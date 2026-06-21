@@ -32,6 +32,7 @@ export default function LoginPage() {
       }
 
       router.push("/");
+      router.refresh(); //bug fixed due for navbar to immediately update
     } catch (err) {
       setError("Something went wrong");
     } finally {

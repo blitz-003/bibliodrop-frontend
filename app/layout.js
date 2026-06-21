@@ -2,21 +2,21 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
-import { SessionProvider } from "@/providers/SessionProvider";
+import { getServerSession } from "@/lib/getServerSession";
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const session = await getServerSession();
+
   return (
     <html lang="en">
       <body>
-        <SessionProvider>
-          <ReactQueryProvider>
-            <Navbar />
+        <ReactQueryProvider>
+          <Navbar user={session?.user} />
 
-            {children}
+          {children}
 
-            <Footer />
-          </ReactQueryProvider>
-        </SessionProvider>
+          <Footer />
+        </ReactQueryProvider>
       </body>
     </html>
   );

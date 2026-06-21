@@ -1,36 +1,21 @@
-"use client";
-
 import Link from "next/link";
-import { authClient } from "@/lib/auth-client";
-import { useSession } from "@/providers/SessionProvider";
+import NavbarActions from "./NavbarActions";
 
-export default function Navbar() {
-  const { user, loading } = useSession();
-
-  async function handleLogout() {
-    await authClient.signOut();
-    window.location.href = "/";
-  }
-
+export default function Navbar({ user }) {
   return (
-    <nav style={{ display: "flex", gap: 10 }}>
+    <nav
+      style={{
+        display: "flex",
+        gap: 20,
+        padding: 20,
+        borderBottom: "1px solid #ccc",
+      }}
+    >
       <Link href="/">Home</Link>
-      <Link href="/browse-books">Browse</Link>
 
-      {!loading && !user && (
-        <>
-          <Link href="/login">Login</Link>
-          <Link href="/register">Register</Link>
-        </>
-      )}
+      <Link href="/browse">Browse</Link>
 
-      {user && (
-        <>
-          <Link href="/dashboard/user">Dashboard</Link>
-          <span>{user.name}</span>
-          <button onClick={handleLogout}>Logout</button>
-        </>
-      )}
+      <NavbarActions user={user} />
     </nav>
   );
 }
