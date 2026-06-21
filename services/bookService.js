@@ -88,3 +88,16 @@ export async function getCategories() {
   await delay(500);
   return categories;
 }
+
+// single book fetch
+export async function getBookById(id) {
+  await delay(500);
+
+  const book = books.find((b) => b.id === Number(id));
+
+  if (!book) {
+    throw new Error("Book not found");
+  }
+
+  return book;
+}

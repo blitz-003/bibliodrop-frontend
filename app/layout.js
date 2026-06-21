@@ -2,18 +2,21 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ReactQueryProvider from "@/providers/ReactQueryProvider";
+import { SessionProvider } from "@/providers/SessionProvider";
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <ReactQueryProvider>
-          <Navbar />
+        <SessionProvider>
+          <ReactQueryProvider>
+            <Navbar />
 
-          {children}
+            {children}
 
-          <Footer />
-        </ReactQueryProvider>
+            <Footer />
+          </ReactQueryProvider>
+        </SessionProvider>
       </body>
     </html>
   );
