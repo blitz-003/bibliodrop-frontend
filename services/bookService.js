@@ -53,30 +53,30 @@ const categories = [
 // simulate delay
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
-// APIs
 export async function getBooks(filters = {}) {
-  await delay(800);
+  const queryParams = new URLSearchParams();
 
-  let result = [...books];
-
-  // search
   if (filters.search) {
-    result = result.filter((book) =>
-      book.title.toLowerCase().includes(filters.search.toLowerCase()),
-    );
+    queryParams.append("search", filters.search);
   }
 
-  // category filter
   if (filters.category) {
-    result = result.filter((book) => book.category === filters.category);
+    queryParams.append("category", filters.category);
   }
 
-  // availability filter
   if (filters.available !== undefined) {
-    result = result.filter((book) => book.available === filters.available);
+    queryParams.append("available", filters.available);
   }
 
-  return result;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_API_URL}/books?${queryParams.toString()}`,
+  );
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch books");
+  }
+
+  return res.json();
 }
 
 export async function getTopLibrarians() {
@@ -91,13 +91,25 @@ export async function getCategories() {
 
 // single book fetch
 export async function getBookById(id) {
-  await delay(500);
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/books/${id}`);
 
-  const book = books.find((b) => b.id === Number(id));
-
-  if (!book) {
-    throw new Error("Book not found");
+  if (!res.ok) {
+    throw new Error("Failed to fetch books");
   }
 
-  return book;
+  return res.json();
+}
+
+export async function createBook(formData) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/books`, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) {
+    const error = await res.json();
+    throw new Error(error.message || "Failed to create book");
+  }
+
+  return res.json();
 }
