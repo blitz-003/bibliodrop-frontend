@@ -35,7 +35,8 @@ export default function RegisterPage() {
         return;
       }
 
-      router.push("/dashboard/user");
+      router.push("/dashboard");
+      router.refresh();
     } catch (err) {
       setError("Something went wrong");
     } finally {

@@ -13,7 +13,7 @@ export default function Navbar({ user }) {
     >
       <Link href="/">Home</Link>
 
-      <Link href="/browse">Browse</Link>
+      <Link href="/browse-books">Browse</Link>
 
       <NavbarActions user={user} />
     </nav>
