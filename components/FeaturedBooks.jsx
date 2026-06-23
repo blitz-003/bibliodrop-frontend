@@ -19,7 +19,7 @@ export default function FeaturedBooks() {
 
       <div>
         {data.map((book) => (
-          <BookCard key={book.id} book={book} />
+          <BookCard key={book._id} book={book} />
         ))}
       </div>
     </section>
