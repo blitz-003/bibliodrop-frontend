@@ -1,30 +1,13 @@
-export default function InventoryPage() {
-  const books = [
-    { title: "Book A", stock: 5 },
-    { title: "Book B", stock: 2 },
-  ];
+import { getServerSession } from "@/lib/getServerSession";
+import InventoryClient from "./InventoryClient";
+import { redirect } from "next/navigation";
 
-  return (
-    <div>
-      <h1>Inventory</h1>
+export default async function InventoryPage() {
+  const session = await getServerSession();
 
-      <table border="1" cellPadding="10">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Stock</th>
-          </tr>
-        </thead>
+  if (!session?.user) {
+    redirect("/login");
+  }
 
-        <tbody>
-          {books.map((b, i) => (
-            <tr key={i}>
-              <td>{b.title}</td>
-              <td>{b.stock}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
+  return <InventoryClient user={session.user} />;
 }
