@@ -19,7 +19,7 @@ export default function InventoryClient({ user }) {
   });
 
   const safeBooks = Array.isArray(books) ? books : [];
-
+  console.log(books);
   return (
     <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
       <h1 className="text-2xl font-bold">📦 Inventory Dashboard</h1>
@@ -35,7 +35,7 @@ export default function InventoryClient({ user }) {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b text-left">
-                  <th className="p-3">Title</th>
+                  <th className="p-1">Title</th>
                   <th>Category</th>
                   <th>Stock</th>
                   <th>Status</th>
@@ -47,18 +47,13 @@ export default function InventoryClient({ user }) {
                   <tr key={b._id} className="border-b hover:bg-gray-50">
                     <td className="p-3 font-medium">{b.title}</td>
                     <td>{b.category}</td>
-                    <td>{b.stock}</td>
+                    <td>{b.totalStock}</td>
                     <td>
-                      <Chip
-                        color={
-                          b.availabilityStatus === "available"
-                            ? "success"
-                            : "warning"
-                        }
-                        size="sm"
-                      >
-                        {b.availabilityStatus}
-                      </Chip>
+                      {b.publishStatus == "pending" ? (
+                        <Chip color={"warning"}>{b.publishStatus}</Chip>
+                      ) : (
+                        <Chip color={"success"}>{b.publishStatus}</Chip>
+                      )}
                     </td>
                   </tr>
                 ))}

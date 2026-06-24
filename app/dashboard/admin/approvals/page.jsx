@@ -1,18 +1,20 @@
-export default function ApprovalsPage() {
-  const requests = [
-    { book: "Book A", status: "Pending" },
-    { book: "Book B", status: "Pending" },
-  ];
+import { getServerSession } from "@/lib/getServerSession"; // Adjust path to your file
+import { redirect } from "next/navigation";
+import ApprovalsClient from "./ApprovalsClient";
 
-  return (
-    <div>
-      <h1>Approvals</h1>
+export default async function ApprovalsPage() {
+  const session = await getServerSession();
 
-      {requests.map((r, i) => (
-        <div key={i}>
-          {r.book} - {r.status}
-        </div>
-      ))}
-    </div>
-  );
+  // 1. Authentication Guard
+  if (!session?.user) {
+    redirect("/login");
+  }
+
+  // 2. Authorization Guard (Must be Admin)
+  if (session.user.role !== "admin") {
+    redirect("/unauthorized");
+  }
+
+  // 3. User passes guards, render the Client dashboard
+  return <ApprovalsClient token={session.accessToken || ""} />;
 }
