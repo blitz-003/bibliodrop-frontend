@@ -1,6 +1,7 @@
 "use client";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import toast from "react-hot-toast"; // 1. Import toast
 
 export default function ApprovalsClient({ token }) {
   const queryClient = useQueryClient();
@@ -10,7 +11,7 @@ export default function ApprovalsClient({ token }) {
     ...(token && { Authorization: `Bearer ${token}` }),
   };
 
-  // 1. Fetching Pending Books
+  // Fetching pending books
   const {
     data: pendingBooks = [],
     isLoading,
@@ -20,6 +21,7 @@ export default function ApprovalsClient({ token }) {
     queryKey: ["pendingBooks"],
     queryFn: async () => {
       const res = await fetch("http://localhost:5000/adminApproval", {
+        headers: fetchHeaders,
         credentials: "include",
       });
       if (!res.ok) throw new Error("Failed to load approvals checklist");
@@ -27,7 +29,7 @@ export default function ApprovalsClient({ token }) {
     },
   });
 
-  // 2. Mutating Status (PATCH)
+  // 2. Mutating Status (PATCH) with Toast integrated
   const mutation = useMutation({
     mutationFn: async ({ bookId, status }) => {
       const res = await fetch(`http://localhost:5000/books/${bookId}/status`, {
@@ -39,12 +41,30 @@ export default function ApprovalsClient({ token }) {
       if (!res.ok) throw new Error("Could not update book status");
       return res.json();
     },
-    // The magic step: This invalidates the cache, pulling the updated list from the backend
-    // and removing the approved/rejected book from view instantly.
-    onSuccess: () => {
+    // Triggers when the button is clicked and the request goes out
+    onMutate: ({ status }) => {
+      // Return context with the status so onSuccess can read it if needed
+      return { status };
+    },
+    // Triggers when the backend successfully updates
+    onSuccess: (data, variables) => {
+      // Invalidate cache to remove item from table list
       queryClient.invalidateQueries({ queryKey: ["pendingBooks"] });
     },
   });
+
+  // 3. Helper function to trigger the promise-based toast notification
+  const handleAction = (bookId, status) => {
+    // toast.promise takes the actual mutation promise execution
+    toast.promise(
+      mutation.mutateAsync({ bookId, status }), // Note: Use mutateAsync here to pass the promise
+      {
+        loading: `Updating book status to ${status}...`,
+        success: <b>Book successfully {status}!</b>,
+        error: <b>Could not update book status.</b>,
+      },
+    );
+  };
 
   if (isLoading)
     return (
@@ -75,7 +95,6 @@ export default function ApprovalsClient({ token }) {
                 <th className="px-6 py-4">Book Title</th>
                 <th className="px-6 py-4">Librarian (Owner)</th>
                 <th className="px-6 py-4">Stock</th>
-                <th className="px-6 py-4">Delivery Fee</th>
                 <th className="px-6 py-4">Publish Status</th>
                 <th className="px-6 py-4 text-right">Actions</th>
               </tr>
@@ -96,36 +115,23 @@ export default function ApprovalsClient({ token }) {
                     </div>
                   </td>
                   <td className="px-6 py-4">{book.totalStock}</td>
-                  <td className="px-6 py-4">${book.deliveryFee?.toFixed(2)}</td>
-
-                  {/* Added Status Column Value */}
                   <td className="px-6 py-4">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700 border border-yellow-200 uppercase tracking-wider">
-                      {book.publishStatus || "pending"}
+                    <span className="inline-flex items-center gap-1 rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700 border border-yellow-200 uppercase">
+                      {book.publishStatus}
                     </span>
                   </td>
 
                   <td className="px-6 py-4 text-right">
                     <div className="flex justify-end gap-2">
                       <button
-                        onClick={() =>
-                          mutation.mutate({
-                            bookId: book._id,
-                            status: "approved",
-                          })
-                        }
+                        onClick={() => handleAction(book._id, "approved")}
                         disabled={mutation.isPending}
                         className="px-3 py-1.5 text-xs font-medium text-white bg-green-600 hover:bg-green-700 rounded-md disabled:opacity-50 transition-all"
                       >
-                        {mutation.isPending ? "Processing..." : "Approve"}
+                        Approve
                       </button>
                       <button
-                        onClick={() =>
-                          mutation.mutate({
-                            bookId: book._id,
-                            status: "rejected",
-                          })
-                        }
+                        onClick={() => handleAction(book._id, "rejected")}
                         disabled={mutation.isPending}
                         className="px-3 py-1.5 text-xs font-medium text-white bg-red-600 hover:bg-red-700 rounded-md disabled:opacity-50 transition-all"
                       >
