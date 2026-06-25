@@ -1,14 +1,34 @@
-import Link from "next/link";
-import SidebarLayout from "./SidebarLayout";
+import {
+  LayoutDashboard,
+  Users,
+  BookOpen,
+  CheckSquare,
+  Receipt,
+} from "lucide-react";
+import SidebarLayout, { SidebarLink } from "./SidebarLayout";
 
-export default function AdminSidebar({ user }) {
+export default function AdminSidebar({ user, closeMobileMenu }) {
   return (
-    <SidebarLayout title="Admin Dashboard" user={user}>
-      <Link href="/dashboard/admin">Overview</Link>
-      <Link href="/dashboard/admin/users">Manage Users</Link>
-      <Link href="/dashboard/admin/books">Manage Books</Link>
-      <Link href="/dashboard/admin/approvals">Manage Approval for Books</Link>
-      <Link href="/dashboard/admin/transactions">Transactions</Link>
+    <SidebarLayout
+      title="Admin Dashboard"
+      user={user}
+      closeMobileMenu={closeMobileMenu}
+    >
+      <SidebarLink href="/dashboard/admin" icon={LayoutDashboard}>
+        Overview
+      </SidebarLink>
+      <SidebarLink href="/dashboard/admin/users" icon={Users}>
+        Manage Users
+      </SidebarLink>
+      <SidebarLink href="/dashboard/admin/books" icon={BookOpen}>
+        Manage Books
+      </SidebarLink>
+      <SidebarLink href="/dashboard/admin/approvals" icon={CheckSquare}>
+        Book Approvals
+      </SidebarLink>
+      <SidebarLink href="/dashboard/admin/transactions" icon={Receipt}>
+        Transactions
+      </SidebarLink>
     </SidebarLayout>
   );
 }
