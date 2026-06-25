@@ -63,10 +63,10 @@ export default function ManageDeliveriesPage() {
               {queue?.map((d) => (
                 <tr key={d._id} className="hover:bg-gray-50/50">
                   <td className="p-4 font-medium text-gray-900">
-                    {d.userName}
+                    {d?.userName || "Deleted User"}
                   </td>
                   <td className="p-4 font-bold text-indigo-950">
-                    {d.bookTitle}
+                    {d?.bookTitle || "Unknown Book"}
                   </td>
                   <td className="p-4">
                     {new Date(d.createdAt).toLocaleDateString()}
