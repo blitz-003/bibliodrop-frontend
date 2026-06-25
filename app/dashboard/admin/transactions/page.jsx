@@ -11,7 +11,7 @@ export default function AdminTransactionsPage() {
   } = useQuery({
     queryKey: ["admin-transactions"],
     queryFn: () =>
-      fetch("http://localhost:5000/admin/transactions", {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/transactions`, {
         credentials: "include",
       }).then((res) => {
         if (!res.ok) throw new Error("Network response error");

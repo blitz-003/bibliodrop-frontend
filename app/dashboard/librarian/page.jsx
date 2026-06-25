@@ -33,7 +33,7 @@ function LibrarianOverviewContent() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["librarian-dashboard-metrics"],
     queryFn: () =>
-      fetch("http://localhost:5000/dashboard/librarian", {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/dashboard/librarian`, {
         credentials: "include",
       }).then((res) => {
         if (!res.ok) throw new Error("Could not load librarian data.");

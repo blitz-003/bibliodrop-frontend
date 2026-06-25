@@ -42,7 +42,7 @@ function BookDetailsContent() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["book-details", id],
     queryFn: () =>
-      fetch(`http://localhost:5000/books/${id}`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/books/${id}`, {
         credentials: "include",
       }).then((res) => {
         if (!res.ok) throw new Error("Catalog item lookup failed.");
@@ -53,12 +53,15 @@ function BookDetailsContent() {
   // 2. Stripe Checkout Mutation
   const checkoutMutation = useMutation({
     mutationFn: async (checkoutPayload) => {
-      const res = await fetch("http://localhost:5000/create-checkout-session", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(checkoutPayload),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/create-checkout-session`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(checkoutPayload),
+        },
+      );
 
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
@@ -83,12 +86,15 @@ function BookDetailsContent() {
   // 3. Post Verified Review Form Submission Mutation
   const submitReviewMutation = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`http://localhost:5000/books/${id}/reviews`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ comment, rating }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/books/${id}/reviews`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ comment, rating }),
+        },
+      );
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
         throw new Error(errorData.message || "Review processing failed.");

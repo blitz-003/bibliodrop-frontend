@@ -11,7 +11,7 @@ export default function UserReadingListPage() {
   } = useQuery({
     queryKey: ["user-reading-list"],
     queryFn: () =>
-      fetch("http://localhost:5000/dashboard/reading-list", {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/dashboard/reading-list`, {
         credentials: "include",
       }).then((res) => {
         if (!res.ok)

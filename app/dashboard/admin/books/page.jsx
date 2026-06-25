@@ -14,7 +14,7 @@ export default function AdminManageBooksPage() {
   } = useQuery({
     queryKey: ["admin-manage-books"],
     queryFn: () =>
-      fetch("http://localhost:5000/admin/books", {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/books`, {
         credentials: "include",
       }).then((res) => {
         if (!res.ok) throw new Error("Failed to load inventory logs.");
@@ -26,7 +26,7 @@ export default function AdminManageBooksPage() {
   const togglePublishMutation = useMutation({
     mutationFn: async ({ id, nextStatus }) => {
       const res = await fetch(
-        `http://localhost:5000/admin/books/${id}/status`,
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/books/${id}/status`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },

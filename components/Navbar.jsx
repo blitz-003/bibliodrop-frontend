@@ -26,22 +26,22 @@ export default function Navbar({ user }) {
         <div className="flex items-center gap-8">
           <Link
             href="/"
-            className="text-xl font-bold text-gray-900 tracking-normal hover:text-blue-600 transition-colors"
+            className="text-2xl font-bold text-gray-900 tracking-normal hover:text-stone-600 transition-colors"
           >
             Bibliodrop
           </Link>
 
           {/* Desktop Global Navigation Links */}
-          <div className="hidden lg:flex items-center gap-6 text-sm font-medium text-gray-600">
+          <div className="hidden lg:flex items-center gap-6 text-base font-medium text-gray-600">
             <Link
               href="/"
-              className={`transition-colors ${pathname === "/" ? "text-blue-600" : "hover:text-blue-600"}`}
+              className={`transition-colors ${pathname === "/" ? "text-stone-900 font-semibold" : "hover:text-stone-900"}`}
             >
               Home
             </Link>
             <Link
               href="/browse-books"
-              className={`transition-colors ${pathname === "/browse-books" ? "text-blue-600" : "hover:text-blue-600"}`}
+              className={`transition-colors ${pathname === "/browse-books" ? "text-stone-900 font-semibold" : "hover:text-stone-900"}`}
             >
               Browse
             </Link>
@@ -49,18 +49,18 @@ export default function Navbar({ user }) {
         </div>
 
         {/* ACTIONS BLOCK (DESKTOP) */}
-        <div className="hidden lg:flex items-center gap-6 text-sm font-medium">
+        <div className="hidden lg:flex items-center gap-6 text-base font-medium">
           {!user ? (
             <>
               <Link
                 href="/login"
-                className="text-gray-600 hover:text-blue-600 transition-colors"
+                className="text-gray-600 hover:text-stone-900 transition-colors"
               >
                 Login
               </Link>
               <Link
                 href="/register"
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors shadow-sm shadow-blue-600/10"
+                className="bg-stone-950 text-white px-5 py-2.5 rounded-lg hover:bg-stone-800 transition-colors shadow-sm"
               >
                 Register
               </Link>
@@ -69,9 +69,9 @@ export default function Navbar({ user }) {
             <>
               <Link
                 href={`/dashboard/${user.role}`}
-                className="flex items-center gap-2 text-gray-600 hover:text-blue-600 transition-colors bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100"
+                className="flex items-center gap-2 text-gray-600 hover:text-stone-900 transition-colors bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100"
               >
-                <LayoutDashboard className="w-4 h-4 text-blue-500" />
+                <LayoutDashboard className="w-4 h-4 text-stone-700" />
                 <span>Dashboard</span>
               </Link>
               <span className="text-gray-900 border-l border-gray-200 pl-4 font-semibold">
@@ -109,14 +109,14 @@ export default function Navbar({ user }) {
             <Link
               href="/"
               onClick={() => setIsOpen(false)}
-              className={`flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${pathname === "/" ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-50"}`}
+              className={`flex items-center px-3 py-2.5 rounded-lg text-base font-medium transition-colors ${pathname === "/" ? "bg-stone-100 text-stone-900" : "text-gray-600 hover:bg-gray-50"}`}
             >
               Home
             </Link>
             <Link
               href="/browse-books"
               onClick={() => setIsOpen(false)}
-              className={`flex items-center px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${pathname === "/browse-books" ? "bg-blue-50 text-blue-600" : "text-gray-600 hover:bg-gray-50"}`}
+              className={`flex items-center px-3 py-2.5 rounded-lg text-base font-medium transition-colors ${pathname === "/browse-books" ? "bg-stone-100 text-stone-900" : "text-gray-600 hover:bg-gray-50"}`}
             >
               Browse Books
             </Link>
@@ -126,10 +126,10 @@ export default function Navbar({ user }) {
           {user && dashboardLinks.length > 0 && (
             <div className="space-y-2 border-t border-gray-100 pt-5">
               <div className="px-3 flex items-center justify-between mb-1">
-                <span className="block text-[10px] font-bold text-blue-600 uppercase tracking-wider">
+                <span className="block text-[10px] font-bold text-stone-700 uppercase tracking-wider">
                   {user.role} Workspace
                 </span>
-                <span className="text-xs font-semibold text-gray-800">
+                <span className="text-sm font-semibold text-gray-800">
                   {user.name}
                 </span>
               </div>
@@ -142,9 +142,9 @@ export default function Navbar({ user }) {
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-base font-medium transition-colors ${
                       isActive
-                        ? "bg-blue-600 text-white shadow-sm shadow-blue-600/10"
+                        ? "bg-stone-950 text-white shadow-sm"
                         : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                     }`}
                   >
@@ -165,14 +165,14 @@ export default function Navbar({ user }) {
                 <Link
                   href="/login"
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center py-2.5 border border-gray-200 rounded-xl text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="flex items-center justify-center py-2.5 border border-gray-200 rounded-xl text-base font-medium text-gray-700 hover:bg-gray-50 transition-colors"
                 >
                   Login
                 </Link>
                 <Link
                   href="/register"
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center py-2.5 bg-blue-600 rounded-xl text-sm font-medium text-white hover:bg-blue-700 transition-colors text-center"
+                  className="flex items-center justify-center py-2.5 bg-stone-950 rounded-xl text-base font-medium text-white hover:bg-stone-800 transition-colors text-center"
                 >
                   Register
                 </Link>
@@ -184,7 +184,7 @@ export default function Navbar({ user }) {
                     logout();
                     setIsOpen(false);
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-base font-medium text-red-600 hover:bg-red-50 transition-colors"
                 >
                   <LogOut className="w-5 h-5" />
                   <span>Logout Account</span>

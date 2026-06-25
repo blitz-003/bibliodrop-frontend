@@ -20,10 +20,13 @@ export default function ApprovalsClient({ token }) {
   } = useQuery({
     queryKey: ["pendingBooks"],
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/adminApproval", {
-        headers: fetchHeaders,
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/adminApproval`,
+        {
+          headers: fetchHeaders,
+          credentials: "include",
+        },
+      );
       if (!res.ok) throw new Error("Failed to load approvals checklist");
       return res.json();
     },
@@ -32,12 +35,15 @@ export default function ApprovalsClient({ token }) {
   // 2. Mutating Status (PATCH) with Toast integrated
   const mutation = useMutation({
     mutationFn: async ({ bookId, status }) => {
-      const res = await fetch(`http://localhost:5000/books/${bookId}/status`, {
-        method: "PATCH",
-        headers: fetchHeaders,
-        credentials: "include",
-        body: JSON.stringify({ publishStatus: status }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/books/${bookId}/status`,
+        {
+          method: "PATCH",
+          headers: fetchHeaders,
+          credentials: "include",
+          body: JSON.stringify({ publishStatus: status }),
+        },
+      );
       if (!res.ok) throw new Error("Could not update book status");
       return res.json();
     },

@@ -20,7 +20,7 @@ export default function AdminManageUsersPage() {
   } = useQuery({
     queryKey: ["admin-users"],
     queryFn: () =>
-      fetch("http://localhost:5000/admin/users", {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/users`, {
         credentials: "include",
       }).then((res) => {
         if (!res.ok) throw new Error("Failed to load user records");
@@ -31,12 +31,15 @@ export default function AdminManageUsersPage() {
   // 2. Mutation: Change User Role
   const changeRoleMutation = useMutation({
     mutationFn: async ({ id, role }) => {
-      const res = await fetch(`http://localhost:5000/admin/users/${id}/role`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ role }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/users/${id}/role`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ role }),
+        },
+      );
       if (!res.ok) throw new Error("Failed to update user role");
       return res.json();
     },
@@ -54,10 +57,13 @@ export default function AdminManageUsersPage() {
   // 3. Mutation: Delete Account Permanent Clean-up
   const deleteAccountMutation = useMutation({
     mutationFn: async (id) => {
-      const res = await fetch(`http://localhost:5000/admin/users/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/users/${id}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        },
+      );
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.message || "Deletion failed.");

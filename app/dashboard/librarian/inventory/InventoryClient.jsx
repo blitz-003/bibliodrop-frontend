@@ -8,9 +8,12 @@ export default function InventoryClient({ user }) {
     queryKey: ["inventory", user?.id],
 
     queryFn: async () => {
-      const res = await fetch("http://localhost:5000/dashboard/inventory", {
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/dashboard/inventory`,
+        {
+          credentials: "include",
+        },
+      );
 
       if (!res.ok) throw new Error("Failed");
 

@@ -32,7 +32,7 @@ function MyReviewsContent() {
   } = useQuery({
     queryKey: ["my-reviews"],
     queryFn: () =>
-      fetch("http://localhost:5000/reviews/me", {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/reviews/me`, {
         credentials: "include",
       }).then((res) => {
         if (!res.ok)
@@ -44,12 +44,15 @@ function MyReviewsContent() {
   // 2. Mutation: Update/Edit an existing review
   const updateReviewMutation = useMutation({
     mutationFn: async ({ reviewId, comment, rating }) => {
-      const res = await fetch(`http://localhost:5000/reviews/${reviewId}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ comment, rating }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/reviews/${reviewId}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ comment, rating }),
+        },
+      );
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.message || "Failed to update review changes.");
@@ -67,10 +70,13 @@ function MyReviewsContent() {
   // 3. Mutation: Delete a review completely
   const deleteReviewMutation = useMutation({
     mutationFn: async (reviewId) => {
-      const res = await fetch(`http://localhost:5000/reviews/${reviewId}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/reviews/${reviewId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        },
+      );
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.message || "Failed to erase review payload.");

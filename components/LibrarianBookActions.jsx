@@ -15,7 +15,7 @@ export default function LibrarianBookActions({ bookId, publishStatus }) {
     mutationFn: async () => {
       // Instead of pushing to an /admin route, we call a clean resource toggle endpoint
       const res = await fetch(
-        `http://localhost:5000/books/${bookId}/toggle-publish`,
+        `${process.env.NEXT_PUBLIC_API_URL}/books/${bookId}/toggle-publish`,
         {
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
@@ -40,10 +40,13 @@ export default function LibrarianBookActions({ bookId, publishStatus }) {
   // 2. Mutation: Delete Book
   const deleteBook = useMutation({
     mutationFn: async () => {
-      const res = await fetch(`http://localhost:5000/books/${bookId}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/books/${bookId}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        },
+      );
       if (!res.ok) throw new Error();
     },
     onSuccess: () => {

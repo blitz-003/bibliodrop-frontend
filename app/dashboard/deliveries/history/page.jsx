@@ -10,7 +10,7 @@ export default function UserDeliveryHistoryPage() {
   } = useQuery({
     queryKey: ["user-deliveries"],
     queryFn: () =>
-      fetch("http://localhost:5000/deliveries/history", {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/deliveries/history`, {
         credentials: "include",
       }).then((res) => res.json()),
   });

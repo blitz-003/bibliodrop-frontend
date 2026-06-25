@@ -28,7 +28,7 @@ function EditBookFormContent() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["edit-book-lookup", id],
     queryFn: () =>
-      fetch(`http://localhost:5000/books/${id}`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/books/${id}`, {
         credentials: "include",
       }).then((res) => {
         if (!res.ok)
@@ -54,12 +54,15 @@ function EditBookFormContent() {
   // 3. Mutation: Send updated data properties to the backend API routing pipeline
   const updateBookMutation = useMutation({
     mutationFn: async (updatedFields) => {
-      const res = await fetch(`http://localhost:5000/books/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(updatedFields),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/books/${id}`,
+        {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(updatedFields),
+        },
+      );
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
         throw new Error(

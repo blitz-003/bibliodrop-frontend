@@ -13,19 +13,22 @@ export default function ManageDeliveriesPage() {
   } = useQuery({
     queryKey: ["librarian-deliveries"],
     queryFn: () =>
-      fetch("http://localhost:5000/deliveries/manage", {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/deliveries/manage`, {
         credentials: "include",
       }).then((res) => res.json()),
   });
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, nextStatus }) => {
-      const res = await fetch(`http://localhost:5000/deliveries/${id}/status`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ status: nextStatus }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/deliveries/${id}/status`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ status: nextStatus }),
+        },
+      );
       if (!res.ok) throw new Error("Status transformation failure.");
       return res.json();
     },

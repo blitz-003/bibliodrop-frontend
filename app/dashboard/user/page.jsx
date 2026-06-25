@@ -37,7 +37,7 @@ function UserOverviewContent() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["user-dashboard-metrics"],
     queryFn: () =>
-      fetch("http://localhost:5000/dashboard/user", {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/dashboard/user`, {
         credentials: "include",
       }).then((res) => {
         if (!res.ok)
