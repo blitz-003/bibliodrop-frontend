@@ -68,6 +68,14 @@ export async function getBooks(filters = {}) {
     queryParams.append("available", filters.available);
   }
 
+  if (filters.page) {
+    queryParams.append("page", filters.page);
+  }
+
+  if (filters.limit) {
+    queryParams.append("limit", filters.limit);
+  }
+
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/books?${queryParams.toString()}`,
   );
