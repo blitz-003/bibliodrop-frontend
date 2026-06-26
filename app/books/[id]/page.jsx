@@ -15,6 +15,7 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import LibrarianBookActions from "@/components/LibrarianBookActions";
 import { authClient } from "@/lib/auth-client";
 
+// ✅ FIX: Define the client outside the component function so it is never recreated during renders.
 const standaloneDetailsClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -39,16 +40,13 @@ function BookDetailsContent() {
 
   const getClientToken = async () => {
     try {
-      // 1. If the library uses getToken()
       if (typeof authClient.getToken === "function") {
-        const res = await authClient.getToken(); // ✅ Fixed
+        const res = await authClient.getToken();
         if (res?.token) return res.token;
         if (res?.data?.token) return res.data.token;
       }
-
-      // 2. Fallback if the library uses token()
       if (typeof authClient.token === "function") {
-        const res = await authClient.token(); // ✅ Fixed
+        const res = await authClient.token();
         if (res?.token) return res.token;
         if (res?.data?.token) return res.data.token;
       }
@@ -58,6 +56,7 @@ function BookDetailsContent() {
     return null;
   };
 
+  // 1. Fetch Auth Token Status
   const { data: clientToken, isLoading: isAuthLoading } = useQuery({
     queryKey: ["auth-token"],
     queryFn: getClientToken,
@@ -66,6 +65,7 @@ function BookDetailsContent() {
 
   const userIsLoggedIn = !!clientToken;
 
+  // 2. Fetch Book Details Dependent Query
   const {
     data,
     isLoading: isBookLoading,
@@ -86,6 +86,8 @@ function BookDetailsContent() {
       if (!res.ok) throw new Error("Failed to load book details.");
       return res.json();
     },
+    // ✅ FIX: Only fire this query after the auth system completes its validation check
+    enabled: !isAuthLoading,
   });
 
   const checkoutMutation = useMutation({
@@ -162,6 +164,7 @@ function BookDetailsContent() {
     },
   });
 
+  // ✅ FIX: Adjusted conditions to prevent loading screens blocking the content layout awkwardly
   if (isAuthLoading || isBookLoading) {
     return (
       <p className="p-5 text-gray-500 font-medium">Loading book details...</p>
@@ -185,10 +188,7 @@ function BookDetailsContent() {
   } = data || {};
 
   const computedAuthStatus = userIsLoggedIn || isAuthenticated;
-
   const isAvailable = book?.availableStock > 0;
-
-  // Checking both explicit status flag and requested state from backend variables
   const isCheckedOut =
     book?.availabilityStatus === "Checked Out" || hasRequestedDelivery;
 
@@ -196,7 +196,6 @@ function BookDetailsContent() {
     router.push(`/books/${id}`);
   };
 
-  // Render text helper to eliminate nested ternary bugs
   const getButtonText = () => {
     if (!computedAuthStatus) return "Login to Request Delivery";
     if (checkoutMutation.isPending) return "Connecting to Stripe...";
@@ -344,7 +343,6 @@ function BookDetailsContent() {
                       router.push("/login");
                       return;
                     }
-
                     checkoutMutation.mutate({
                       bookId: book._id,
                       title: book.title,
@@ -373,7 +371,6 @@ function BookDetailsContent() {
                   >
                     <path d="M13.93 10.09c0-.62-.51-1.01-1.37-1.01-.89 0-1.77.27-2.54.73l-.44-2.1c.88-.41 2.05-.68 3.23-.68 2.25 0 3.73 1.15 3.73 3.4 0 2.22-1.74 3.03-3.15 3.82-.93.52-1.28.91-1.28 1.48h2.64c0-.62.51-1.01 1.37-1.01.89 0 1.77-.27 2.54-.73l.44-2.1c-.88.41-2.05.68-3.23.68-2.25 0-3.73-1.15-3.73-3.4 0-2.22 1.74-3.03 3.15-3.82.93-.52 1.28-.91 1.28-1.48H13.93zM5.5 10.37c0-2.8 2.04-4.22 4.97-4.22 1.15 0 2.11.2 2.76.47l-.46 2.03c-.53-.22-1.2-.38-1.95-.38-1.57 0-2.61.77-2.61 2.16 0 3.02 4.19 2.5 4.19 5.51 0 2.94-2.14 4.14-5.22 4.14-1.28 0-2.45-.25-3.14-.58l.49-2.06c.64.3 1.5.49 2.37.49 1.69 0 2.77-.73 2.77-2.11 0-3.21-4.17-2.56-4.17-5.45z" />
                   </svg>
-
                   <span>{getButtonText()}</span>
                 </button>
               </>
