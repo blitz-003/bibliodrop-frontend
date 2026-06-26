@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-
+import { authClient } from "@/lib/auth-client";
 export default function UserDeliveryHistoryPage() {
   const {
     data: deliveries,
@@ -9,10 +9,30 @@ export default function UserDeliveryHistoryPage() {
     isError,
   } = useQuery({
     queryKey: ["user-deliveries"],
-    queryFn: () =>
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/deliveries/history`, {
-        credentials: "include",
-      }).then((res) => res.json()),
+    queryFn: async () => {
+      const { data, error } = await authClient.token();
+
+      if (error) {
+        console.error(error);
+      } else {
+        console.log(data.token);
+      }
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/deliveries/history`,
+        {
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+        },
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to load delivery history.");
+      }
+
+      return res.json();
+    },
   });
 
   if (isLoading) return <p className="p-6">Loading delivery records...</p>;

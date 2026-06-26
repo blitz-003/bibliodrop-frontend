@@ -9,6 +9,7 @@ import {
   QueryClientProvider,
 } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { authClient } from "@/lib/auth-client";
 
 // Initialize a standalone Query Client instance specifically for this route tree
 const standaloneEditClient = new QueryClient({
@@ -27,14 +28,24 @@ function EditBookFormContent() {
   // 1. Fetch current book specifications to seed our input states
   const { data, isLoading, isError } = useQuery({
     queryKey: ["edit-book-lookup", id],
-    queryFn: () =>
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/books/${id}`, {
-        credentials: "include",
-      }).then((res) => {
-        if (!res.ok)
-          throw new Error("Could not retrieve catalog item specifications.");
-        return res.json();
-      }),
+    queryFn: async () => {
+      const { data, error } = await authClient.token();
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/books/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+        },
+      );
+
+      if (!res.ok) {
+        throw new Error("Could not retrieve catalog item specifications.");
+      }
+
+      return res.json();
+    },
   });
 
   // 2. Initialize local form state lazily from the fetched data
@@ -54,21 +65,28 @@ function EditBookFormContent() {
   // 3. Mutation: Send updated data properties to the backend API routing pipeline
   const updateBookMutation = useMutation({
     mutationFn: async (updatedFields) => {
+      const { data, error } = await authClient.token();
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/books/${id}`,
         {
           method: "PUT",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${data.token}`,
+          },
           body: JSON.stringify(updatedFields),
         },
       );
+
       if (!res.ok) {
         const errorData = await res.json().catch(() => ({}));
+
         throw new Error(
           errorData.message || "Server rejected document modifications.",
         );
       }
+
       return res.json();
     },
     onSuccess: () => {

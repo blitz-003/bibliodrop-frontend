@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { authClient } from "@/lib/auth-client";
 
 export default function AdminManageUsersPage() {
   const queryClient = useQueryClient();
@@ -19,65 +20,106 @@ export default function AdminManageUsersPage() {
     isError,
   } = useQuery({
     queryKey: ["admin-users"],
-    queryFn: () =>
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/users`, {
-        credentials: "include",
-      }).then((res) => {
-        if (!res.ok) throw new Error("Failed to load user records");
-        return res.json();
-      }),
+    queryFn: async () => {
+      const { data: tokenData } = await authClient.token();
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/users`,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenData.token}`,
+          },
+        },
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to load user records");
+      }
+
+      return res.json();
+    },
   });
 
   // 2. Mutation: Change User Role
+
   const changeRoleMutation = useMutation({
     mutationFn: async ({ id, role }) => {
+      const { data: tokenData } = await authClient.getToken();
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/users/${id}/role`,
         {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${tokenData.token}`,
+          },
           body: JSON.stringify({ role }),
         },
       );
-      if (!res.ok) throw new Error("Failed to update user role");
+
+      if (!res.ok) {
+        throw new Error("Failed to update user role");
+      }
+
       return res.json();
     },
+
     onSuccess: (data) => {
-      // Toast notice formatting: role of (user email) changed from this to this
       toast.success(
         `Role of ${data.email} changed from ${roleModalUser.role} to ${data.role}`,
       );
-      queryClient.invalidateQueries(["admin-users"]);
-      setRoleModalUser(null); // Dismiss window
+
+      queryClient.invalidateQueries({
+        queryKey: ["admin-users"],
+      });
+
+      setRoleModalUser(null);
     },
-    onError: () => toast.error("Could not modify authorization rules."),
+
+    onError: () => {
+      toast.error("Could not modify authorization rules.");
+    },
   });
 
   // 3. Mutation: Delete Account Permanent Clean-up
+
   const deleteAccountMutation = useMutation({
     mutationFn: async (id) => {
+      const { data: tokenData } = await authClient.token();
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/users/${id}`,
         {
           method: "DELETE",
-          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${tokenData.token}`,
+          },
         },
       );
+
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
         throw new Error(err.message || "Deletion failed.");
       }
+
       return res.json();
     },
+
     onSuccess: () => {
       toast.success("Account successfully purged from system.");
-      queryClient.invalidateQueries(["admin-users"]);
-      setDeleteModalUser(null); // Dismiss window
-    },
-    onError: (err) => toast.error(err.message || "Failed to remove account."),
-  });
 
+      queryClient.invalidateQueries({
+        queryKey: ["admin-users"],
+      });
+
+      setDeleteModalUser(null);
+    },
+
+    onError: (err) => {
+      toast.error(err.message || "Failed to remove account.");
+    },
+  });
   if (isLoading)
     return (
       <p className="p-6 text-gray-500 font-medium">

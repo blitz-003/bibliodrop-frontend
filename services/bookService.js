@@ -108,15 +108,21 @@ export async function getBookById(id) {
   return res.json();
 }
 
+import { authClient } from "@/lib/auth-client";
+
 export async function createBook(formData) {
+  const { data: tokenData } = await authClient.token();
+
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/books`, {
     method: "POST",
+    headers: {
+      Authorization: `Bearer ${tokenData.token}`,
+    },
     body: formData,
-    credentials: "include",
   });
 
   if (!res.ok) {
-    const error = await res.json();
+    const error = await res.json().catch(() => ({}));
     throw new Error(error.message || "Failed to create book");
   }
 

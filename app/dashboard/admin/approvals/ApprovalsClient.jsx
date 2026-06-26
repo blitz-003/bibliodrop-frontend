@@ -1,15 +1,16 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast"; // 1. Import toast
 
 export default function ApprovalsClient({ token }) {
   const queryClient = useQueryClient();
 
-  const fetchHeaders = {
-    "Content-Type": "application/json",
-    ...(token && { Authorization: `Bearer ${token}` }),
-  };
+  // const fetchHeaders = {
+  //   "Content-Type": "application/json",
+  //   ...(token && { Authorization: `Bearer ${token}` }),
+  // };
 
   // Fetching pending books
   const {
@@ -20,14 +21,19 @@ export default function ApprovalsClient({ token }) {
   } = useQuery({
     queryKey: ["pendingBooks"],
     queryFn: async () => {
+      const { data: tokenData } = await authClient.token();
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/adminApproval`,
         {
-          headers: fetchHeaders,
-          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${tokenData.token}`,
+          },
         },
       );
-      if (!res.ok) throw new Error("Failed to load approvals checklist");
+
+      if (!res.ok) throw new Error("Failed");
+
       return res.json();
     },
   });
@@ -35,27 +41,39 @@ export default function ApprovalsClient({ token }) {
   // 2. Mutating Status (PATCH) with Toast integrated
   const mutation = useMutation({
     mutationFn: async ({ bookId, status }) => {
+      const { data: tokenData } = await authClient.token();
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/books/${bookId}/status`,
         {
           method: "PATCH",
-          headers: fetchHeaders,
-          credentials: "include",
-          body: JSON.stringify({ publishStatus: status }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${tokenData.token}`,
+          },
+          body: JSON.stringify({
+            publishStatus: status,
+          }),
         },
       );
-      if (!res.ok) throw new Error("Could not update book status");
+
+      if (!res.ok) {
+        throw new Error("Could not update book status");
+      }
+
       return res.json();
     },
-    // Triggers when the button is clicked and the request goes out
-    onMutate: ({ status }) => {
-      // Return context with the status so onSuccess can read it if needed
-      return { status };
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["pendingBooks"],
+      });
+
+      toast.success("Book status updated successfully!");
     },
-    // Triggers when the backend successfully updates
-    onSuccess: (data, variables) => {
-      // Invalidate cache to remove item from table list
-      queryClient.invalidateQueries({ queryKey: ["pendingBooks"] });
+
+    onError: (error) => {
+      toast.error(error.message || "Could not update book status");
     },
   });
 

@@ -4,8 +4,10 @@ import { useState } from "react";
 import { Card, Input, TextArea, Button } from "@heroui/react";
 import Image from "next/image";
 import { createBook } from "@/services/bookService";
+import { useRouter } from "next/navigation";
 
 export default function AddBookPage() {
+  const router = useRouter();
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
 
@@ -60,6 +62,7 @@ export default function AddBookPage() {
       await createBook(formData);
 
       alert("Book ready to submit!");
+      router.push("/dashboard/librarian/inventory");
     } catch (err) {
       console.error(err);
       alert(err.message || "Something went wrong");

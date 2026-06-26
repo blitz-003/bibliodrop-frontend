@@ -3,6 +3,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import { authClient } from "@/lib/auth-client";
 
 export default function LibrarianBookActions({ bookId, publishStatus }) {
   const router = useRouter();
@@ -13,47 +14,79 @@ export default function LibrarianBookActions({ bookId, publishStatus }) {
 
   const togglePublish = useMutation({
     mutationFn: async () => {
-      // Instead of pushing to an /admin route, we call a clean resource toggle endpoint
+      const { data: tokenData } = await authClient.getAccessToken();
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/books/${bookId}/toggle-publish`,
         {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${tokenData?.accessToken}`,
+          },
         },
       );
-      if (!res.ok) throw new Error();
+
+      if (!res.ok) {
+        const error = await res.json().catch(() => ({}));
+        throw new Error(
+          error.message || "Could not update publication status.",
+        );
+      }
+
       return res.json();
     },
+
     onSuccess: (data) => {
-      // Check whatever property your backend uses to denote visibility status
       const isNowPublished =
         data.publishStatus === "approved" || data.isPublished === true;
+
       toast.success(
         `Book ${isNowPublished ? "published" : "unpublished"} successfully!`,
       );
-      queryClient.invalidateQueries(["book-details", bookId]);
+
+      queryClient.invalidateQueries({
+        queryKey: ["book-details", bookId],
+      });
     },
-    onError: () => toast.error("Could not update publication status."),
+
+    onError: (err) => {
+      toast.error(err.message || "Could not update publication status.");
+    },
   });
 
   // 2. Mutation: Delete Book
+
   const deleteBook = useMutation({
     mutationFn: async () => {
+      const { data: tokenData } = await authClient.getAccessToken();
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/books/${bookId}`,
         {
           method: "DELETE",
-          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${tokenData?.accessToken}`,
+          },
         },
       );
-      if (!res.ok) throw new Error();
+
+      if (!res.ok) {
+        const error = await res.json().catch(() => ({}));
+        throw new Error(error.message || "Failed to delete book");
+      }
+
+      return res.json();
     },
+
     onSuccess: () => {
       toast.success("Book removed successfully.");
       router.push("/dashboard/inventory");
     },
-    onError: () => toast.error("Failed to delete book."),
+
+    onError: (err) => {
+      toast.error(err.message || "Failed to delete book.");
+    },
   });
 
   return (

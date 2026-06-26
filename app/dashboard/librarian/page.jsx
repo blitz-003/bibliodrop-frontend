@@ -1,5 +1,6 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
 import {
   useQuery,
   QueryClient,
@@ -32,13 +33,25 @@ const librarianOverviewClient = new QueryClient({
 function LibrarianOverviewContent() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["librarian-dashboard-metrics"],
-    queryFn: () =>
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/dashboard/librarian`, {
-        credentials: "include",
-      }).then((res) => {
-        if (!res.ok) throw new Error("Could not load librarian data.");
-        return res.json();
-      }),
+
+    queryFn: async () => {
+      const { data: tokenData } = await authClient.token();
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/dashboard/librarian`,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenData.token}`,
+          },
+        },
+      );
+
+      if (!res.ok) {
+        throw new Error("Could not load librarian data.");
+      }
+
+      return res.json();
+    },
   });
 
   if (isLoading)

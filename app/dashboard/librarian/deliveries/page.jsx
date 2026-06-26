@@ -1,5 +1,6 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
@@ -12,31 +13,60 @@ export default function ManageDeliveriesPage() {
     isError,
   } = useQuery({
     queryKey: ["librarian-deliveries"],
-    queryFn: () =>
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/deliveries/manage`, {
-        credentials: "include",
-      }).then((res) => res.json()),
+    queryFn: async () => {
+      const { data: tokenData } = await authClient.token();
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/deliveries/manage`,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenData.token}`,
+          },
+        },
+      );
+
+      if (!res.ok) throw new Error("Failed");
+
+      return res.json();
+    },
   });
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, nextStatus }) => {
+      const { data } = await authClient.token();
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/deliveries/${id}/status`,
         {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ status: nextStatus }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${data.token}`,
+          },
+          body: JSON.stringify({
+            status: nextStatus,
+          }),
         },
       );
-      if (!res.ok) throw new Error("Status transformation failure.");
+
+      if (!res.ok) {
+        throw new Error("Status transformation failure.");
+      }
+
       return res.json();
     },
+
     onSuccess: () => {
       toast.success("Delivery status updated successfully!");
-      queryClient.invalidateQueries(["librarian-deliveries"]);
+
+      queryClient.invalidateQueries({
+        queryKey: ["librarian-deliveries"],
+      });
     },
-    onError: () => toast.error("Could not alter workflow item step."),
+
+    onError: () => {
+      toast.error("Could not alter workflow item step.");
+    },
   });
 
   if (isLoading) return <p className="p-6">Loading pipeline streams...</p>;

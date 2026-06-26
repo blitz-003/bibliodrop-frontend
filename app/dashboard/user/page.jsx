@@ -26,6 +26,7 @@ import {
   Cell,
   Legend,
 } from "recharts";
+import { authClient } from "@/lib/auth-client";
 
 const userOverviewClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false, retry: false } },
@@ -36,79 +37,122 @@ const COLORS = ["#635BFF", "#0EA5E9", "#10B981", "#F59E0B", "#EF4444"];
 function UserOverviewContent() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["user-dashboard-metrics"],
-    queryFn: () =>
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/dashboard/user`, {
-        credentials: "include",
-      }).then((res) => {
-        if (!res.ok)
-          throw new Error("Could not load fresh dashboard summaries.");
-        return res.json();
-      }),
+    queryFn: async () => {
+      const { data, error } = await authClient.token();
+
+      if (error) {
+        console.error(error);
+        throw new Error("Failed to retrieve authentication token.");
+      }
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/dashboard/user`,
+        {
+          headers: {
+            Authorization: `Bearer ${data?.token}`,
+          },
+        },
+      );
+
+      if (!res.ok) {
+        throw new Error("Could not load fresh dashboard summaries.");
+      }
+
+      return res.json();
+    },
   });
 
-  if (isLoading)
+  // Handle Loading State
+  if (isLoading) {
     return (
-      <p className="p-6 text-sm font-medium text-gray-400 animate-pulse">
-        Loading overview metrics...
-      </p>
+      <div className="w-full space-y-6 p-4 md:p-8 max-w-[1400px] mx-auto animate-pulse">
+        <div className="h-12 bg-gray-200 rounded w-1/4 mb-4"></div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {[...Array(4)].map((_, i) => (
+            <div
+              key={i}
+              className="h-24 bg-gray-100 border border-gray-200 rounded-xl"
+            ></div>
+          ))}
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="h-80 bg-gray-50 border border-gray-200 rounded-xl"></div>
+          <div className="h-80 bg-gray-50 border border-gray-200 rounded-xl"></div>
+        </div>
+      </div>
     );
-  if (isError)
-    return (
-      <p className="p-6 text-sm font-medium text-red-500">
-        Error rendering data metrics models.
-      </p>
-    );
+  }
 
-  const { stats, charts } = data;
+  // Handle Error State
+  if (isError) {
+    return (
+      <div className="w-full p-8 max-w-[1400px] mx-auto text-center">
+        <div className="bg-red-50 border border-red-200 text-red-800 p-6 rounded-xl inline-block max-w-md">
+          <h3 className="font-bold text-lg mb-2">Failed to load dashboard</h3>
+          <p className="text-sm">
+            There was an issue fetching your reading insights. Please try
+            refreshing the page.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Safely extract stats and charts with default fallbacks
+  const { stats = {}, charts = {} } = data || {};
 
   return (
     <div className="w-full space-y-6 p-4 md:p-8 font-sans text-gray-700 max-w-[1400px] mx-auto">
+      {/* HEADER */}
       <div>
         <h1 className="text-xl md:text-2xl font-black text-gray-900 tracking-tight">
-          Reader Insights Overview
+          Reading Dashboard
         </h1>
         <p className="text-xs text-gray-400 mt-0.5">
-          Track your personal reading logistics and financial history.
+          Track your reading habits, borrowing activity, and spending insights.
         </p>
       </div>
 
-      {/* METRICS CARDS GRID (MOBILE RESPONSIVE) */}
+      {/* METRIC CARDS */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-indigo-50/60 border border-indigo-100 rounded-xl p-5 flex items-center justify-between shadow-sm">
+        {/* Total Spent */}
+        <div className="bg-emerald-50/60 border border-emerald-100 rounded-xl p-5 flex items-center justify-between shadow-sm">
           <div className="space-y-1">
-            <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider">
+            <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider">
               Total Spent
             </span>
-            <h2 className="text-xl md:text-2xl font-black text-indigo-900">
+            <h2 className="text-xl md:text-2xl font-black text-emerald-900">
               ${Number(stats.totalSpent || 0).toFixed(2)}
             </h2>
           </div>
-          <div className="p-3 bg-indigo-100 text-indigo-600 rounded-xl">
+          <div className="p-3 bg-emerald-100 text-emerald-600 rounded-xl">
             <Wallet className="w-5 h-5" />
           </div>
         </div>
 
-        <div className="bg-sky-50/60 border border-sky-100 rounded-xl p-5 flex items-center justify-between shadow-sm">
+        {/* Books Read */}
+        <div className="bg-indigo-50/60 border border-indigo-100 rounded-xl p-5 flex items-center justify-between shadow-sm">
           <div className="space-y-1">
-            <span className="text-xs font-bold text-sky-700 uppercase tracking-wider">
-              Total Books Read
+            <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider">
+              Books Read
             </span>
-            <h2 className="text-xl md:text-2xl font-black text-sky-900">
-              {stats.totalBooksRead || 0} Units
+            <h2 className="text-xl md:text-2xl font-black text-indigo-900">
+              {stats.totalBooksRead || 0}
             </h2>
           </div>
-          <div className="p-3 bg-sky-100 text-sky-600 rounded-xl">
+          <div className="p-3 bg-indigo-100 text-indigo-600 rounded-xl">
             <BookOpen className="w-5 h-5" />
           </div>
         </div>
 
+        {/* Pending Deliveries */}
         <div className="bg-amber-50/60 border border-amber-100 rounded-xl p-5 flex items-center justify-between shadow-sm">
           <div className="space-y-1">
             <span className="text-xs font-bold text-amber-700 uppercase tracking-wider">
               Pending Deliveries
             </span>
             <h2 className="text-xl md:text-2xl font-black text-amber-900">
-              {stats.pendingDeliveries || 0} Orders
+              {stats.pendingDeliveries || 0}
             </h2>
           </div>
           <div className="p-3 bg-amber-100 text-amber-600 rounded-xl">
@@ -116,66 +160,65 @@ function UserOverviewContent() {
           </div>
         </div>
 
-        <div className="bg-emerald-50/60 border border-emerald-100 rounded-xl p-5 flex items-center justify-between shadow-sm">
+        {/* Currently Borrowed */}
+        <div className="bg-sky-50/60 border border-sky-100 rounded-xl p-5 flex items-center justify-between shadow-sm">
           <div className="space-y-1">
-            <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider">
-              Active Borrowing
+            <span className="text-xs font-bold text-sky-700 uppercase tracking-wider">
+              Currently Borrowed
             </span>
-            <h2 className="text-xl md:text-2xl font-black text-emerald-900">
-              {stats.activeBorrowing || 0} Books
+            <h2 className="text-xl md:text-2xl font-black text-sky-900">
+              {stats.activeBorrowing || 0}
             </h2>
           </div>
-          <div className="p-3 bg-emerald-100 text-emerald-600 rounded-xl">
+          <div className="p-3 bg-sky-100 text-sky-600 rounded-xl">
             <ShoppingBag className="w-5 h-5" />
           </div>
         </div>
       </div>
 
-      {/* CHARTS GRAPHICS REGION */}
+      {/* CHARTS */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* MONTHLY SPENDING BAR CHART */}
-        <div className="bg-white border border-gray-100 p-4 md:p-5 rounded-xl shadow-sm space-y-4">
+        {/* Monthly Spending */}
+        <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm space-y-4">
           <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
-            <BarChart3 className="w-4 h-4 text-indigo-600" /> Monthly Spending
-            Summary
+            <BarChart3 className="w-4 h-4 text-indigo-600" />
+            Monthly Spending
           </h3>
-          <div className="h-64 w-full text-xs">
+          <div className="h-64">
             {charts.monthlySpending?.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={charts.monthlySpending}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#F3F4F6" />
-                  <XAxis dataKey="month" stroke="#9CA3AF" />
-                  <YAxis stroke="#9CA3AF" />
-                  <Tooltip formatter={(value) => [`$${value}`, "Amount"]} />
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="month" />
+                  <YAxis />
+                  <Tooltip formatter={(v) => [`$${v}`, "Spent"]} />
                   <Bar dataKey="amount" fill="#635BFF" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-full w-full flex items-center justify-center text-gray-400 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-                No monthly transactional history available.
+              <div className="h-full flex items-center justify-center text-gray-400 bg-gray-50 rounded-xl border border-dashed">
+                No spending history found.
               </div>
             )}
           </div>
         </div>
 
-        {/* CATEGORY DISTRIBUTION PIE CHART */}
-        <div className="bg-white border border-gray-100 p-4 md:p-5 rounded-xl shadow-sm space-y-4">
+        {/* Category Distribution */}
+        <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm space-y-4">
           <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
-            <PieIcon className="w-4 h-4 text-sky-600" /> Book Categories
-            Distribution
+            <PieIcon className="w-4 h-4 text-emerald-600" />
+            Reading Categories
           </h3>
-          <div className="h-64 w-full text-xs flex items-center justify-center">
+          <div className="h-64">
             {charts.categoryDistribution?.length > 0 ? (
               <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Pie
                     data={charts.categoryDistribution}
-                    cx="50%"
-                    cy="45%"
-                    innerRadius={60}
-                    outerRadius={80}
-                    paddingAngle={5}
                     dataKey="count"
+                    nameKey="name"
+                    outerRadius={85}
+                    label
                   >
                     {charts.categoryDistribution.map((entry, index) => (
                       <Cell
@@ -184,17 +227,13 @@ function UserOverviewContent() {
                       />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value) => [value, "Books"]} />
-                  <Legend
-                    verticalAlign="bottom"
-                    height={36}
-                    iconType="circle"
-                  />
+                  <Tooltip />
+                  <Legend />
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-full w-full flex items-center justify-center text-gray-400 bg-gray-50 rounded-xl border border-dashed border-gray-200">
-                No historical category data logged.
+              <div className="h-full flex items-center justify-center text-gray-400 bg-gray-50 rounded-xl border border-dashed">
+                No category insights available.
               </div>
             )}
           </div>

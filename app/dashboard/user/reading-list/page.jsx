@@ -1,23 +1,40 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
 import { useQuery } from "@tanstack/react-query";
 
 export default function UserReadingListPage() {
   // Fetch reading list directory data via TanStack Query
+
   const {
     data: readingList,
     isLoading,
     isError,
   } = useQuery({
     queryKey: ["user-reading-list"],
-    queryFn: () =>
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/dashboard/reading-list`, {
-        credentials: "include",
-      }).then((res) => {
-        if (!res.ok)
-          throw new Error("Could not parse digital catalog archives.");
-        return res.json();
-      }),
+    queryFn: async () => {
+      const { data, error } = await authClient.token();
+
+      if (error) {
+        console.error(error);
+      } else {
+        console.log(data.token);
+      }
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/dashboard/reading-list`,
+        {
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+        },
+      );
+
+      if (!res.ok) {
+        throw new Error("Could not parse digital catalog archives.");
+      }
+
+      return res.json();
+    },
   });
 
   if (isLoading) {

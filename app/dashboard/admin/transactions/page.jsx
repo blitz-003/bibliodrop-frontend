@@ -1,22 +1,34 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-
+import { authClient } from "@/lib/auth-client";
 export default function AdminTransactionsPage() {
   // Fetch compiled admin ledger stream via TanStack Query
+
   const {
     data: transactions,
     isLoading,
     isError,
   } = useQuery({
     queryKey: ["admin-transactions"],
-    queryFn: () =>
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/transactions`, {
-        credentials: "include",
-      }).then((res) => {
-        if (!res.ok) throw new Error("Network response error");
-        return res.json();
-      }),
+    queryFn: async () => {
+      const { data: tokenData } = await authClient.token();
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/transactions`,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenData.token}`,
+          },
+        },
+      );
+
+      if (!res.ok) {
+        throw new Error("Network response error");
+      }
+
+      return res.json();
+    },
   });
 
   if (isLoading)

@@ -1,5 +1,6 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
@@ -7,44 +8,75 @@ export default function AdminManageBooksPage() {
   const queryClient = useQueryClient();
 
   // 1. Fetch entire catalog via Admin master endpoint
+
   const {
     data: books,
     isLoading,
     isError,
   } = useQuery({
     queryKey: ["admin-manage-books"],
-    queryFn: () =>
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/books`, {
-        credentials: "include",
-      }).then((res) => {
-        if (!res.ok) throw new Error("Failed to load inventory logs.");
-        return res.json();
-      }),
+    queryFn: async () => {
+      const { data: tokenData } = await authClient.token();
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/admin/books`,
+        {
+          headers: {
+            Authorization: `Bearer ${tokenData.token}`,
+          },
+        },
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to load inventory logs.");
+      }
+
+      return res.json();
+    },
   });
 
   // 2. Mutation: Toggle Publication States
+
   const togglePublishMutation = useMutation({
     mutationFn: async ({ id, nextStatus }) => {
+      const { data: tokenData } = await authClient.token();
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_URL}/admin/books/${id}/status`,
         {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ publishStatus: nextStatus }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${tokenData.token}`,
+          },
+          body: JSON.stringify({
+            publishStatus: nextStatus,
+          }),
         },
       );
-      if (!res.ok) throw new Error("Status transformation failure.");
+
+      if (!res.ok) {
+        throw new Error("Status transformation failure.");
+      }
+
       return res.json();
     },
+
     onSuccess: (data) => {
       const isApproved = data.publishStatus === "approved";
+
       toast.success(
         `Book successfully ${isApproved ? "Published" : "Unpublished"}!`,
       );
-      queryClient.invalidateQueries(["admin-manage-books"]);
+
+      queryClient.invalidateQueries({
+        queryKey: ["admin-manage-books"],
+      });
     },
-    onError: () => toast.error("Could not alter book publication status."),
+
+    onError: () => {
+      toast.error("Could not alter book publication status.");
+    },
   });
 
   if (isLoading)

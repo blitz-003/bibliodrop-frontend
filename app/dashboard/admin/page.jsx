@@ -1,5 +1,6 @@
 "use client";
 
+import { authClient } from "@/lib/auth-client";
 import {
   useQuery,
   QueryClient,
@@ -32,13 +33,24 @@ const adminOverviewClient = new QueryClient({
 function AdminOverviewContent() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["admin-dashboard-metrics"],
-    queryFn: () =>
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/dashboard/admin`, {
-        credentials: "include",
-      }).then((res) => {
-        if (!res.ok) throw new Error("Could not load system matrices.");
-        return res.json();
-      }),
+    queryFn: async () => {
+      const { data } = await authClient.token();
+
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/dashboard/admin`,
+        {
+          headers: {
+            Authorization: `Bearer ${data.token}`,
+          },
+        },
+      );
+
+      if (!res.ok) {
+        throw new Error("Could not load system matrices.");
+      }
+
+      return res.json();
+    },
   });
 
   if (isLoading)
