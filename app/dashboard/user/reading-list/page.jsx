@@ -45,7 +45,7 @@ export default function UserReadingListPage() {
           {[...Array(4)].map((_, i) => (
             <div
               key={i}
-              className="h-80 bg-gray-50 border border-gray-100 rounded-2xl animate-pulse"
+              className="h-80 bg-white border border-gray-100 rounded-2xl animate-pulse"
             />
           ))}
         </div>
@@ -65,9 +65,7 @@ export default function UserReadingListPage() {
     <div className="p-6 max-w-7xl mx-auto">
       {/* Header Profile Title */}
       <div className="mb-8">
-        <h1 className="text-2xl font-black text-gray-900 tracking-normal">
-          My Reading List
-        </h1>
+        <h1 className="text-2xl font-black text-gray-900 ">My Reading List</h1>
         <p className="text-sm text-gray-500 mt-1">
           Your curated collection of successfully acquired and delivered
           literature volumes.
@@ -83,7 +81,7 @@ export default function UserReadingListPage() {
               className="group bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden flex flex-col h-full"
             >
               {/* Card Header Top: Small Compressed Aspect-ratio Media Box Container */}
-              <div className="relative aspect-[4/3] w-full bg-gray-50 overflow-hidden border-b border-gray-50">
+              <div className="relative aspect-[4/3] w-full bg-white overflow-hidden border-b border-gray-50">
                 <img
                   src={book.coverImage}
                   alt={book.title}
@@ -95,7 +93,7 @@ export default function UserReadingListPage() {
                 />
 
                 {/* Micro Meta Delivery Log Badge */}
-                <div className="absolute top-3 right-3 bg-green-500/90 text-white backdrop-blur-md font-bold text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full shadow-sm">
+                <div className="absolute top-3 right-3 bg-green-500/90 text-white backdrop-blur-md font-semibold text-[10px] uppercase  px-2 py-0.5 rounded-full shadow-sm">
                   Arrived
                 </div>
               </div>
@@ -112,7 +110,7 @@ export default function UserReadingListPage() {
                 {/* Primary Narrative Text Strings block wrapper */}
                 <div className="space-y-0.5 flex-grow">
                   <h3
-                    className="text-sm font-bold text-gray-900 group-hover:text-[#635BFF] transition-colors line-clamp-1 leading-tight tracking-normal"
+                    className="text-sm font-semibold text-gray-900 group-hover:text-[#635BFF] transition-colors line-clamp-1 leading-tight "
                     title={book.title}
                   >
                     {book.title}
@@ -143,7 +141,7 @@ export default function UserReadingListPage() {
         </div>
       ) : (
         /* Empty State Display Component Frame Layout Setup */
-        <div className="bg-gray-50/50 border border-dashed border-gray-200 rounded-2xl p-12 text-center max-w-md mx-auto mt-8">
+        <div className="bg-white/50 border border-dashed border-gray-200 rounded-2xl p-12 text-center max-w-md mx-auto mt-8">
           <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto text-gray-400 mb-3">
             <svg
               className="w-6 h-6"
@@ -159,7 +157,7 @@ export default function UserReadingListPage() {
               />
             </svg>
           </div>
-          <h3 className="text-sm font-bold text-gray-900 tracking-normal">
+          <h3 className="text-sm font-semibold text-gray-900 ">
             Your reading library is empty
           </h3>
           <p className="text-xs text-gray-400 mt-1 max-w-xs mx-auto">

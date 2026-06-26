@@ -10,20 +10,30 @@ export default function SidebarLayout({
   closeMobileMenu,
 }) {
   return (
-    <aside className="w-full h-screen flex flex-col bg-slate-900 border-r border-slate-800 p-6 text-slate-300 font-sans">
+    <aside
+      className="
+    h-full
+    bg-slate-900
+    border border-slate-800
+    rounded-3xl
+    shadow-xl
+    flex flex-col
+    p-6
+    text-slate-300
+    
+  "
+    >
       {/* 1. BRAND TITLE HEADER BLOCK (Updated to Bibliodrop) */}
       <div className="border-b border-slate-800/80 pb-5">
-        <span className="block text-xs uppercase tracking-widest font-semibold text-blue-500">
+        <span className="block text-xs uppercase  font-semibold text-blue-500">
           {title}
         </span>
-        <h2 className="text-xl font-bold text-white mt-1 font-sans">
-          Bibliodrop
-        </h2>
+        <h2 className="text-xl font-semibold text-white mt-1 ">Bibliodrop</h2>
       </div>
 
       {/* 2. IDENTITY PROFILE BOX (Swapped violet to HeroUI primary blue-600) */}
       <div className="mt-5 mb-8 bg-slate-800/50 border border-slate-800 rounded-xl p-4 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-base font-bold select-none shadow-sm shadow-blue-600/20">
+        <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-base font-semibold select-none shadow-sm shadow-blue-600/20">
           {user.name ? user.name.charAt(0).toUpperCase() : "U"}
         </div>
         <div className="min-w-0 flex-1">
@@ -37,7 +47,7 @@ export default function SidebarLayout({
       </div>
 
       {/* 3. ACTIVE LIVE NAVIGATION LINK GRID */}
-      <nav className="flex flex-col gap-2 overflow-y-auto pr-1">
+      <nav className="flex-1 flex flex-col gap-2 overflow-y-auto pr-1">
         {React.Children.map(children, (child) => {
           if (React.isValidElement(child)) {
             return React.cloneElement(child, { onClick: closeMobileMenu });

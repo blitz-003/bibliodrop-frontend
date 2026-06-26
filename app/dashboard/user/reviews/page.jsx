@@ -168,7 +168,7 @@ function MyReviewsContent() {
         {[1, 2].map((n) => (
           <div
             key={n}
-            className="h-32 bg-gray-50 border border-gray-100 rounded-xl"
+            className="h-32 bg-white border border-gray-100 rounded-xl"
           ></div>
         ))}
       </div>
@@ -187,9 +187,9 @@ function MyReviewsContent() {
   }
 
   return (
-    <div className="w-full max-w-4xl p-4 md:p-8 space-y-6 font-sans text-gray-700 mx-auto">
+    <div className="w-full max-w-4xl p-4 md:p-8 space-y-6 text-gray-700 mx-auto">
       <div>
-        <h1 className="text-xl md:text-2xl font-black text-gray-900 tracking-tight flex items-center gap-2">
+        <h1 className="text-xl md:text-2xl font-black text-gray-900  flex items-center gap-2">
           <MessageSquare className="w-6 h-6 text-indigo-600" />
           My Personal Reviews
         </h1>
@@ -211,7 +211,7 @@ function MyReviewsContent() {
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="text-sm font-bold text-gray-900">
+                  <h3 className="text-sm font-semibold text-gray-900">
                     {rev.bookId?.title || "Unknown Book"}
                   </h3>
 
@@ -224,7 +224,7 @@ function MyReviewsContent() {
                   <select
                     value={editRating}
                     onChange={(e) => setEditRating(Number(e.target.value))}
-                    className="bg-gray-50 border border-gray-200 rounded px-2 py-0.5 text-xs font-bold focus:outline-none focus:border-indigo-500"
+                    className="bg-white border border-gray-200 rounded px-2 py-0.5 text-xs font-semibold focus:outline-none focus:border-indigo-500"
                   >
                     {[5, 4, 3, 2, 1].map((n) => (
                       <option key={n} value={n}>
@@ -233,7 +233,7 @@ function MyReviewsContent() {
                     ))}
                   </select>
                 ) : (
-                  <div className="flex items-center gap-1 text-xs font-bold text-amber-500 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100">
+                  <div className="flex items-center gap-1 text-xs font-semibold text-amber-500 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-100">
                     <Star className="w-3 h-3 fill-current" />
                     {rev.rating}/5
                   </div>
@@ -245,10 +245,10 @@ function MyReviewsContent() {
                   rows={2}
                   value={editComment}
                   onChange={(e) => setEditComment(e.target.value)}
-                  className="w-full bg-gray-50 border border-gray-200 rounded-lg p-3 text-xs focus:outline-none focus:border-indigo-500"
+                  className="w-full bg-white border border-gray-200 rounded-lg p-3 text-xs focus:outline-none focus:border-indigo-500"
                 />
               ) : (
-                <p className="text-xs text-gray-600 leading-relaxed bg-gray-50 p-3 rounded-lg">
+                <p className="text-xs text-gray-600 leading-relaxed bg-white p-3 rounded-lg">
                   {rev.comment}
                 </p>
               )}
@@ -285,7 +285,7 @@ function MyReviewsContent() {
                   <>
                     <button
                       onClick={() => startEditing(rev)}
-                      className="inline-flex items-center gap-1 border border-gray-200 hover:bg-gray-50 px-3 py-1.5 rounded-lg"
+                      className="inline-flex items-center gap-1 border border-gray-200 hover:bg-white px-3 py-1.5 rounded-lg"
                     >
                       <Edit3 className="w-3.5 h-3.5" />
                       Edit

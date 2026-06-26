@@ -7,14 +7,14 @@ export default function DashboardShell({ user, children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen bg-slate-50 font-sans overflow-hidden">
+    <div className="flex min-h-screen bg-slate-50  overflow-hidden">
       <Sidebar
         user={user}
         isOpen={isSidebarOpen}
         setIsOpen={setIsSidebarOpen}
       />
 
-      <main className="flex-1 overflow-y-auto p-4 md:p-8 bg-slate-50 w-full">
+      <main className="flex-1 overflow-y-auto bg-slate-50 w-full p-4 md:p-8 lg:ml-72">
         {children}
       </main>
     </div>

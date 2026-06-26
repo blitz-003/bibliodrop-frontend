@@ -29,8 +29,8 @@ export default function InventoryClient({ user }) {
   const safeBooks = Array.isArray(books) ? books : [];
   console.log(books);
   return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
-      <h1 className="text-2xl font-bold">Inventory Dashboard</h1>
+    <div className="p-6 space-y-6 bg-white min-h-screen">
+      <h1 className="text-2xl font-semibold">Inventory Dashboard</h1>
 
       {/* CARD WRAPPER */}
       <Card className="p-4">
@@ -52,7 +52,7 @@ export default function InventoryClient({ user }) {
 
               <tbody>
                 {safeBooks.map((b) => (
-                  <tr key={b._id} className="border-b hover:bg-gray-50">
+                  <tr key={b._id} className="border-b hover:bg-white">
                     <td className="p-3 font-medium">{b.title}</td>
                     <td>{b.category}</td>
                     <td>{b.totalStock}</td>

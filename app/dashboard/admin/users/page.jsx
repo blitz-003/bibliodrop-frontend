@@ -136,9 +136,7 @@ export default function AdminManageUsersPage() {
   return (
     <div className="p-6 max-w-7xl mx-auto relative">
       <div className="mb-6">
-        <h1 className="text-2xl font-black text-gray-900 tracking-tight">
-          Manage Users
-        </h1>
+        <h1 className="text-2xl font-black text-gray-900 ">Manage Users</h1>
         <p className="text-sm text-gray-500">
           View registered accounts, alter account group privileges, or revoke
           system access logs.
@@ -150,7 +148,7 @@ export default function AdminManageUsersPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100 text-xs font-bold uppercase tracking-wider text-gray-600">
+              <tr className="bg-white border-b border-gray-100 text-xs font-semibold uppercase  text-gray-600">
                 <th className="p-4">Username</th>
                 <th className="p-4">Email</th>
                 <th className="p-4">Role</th>
@@ -160,17 +158,14 @@ export default function AdminManageUsersPage() {
             </thead>
             <tbody className="divide-y divide-gray-100 text-sm text-gray-700">
               {users?.map((u) => (
-                <tr
-                  key={u._id}
-                  className="hover:bg-gray-50/50 transition-colors"
-                >
-                  <td className="p-4 font-bold text-gray-900">
+                <tr key={u._id} className="hover:bg-white/50 transition-colors">
+                  <td className="p-4 font-semibold text-gray-900">
                     {u.name || "No Username"}
                   </td>
                   <td className="p-4 font-medium text-gray-600">{u.email}</td>
                   <td className="p-4">
                     <span
-                      className={`px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider ${
+                      className={`px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase  ${
                         u.role === "admin"
                           ? "bg-purple-100 text-purple-700"
                           : u.role === "librarian"
@@ -192,7 +187,7 @@ export default function AdminManageUsersPage() {
                         setRoleModalUser(u);
                         setSelectedRole(u.role);
                       }}
-                      className="bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 font-semibold text-xs px-3 py-1.5 rounded-lg shadow-sm transition-colors"
+                      className="bg-white hover:bg-white text-gray-700 border border-gray-200 font-semibold text-xs px-3 py-1.5 rounded-lg shadow-sm transition-colors"
                     >
                       Change Role
                     </button>
@@ -222,13 +217,13 @@ export default function AdminManageUsersPage() {
             </div>
 
             <div className="space-y-1">
-              <label className="text-xs font-bold uppercase tracking-wider text-gray-500">
+              <label className="text-xs font-semibold uppercase  text-gray-500">
                 Select Access Pool
               </label>
               <select
                 value={selectedRole}
                 onChange={(e) => setSelectedRole(e.target.value)}
-                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-indigo-500 font-medium text-gray-700"
+                className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-indigo-500 font-medium text-gray-700"
               >
                 <option value="user">User</option>
                 <option value="librarian">Librarian</option>

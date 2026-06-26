@@ -103,18 +103,18 @@ export default function ApprovalsClient({ token }) {
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6 text-gray-800">
+      <h1 className="text-2xl font-semibold mb-6 text-gray-800">
         Admin Approval Management
       </h1>
 
       {pendingBooks.length === 0 ? (
-        <div className="p-8 bg-gray-50 border rounded-lg text-center text-gray-500">
+        <div className="p-8 bg-white border rounded-lg text-center text-gray-500">
           No books are currently waiting for approval.
         </div>
       ) : (
         <div className="overflow-x-auto border border-gray-200 rounded-lg shadow-sm">
           <table className="w-full text-left border-collapse bg-white text-sm text-gray-500">
-            <thead className="bg-gray-50 text-xs font-semibold uppercase text-gray-700 border-b">
+            <thead className="bg-white text-xs font-semibold uppercase text-gray-700 border-b">
               <tr>
                 <th className="px-6 py-4">Book Title</th>
                 <th className="px-6 py-4">Librarian (Owner)</th>
@@ -125,10 +125,7 @@ export default function ApprovalsClient({ token }) {
             </thead>
             <tbody className="divide-y divide-gray-200">
               {pendingBooks.map((book) => (
-                <tr
-                  key={book._id}
-                  className="hover:bg-gray-50 transition-colors"
-                >
+                <tr key={book._id} className="hover:bg-white transition-colors">
                   <td className="px-6 py-4 font-medium text-gray-900">
                     {book.title}
                   </td>

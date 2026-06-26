@@ -59,7 +59,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md">
         {/* CARD */}
         <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 md:p-8">
@@ -69,7 +69,7 @@ export default function LoginPage() {
               <BookOpen className="w-8 h-8 text-white" />
             </div>
 
-            <h1 className="mt-5 text-3xl font-bold text-slate-900">
+            <h1 className="mt-5 text-3xl font-semibold text-slate-900">
               Welcome Back
             </h1>
 
@@ -180,7 +180,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition disabled:opacity-50"
+              className="w-full bg-neutral-900/95 hover:bg-neutral-700 text-white py-3 rounded-xl font-semibold transition disabled:opacity-50"
             >
               {loading ? "Signing In..." : "Sign In"}
             </button>

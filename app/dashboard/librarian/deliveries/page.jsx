@@ -84,7 +84,7 @@ export default function ManageDeliveriesPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100 text-sm font-semibold text-gray-600">
+              <tr className="bg-white border-b border-gray-100 text-sm font-semibold text-gray-600">
                 <th className="p-4">Client Name</th>
                 <th className="p-4">Book Name</th>
                 <th className="p-4">Order Date</th>
@@ -94,11 +94,11 @@ export default function ManageDeliveriesPage() {
             </thead>
             <tbody className="divide-y divide-gray-100 text-sm text-gray-700">
               {queue?.map((d) => (
-                <tr key={d._id} className="hover:bg-gray-50/50">
+                <tr key={d._id} className="hover:bg-white/50">
                   <td className="p-4 font-medium text-gray-900">
                     {d?.userName || "Deleted User"}
                   </td>
-                  <td className="p-4 font-bold text-indigo-950">
+                  <td className="p-4 font-semibold text-indigo-950">
                     {d?.bookTitle || "Unknown Book"}
                   </td>
                   <td className="p-4">
@@ -106,7 +106,7 @@ export default function ManageDeliveriesPage() {
                   </td>
                   <td className="p-4">
                     <span
-                      className={`px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${
+                      className={`px-2.5 py-1 rounded-full text-xs font-semibold uppercase  ${
                         d.status === "pending"
                           ? "bg-amber-50 text-amber-700 border border-amber-200"
                           : d.status === "dispatched"

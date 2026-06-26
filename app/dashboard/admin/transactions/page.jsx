@@ -45,7 +45,7 @@ export default function AdminTransactionsPage() {
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-2xl font-black text-gray-900 tracking-tight">
+        <h1 className="text-2xl font-black text-gray-900 ">
           System Transactions
         </h1>
         <p className="text-sm text-gray-500">
@@ -58,7 +58,7 @@ export default function AdminTransactionsPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100 text-xs font-bold uppercase tracking-wider text-gray-600">
+              <tr className="bg-white border-b border-gray-100 text-xs font-semibold uppercase  text-gray-600">
                 <th className="p-4">Transaction ID</th>
                 <th className="p-4">Amount</th>
                 <th className="p-4">Book Name</th>
@@ -72,7 +72,7 @@ export default function AdminTransactionsPage() {
               {transactions?.map((tx) => (
                 <tr
                   key={tx._id}
-                  className="hover:bg-gray-50/50 transition-colors"
+                  className="hover:bg-white/50 transition-colors"
                 >
                   {/* Transaction ID */}
                   <td
@@ -89,7 +89,7 @@ export default function AdminTransactionsPage() {
 
                   {/* Book Name */}
                   <td
-                    className="p-4 font-bold text-indigo-950 max-w-[200px] truncate"
+                    className="p-4 font-semibold text-indigo-950 max-w-[200px] truncate"
                     title={tx.bookName}
                   >
                     {tx.bookName}
@@ -116,7 +116,7 @@ export default function AdminTransactionsPage() {
                   {/* Delivery Status (Color Coded badges with NO action buttons) */}
                   <td className="p-4">
                     <span
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold uppercase  ${
                         tx.deliveryStatus === "pending"
                           ? "bg-amber-50 text-amber-700 border border-amber-200"
                           : tx.deliveryStatus === "dispatched"

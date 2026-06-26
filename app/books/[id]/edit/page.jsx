@@ -122,9 +122,11 @@ function EditBookFormContent() {
   }
 
   return (
-    <div className="p-6 max-w-2xl mx-auto space-y-8 text-gray-700 font-sans">
+    <div className="p-6 max-w-2xl mx-auto space-y-8 text-gray-700 ">
       <div>
-        <h1 className="text-xl font-bold text-gray-900">Edit Catalog Volume</h1>
+        <h1 className="text-xl font-semibold text-gray-900">
+          Edit Catalog Volume
+        </h1>
         <p className="text-xs text-gray-400">
           Modify data variables index record for catalog index reference token{" "}
           {id}
@@ -136,7 +138,7 @@ function EditBookFormContent() {
         className="space-y-5 bg-white border border-gray-100 p-6 rounded-xl shadow-sm"
       >
         <div className="space-y-1">
-          <label className="text-xs font-bold text-gray-500 uppercase">
+          <label className="text-xs font-semibold text-gray-500 uppercase">
             Book Title
           </label>
           <input
@@ -149,7 +151,7 @@ function EditBookFormContent() {
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs font-bold text-gray-500 uppercase">
+          <label className="text-xs font-semibold text-gray-500 uppercase">
             Author
           </label>
           <input
@@ -162,7 +164,7 @@ function EditBookFormContent() {
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs font-bold text-gray-500 uppercase">
+          <label className="text-xs font-semibold text-gray-500 uppercase">
             Category Tag
           </label>
           <input
@@ -174,7 +176,7 @@ function EditBookFormContent() {
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs font-bold text-gray-500 uppercase">
+          <label className="text-xs font-semibold text-gray-500 uppercase">
             Delivery Logistics Access Fee ($)
           </label>
           <input
@@ -190,7 +192,7 @@ function EditBookFormContent() {
         </div>
 
         <div className="space-y-1">
-          <label className="text-xs font-bold text-gray-500 uppercase">
+          <label className="text-xs font-semibold text-gray-500 uppercase">
             Manifest Overview Description
           </label>
           <textarea
@@ -205,7 +207,7 @@ function EditBookFormContent() {
           <button
             type="button"
             onClick={() => router.back()}
-            className="bg-white hover:bg-gray-50 text-gray-700 border border-gray-200 font-semibold text-xs px-4 py-2 rounded-lg transition-colors"
+            className="bg-white hover:bg-white text-gray-700 border border-gray-200 font-semibold text-xs px-4 py-2 rounded-lg transition-colors"
           >
             Cancel
           </button>

@@ -45,7 +45,7 @@ export default function UserDeliveryHistoryPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100 text-sm font-semibold text-gray-600">
+              <tr className="bg-white border-b border-gray-100 text-sm font-semibold text-gray-600">
                 <th className="p-4">Book Title</th>
                 <th className="p-4">Delivery Fee</th>
                 <th className="p-4">Request Date</th>
@@ -55,15 +55,17 @@ export default function UserDeliveryHistoryPage() {
             </thead>
             <tbody className="divide-y divide-gray-100 text-sm text-gray-700">
               {deliveries?.map((d) => (
-                <tr key={d._id} className="hover:bg-gray-50/50">
-                  <td className="p-4 font-bold text-gray-900">{d.bookTitle}</td>
+                <tr key={d._id} className="hover:bg-white/50">
+                  <td className="p-4 font-semibold text-gray-900">
+                    {d.bookTitle}
+                  </td>
                   <td className="p-4">${d.deliveryFee.toFixed(2)}</td>
                   <td className="p-4">
                     {new Date(d.createdAt).toLocaleDateString()}
                   </td>
                   <td className="p-4">
                     <span
-                      className={`px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider ${
+                      className={`px-2.5 py-1 rounded-full text-xs font-semibold uppercase  ${
                         d.status === "pending"
                           ? "bg-amber-50 text-amber-700 border border-amber-200"
                           : d.status === "dispatched"

@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import TeaserSection from "@/components/TeaserSection";
 
 // --- PREMIUM IMAGES (Books, Coffee, Cafes) ---
 const IMAGES = {
@@ -147,7 +148,7 @@ export default function HomePage() {
   );
 
   return (
-    <div className="relative min-h-screen bg-[#FAF9F5] text-stone-900 overflow-x-hidden font-sans antialiased selection:bg-stone-200">
+    <div className="relative min-h-screen bg-slate-50 text-stone-900 overflow-x-hidden  antialiased selection:bg-slate-50">
       {/* ================= RE-SIZED LARGER PAPER AIRPLANE LAYER ================= */}
       <motion.div
         style={{ y: planeY, x: planeX, rotate: planeRotate, scale: planeScale }}
@@ -170,19 +171,21 @@ export default function HomePage() {
       </motion.div>
 
       {/* ================= 1. CINEMATIC HERO SECTION ================= */}
-      <section className="relative min-h-screen grid grid-cols-1 lg:grid-cols-12 items-stretch border-b border-stone-200/80">
+      {/* UPDATED: Removed border, forced layout to top of window */}
+      <section className="relative min-h-screen grid grid-cols-1 lg:grid-cols-12 items-stretch">
         {/* Left Panel */}
-        <div className="lg:col-span-6 flex flex-col justify-center px-6 sm:px-12 lg:px-20 py-24 z-10 bg-[#FAF9F5]/90 backdrop-blur-sm lg:backdrop-blur-none">
+        {/* UPDATED: lg:pt-36 pushes content down safely past your floating navbar */}
+        <div className="lg:col-span-6 flex flex-col justify-center px-6 sm:px-12 lg:px-20 pt-28 pb-16 lg:pt-36 lg:pb-24 z-10 bg-slate-50 backdrop-blur-sm lg:backdrop-blur-none">
           <motion.div
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            className="max-w-xl space-y-8"
+            className="max-w-xl space-y-4"
           >
-            <div className="overflow-hidden py-2">
+            <div className="overflow-hidden py-1">
               <motion.h1
                 variants={textRevealVariants}
-                className="text-5xl sm:text-6xl md:text-7xl font-serif font-light tracking-tight text-stone-900 leading-[1.05]"
+                className="text-5xl sm:text-6xl md:text-7xl font-serif font-light text-stone-900 leading-[1.05]"
               >
                 Your Local Library, <br />
                 <span className="italic font-normal text-stone-500 font-serif">
@@ -191,7 +194,7 @@ export default function HomePage() {
               </motion.h1>
             </div>
 
-            <div className="overflow-hidden py-1">
+            <div className="overflow-hidden">
               <motion.p
                 variants={textRevealVariants}
                 className="text-lg text-stone-600 font-light leading-relaxed"
@@ -202,20 +205,20 @@ export default function HomePage() {
               </motion.p>
             </div>
 
-            <div className="overflow-hidden pt-4 flex items-center gap-6">
+            <div className="overflow-hidden pt-2 flex items-center gap-3">
               <Link href="/browse-books">
                 <motion.button
                   variants={textRevealVariants}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="px-8 py-4 bg-stone-900 text-stone-100 rounded-none shadow-sm hover:bg-stone-800 transition-all duration-300 text-sm font-medium uppercase tracking-wider"
+                  className="px-8 py-4 bg-stone-900 text-stone-100 rounded-none shadow-sm hover:bg-stone-800 transition-all duration-300 text-sm font-medium uppercase"
                 >
                   Browse Books
                 </motion.button>
               </Link>
               <motion.span
                 variants={textRevealVariants}
-                className="text-xs uppercase tracking-widest text-stone-400 font-semibold hidden sm:inline-block"
+                className="text-xs uppercase  text-stone-400 font-semibold hidden sm:inline-block"
               >
                 Est. 2026 — Archive Edition
               </motion.span>
@@ -224,12 +227,13 @@ export default function HomePage() {
         </div>
 
         {/* Right Panel: Atmospheric Woman Reading Picture */}
-        <div className="absolute inset-0 lg:relative lg:col-span-6 h-full w-full -z-10 lg:z-0">
+        {/* UPDATED: Added lg:col-span-7, lg:p-6 (space on all sides), and rounded-3xl corners */}
+        <div className="absolute inset-0 lg:relative lg:col-span-6 h-full w-full -z-10 lg:z-0 lg:p-6 lg:pl-0">
           <div className="absolute inset-0 bg-gradient-to-r from-[#FAF9F5] via-[#FAF9F5]/40 to-transparent lg:hidden z-10" />
           <img
             src={IMAGES.heroBg}
             alt="A woman reading a book with a steaming hot coffee cup alongside"
-            className="w-full h-full object-cover object-center filter contrast-[102%]"
+            className="w-full h-full object-cover object-center filter contrast-[102%] lg:rounded-3xl shadow-md"
           />
         </div>
       </section>
@@ -238,7 +242,7 @@ export default function HomePage() {
       <section className="py-24 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-16 gap-4">
           <div>
-            <span className="text-xs uppercase tracking-widest text-stone-400 font-semibold">
+            <span className="text-xs uppercase  text-stone-400 font-semibold">
               New Arrivals
             </span>
             <h2 className="text-3xl md:text-4xl font-serif font-light text-stone-900 mt-2">
@@ -275,7 +279,7 @@ export default function HomePage() {
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out grayscale-[10%] rounded-2xl"
                   />
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[10px] uppercase tracking-widest px-3 py-1 font-medium text-stone-700">
+                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm text-[10px] uppercase  px-3 py-1 font-medium text-stone-700">
                     {book.category}
                   </div>
                 </div>
@@ -285,7 +289,7 @@ export default function HomePage() {
                     <h3 className="font-serif text-xl font-light text-stone-900 group-hover:text-stone-600 transition-colors duration-300">
                       {book.title}
                     </h3>
-                    <p className="text-xs text-stone-500 font-light tracking-wide mt-1">
+                    <p className="text-xs text-stone-500 font-light  mt-1">
                       by {book.author}
                     </p>
                   </div>
@@ -304,7 +308,7 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20 py-24 grid grid-cols-1 md:grid-cols-2 gap-16 relative">
           {/* Left Panel: Frozen Sticky Content */}
           <div className="md:sticky md:top-32 h-fit space-y-6 self-start">
-            <span className="text-xs uppercase tracking-widest text-stone-400 font-semibold">
+            <span className="text-xs uppercase  text-stone-400 font-semibold">
               Our Process
             </span>
             <h2 className="text-4xl md:text-5xl font-serif font-light text-stone-900 leading-tight">
@@ -354,11 +358,11 @@ export default function HomePage() {
                       <h3 className="text-xl font-serif font-light text-stone-900 group-hover:text-stone-600 transition-colors duration-200">
                         {lib.name}
                       </h3>
-                      <span className="text-[11px] font-mono tracking-wider bg-stone-100 text-stone-600 px-2 py-0.5 self-center sm:self-auto rounded-full">
+                      <span className="text-[11px] font-mono  bg-stone-100 text-stone-600 px-2 py-0.5 self-center sm:self-auto rounded-full">
                         Verified Courier
                       </span>
                     </div>
-                    <p className="text-xs text-stone-400 tracking-wider uppercase font-medium">
+                    <p className="text-xs text-stone-400  uppercase font-medium">
                       {lib.role}
                     </p>
                     <p className="text-sm font-light text-stone-600 pt-2 border-t border-stone-100 mt-2">
@@ -379,7 +383,7 @@ export default function HomePage() {
       {/* ================= 4. CURATED CATEGORIES GRID ================= */}
       <section className="py-24 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
         <div className="text-center max-w-xl mx-auto mb-16">
-          <span className="text-xs uppercase tracking-widest text-stone-400 font-semibold">
+          <span className="text-xs uppercase  text-stone-400 font-semibold">
             Taxonomy
           </span>
           <h2 className="text-3xl md:text-4xl font-serif font-light text-stone-900 mt-2">
@@ -406,7 +410,7 @@ export default function HomePage() {
                 <span className="block font-serif text-lg font-light text-stone-800 group-hover:text-stone-900">
                   {cat}
                 </span>
-                <span className="text-[10px] font-mono tracking-widest text-stone-400 block mt-2 uppercase">
+                <span className="text-[10px] font-mono  text-stone-400 block mt-2 uppercase">
                   Explore →
                 </span>
               </Link>

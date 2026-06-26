@@ -41,9 +41,20 @@ export default function Sidebar({ user, isOpen, setIsOpen }) {
 
       {/* FULL HEIGHT DRAW SIDEBAR */}
       <div
-        className={`fixed inset-y-0 left-0 transform ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:translate-x-0 lg:static lg:block transition-transform duration-200 ease-in-out z-50 w-64 h-screen bg-slate-900 flex-shrink-0`}
+        className={`
+    fixed
+    left-0
+    top-23
+    bottom-6
+    w-64
+    z-50
+    transition-transform duration-300 ease-in-out
+
+    ${isOpen ? "translate-x-4" : "-translate-x-full"}
+
+    lg:left-4
+    lg:translate-x-0
+  `}
       >
         {renderSidebarContent()}
       </div>

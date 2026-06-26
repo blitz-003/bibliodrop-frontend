@@ -72,11 +72,11 @@ export default function RegisterPage() {
         <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 md:p-8">
           {/* HEADER */}
           <div className="text-center mb-8">
-            <div className="w-16 h-16 rounded-2xl bg-blue-600 mx-auto flex items-center justify-center shadow-lg">
+            <div className="w-16 h-16 rounded-2xl bg-blue-600/95 hover:bg-blue-700 mx-auto flex items-center justify-center shadow-lg">
               <BookOpen className="w-8 h-8 text-white" />
             </div>
 
-            <h1 className="mt-5 text-3xl font-bold text-slate-900">
+            <h1 className="mt-5 text-3xl font-semibold text-slate-900">
               Create Account
             </h1>
 
@@ -284,7 +284,7 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-semibold transition disabled:opacity-50"
+              className="w-full bg-neutral-900/95 hover:bg-neutral-700 text-white py-3 rounded-xl font-semibold transition disabled:opacity-50"
             >
               {loading ? "Creating Account..." : "Create Account"}
             </button>

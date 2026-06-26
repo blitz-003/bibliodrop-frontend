@@ -86,7 +86,6 @@ function BookDetailsContent() {
       if (!res.ok) throw new Error("Failed to load book details.");
       return res.json();
     },
-    // ✅ FIX: Only fire this query after the auth system completes its validation check
     enabled: !isAuthLoading,
   });
 
@@ -206,14 +205,16 @@ function BookDetailsContent() {
   };
 
   return (
-    <div className="w-full min-h-[calc(100vh-64px)] p-4 md:p-8 flex flex-col items-center bg-gray-50 gap-6 font-sans text-gray-700">
+    <div className="w-full min-h-[calc(100vh-64px)] p-4 md:p-8 flex flex-col items-center bg-slate-50 gap-6  text-gray-700">
       {/* ─── STATUS BANNERS ─── */}
       {isSuccess && (
         <div className="w-full max-w-5xl bg-green-50 border border-green-200 rounded-xl p-4 flex items-center justify-between shadow-sm">
           <div className="flex items-center gap-3">
             <CheckCircle2 className="w-6 h-6 text-green-600 shrink-0" />
             <div>
-              <h3 className="font-bold text-green-900">Payment Successful!</h3>
+              <h3 className="font-semibold text-green-900">
+                Payment Successful!
+              </h3>
               <p className="text-sm text-green-700">
                 Your delivery has been requested.
               </p>
@@ -233,7 +234,7 @@ function BookDetailsContent() {
           <div className="flex items-center gap-3">
             <XCircle className="w-6 h-6 text-amber-600 shrink-0" />
             <div>
-              <h3 className="font-bold text-amber-900">Payment Canceled</h3>
+              <h3 className="font-semibold text-amber-900">Payment Canceled</h3>
               <p className="text-sm text-amber-700">
                 The checkout process was interrupted.
               </p>
@@ -250,7 +251,7 @@ function BookDetailsContent() {
 
       {/* ─── MAIN CARD FRAME ─── */}
       <div className="w-full max-w-5xl bg-white shadow-xl rounded-xl overflow-hidden flex flex-col md:flex-row border border-gray-100">
-        <div className="w-full md:w-1/2 h-[45vh] md:h-auto relative bg-gray-100 min-h-[400px]">
+        <div className="w-full md:w-1/2 h-[45vh] md:h-auto relative bg-gray-100 min-h-[550px]">
           <Image
             src={
               book?.coverImage ||
@@ -266,7 +267,7 @@ function BookDetailsContent() {
 
         <div className="w-full md:w-1/2 p-6 md:p-8 flex flex-col justify-center gap-4">
           <div className="space-y-1 text-center md:text-left">
-            <h1 className="text-2xl md:text-3xl font-extrabold text-gray-900 tracking-tight">
+            <h1 className="text-2xl md:text-3xl font-semibold text-gray-900 ">
               {book?.title}
             </h1>
             <p className="text-sm text-gray-400 font-medium">
@@ -314,7 +315,7 @@ function BookDetailsContent() {
           </div>
 
           <div className="bg-indigo-50/60 p-4 rounded-xl border border-indigo-100 flex items-center justify-between">
-            <span className="text-xs font-bold uppercase tracking-wider text-indigo-700">
+            <span className="text-xs font-semibold uppercase  text-indigo-700">
               Delivery Logistics Fee
             </span>
             <span className="text-2xl md:text-3xl font-black text-indigo-600">
@@ -356,7 +357,7 @@ function BookDetailsContent() {
                     isSuccess ||
                     isCheckedOut
                   }
-                  className={`w-full py-3 px-4 rounded-xl font-medium tracking-wide shadow-sm flex items-center justify-center gap-2.5 transition-all duration-200 ${
+                  className={`w-full py-3 px-4 rounded-xl font-medium  shadow-sm flex items-center justify-center gap-2.5 transition-all duration-200 ${
                     !isAvailable || isSuccess || isCheckedOut
                       ? "bg-gray-200 text-gray-400 cursor-not-allowed shadow-none"
                       : !computedAuthStatus
@@ -381,11 +382,13 @@ function BookDetailsContent() {
 
       {/* ─── REVIEW LISTING MODULE ─── */}
       <div className="w-full max-w-5xl bg-white shadow-md border border-gray-100 rounded-xl p-6 space-y-6 mt-2">
-        <h2 className="text-lg font-bold text-gray-900">Reader Feedback Log</h2>
+        <h2 className="text-lg font-semibold text-gray-900">
+          Reader Feedback Log
+        </h2>
 
         {computedAuthStatus && canReview ? (
-          <div className="bg-gray-50 rounded-xl border border-gray-100 p-5 space-y-4 max-w-xl">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-gray-400">
+          <div className="bg-white rounded-xl border border-gray-100 p-5 space-y-4 max-w-xl">
+            <h3 className="text-xs font-semibold uppercase  text-gray-400">
               Write a Review
             </h3>
             <div className="flex items-center gap-4">
@@ -430,7 +433,7 @@ function BookDetailsContent() {
             book.reviews.map((rev, i) => (
               <div key={i} className="border-b border-gray-50 pb-4 space-y-1">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-gray-900">
+                  <span className="font-semibold text-gray-900">
                     {rev.userName || "Anonymous Reader"}
                   </span>
                   <span className="font-semibold text-amber-600">

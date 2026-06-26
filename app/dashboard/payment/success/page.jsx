@@ -27,7 +27,7 @@ export default function PaymentSuccessPage() {
   }, [countdown, router]);
 
   return (
-    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-gray-50 p-4">
+    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-white p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center border border-gray-100">
         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
           <svg
@@ -53,11 +53,11 @@ export default function PaymentSuccessPage() {
         </p>
 
         {countdown > 0 ? (
-          <p className="text-xs text-gray-400 mb-4 tracking-wide">
+          <p className="text-xs text-gray-400 mb-4 ">
             Redirecting to dashboard in <b>{countdown}</b> seconds...
           </p>
         ) : (
-          <p className="text-xs text-green-600 font-medium mb-4 tracking-wide">
+          <p className="text-xs text-green-600 font-medium mb-4 ">
             Redirecting now...
           </p>
         )}

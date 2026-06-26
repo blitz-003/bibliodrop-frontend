@@ -20,13 +20,15 @@ export default function Navbar({ user }) {
   }
 
   return (
-    <nav className="bg-white border-b border-gray-200 sticky top-0 z-50 w-full font-sans text-gray-700">
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+    // UPDATED: Added lg:w-3/4, mx-auto, lg:mt-4, lg:rounded-full, and handled borders for a floating look
+    <nav className="bg-white border-b lg:border border-gray-200 sticky top-0 lg:top-2 z-50 w-full lg:w-90/100 mx-auto lg:rounded-full  text-gray-700 shadow-sm">
+      {/* UPDATED: Adjusted internal horizontal padding for the pill shape on desktop */}
+      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 h-16 flex items-center justify-between">
         {/* BRAND LOGO & CORE LINKS */}
         <div className="flex items-center gap-8">
           <Link
             href="/"
-            className="text-2xl font-bold text-gray-900 tracking-normal hover:text-stone-600 transition-colors"
+            className="text-2xl font-semibold text-gray-900  hover:text-stone-600 transition-colors"
           >
             Bibliodrop
           </Link>
@@ -58,18 +60,20 @@ export default function Navbar({ user }) {
               >
                 Login
               </Link>
+              {/* UPDATED: Rounded-full to match the outer tablet shape */}
               <Link
                 href="/register"
-                className="bg-stone-950 text-white px-5 py-2.5 rounded-lg hover:bg-stone-800 transition-colors shadow-sm"
+                className="bg-stone-800 text-white px-5 py-2.5 rounded-full hover:bg-stone-950 transition-colors shadow-sm"
               >
                 Register
               </Link>
             </>
           ) : (
             <>
+              {/* UPDATED: Rounded-full to match the outer tablet shape */}
               <Link
                 href={`/dashboard/${user.role}`}
-                className="flex items-center gap-2 text-gray-600 hover:text-stone-900 transition-colors bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100"
+                className="flex items-center gap-2 text-gray-600 hover:text-stone-900 transition-colors bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100"
               >
                 <LayoutDashboard className="w-4 h-4 text-stone-700" />
                 <span>Dashboard</span>
@@ -100,10 +104,11 @@ export default function Navbar({ user }) {
 
       {/* MOBILE UNIFIED EXPANDABLE MENU DRAWER */}
       {isOpen && (
-        <div className="lg:hidden border-t border-gray-100 bg-white shadow-xl max-h-[calc(100vh-64px)] overflow-y-auto px-4 py-5 space-y-6">
+        // UPDATED: Added lg:hidden safeguard and rounded adjustments if screen transitions
+        <div className="lg:hidden border-t border-gray-100 bg-white shadow-xl max-h-[calc(100vh-64px)] overflow-y-auto px-4 py-5 space-y-6 rounded-b-xl">
           {/* SECTION A: PRIMARY BASE CORE ROUTES */}
           <div className="space-y-2">
-            <span className="block text-[10px] font-bold text-gray-400 uppercase tracking-wider px-3">
+            <span className="block text-[10px] font-semibold text-gray-400 uppercase  px-3">
               Explore
             </span>
             <Link
@@ -126,7 +131,7 @@ export default function Navbar({ user }) {
           {user && dashboardLinks.length > 0 && (
             <div className="space-y-2 border-t border-gray-100 pt-5">
               <div className="px-3 flex items-center justify-between mb-1">
-                <span className="block text-[10px] font-bold text-stone-700 uppercase tracking-wider">
+                <span className="block text-[10px] font-semibold text-stone-700 uppercase ">
                   {user.role} Workspace
                 </span>
                 <span className="text-sm font-semibold text-gray-800">
@@ -172,7 +177,7 @@ export default function Navbar({ user }) {
                 <Link
                   href="/register"
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center py-2.5 bg-stone-950 rounded-xl text-base font-medium text-white hover:bg-stone-800 transition-colors text-center"
+                  className="flex items-center justify-center py-2.5 bg-stone-700 rounded-xl text-base font-medium text-white hover:bg-stone-800 transition-colors text-center"
                 >
                   Register
                 </Link>

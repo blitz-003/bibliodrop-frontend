@@ -15,7 +15,6 @@ export default async function RootLayout({ children }) {
           <Navbar user={session?.user} />
 
           {children}
-
           <Footer />
           <Toaster position="top-center" reverseOrder={false} />
         </ReactQueryProvider>

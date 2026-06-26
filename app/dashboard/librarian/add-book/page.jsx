@@ -1,15 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { Card, Input, TextArea, Button } from "@heroui/react";
+import { Card, Input, TextArea, Button, Spinner } from "@heroui/react";
 import Image from "next/image";
-import { createBook } from "@/services/bookService";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { createBook } from "@/services/bookService";
 
 export default function AddBookPage() {
   const router = useRouter();
+
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
@@ -23,6 +26,8 @@ export default function AddBookPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (isSubmitting) return;
+
     const form = e.target;
 
     const title = form.title?.value;
@@ -32,14 +37,13 @@ export default function AddBookPage() {
     const stock = form.stock?.value;
     const deliveryFee = form.deliveryFee?.value;
 
-    // required validations
     if (!title || !author || !category) {
-      alert("Title, Author, Category are required");
+      toast.error("Title, Author and Category are required.");
       return;
     }
 
     if (!image) {
-      alert("Cover image is required");
+      toast.error("Please upload a cover image.");
       return;
     }
 
@@ -51,47 +55,57 @@ export default function AddBookPage() {
     formData.append("description", description || "");
     formData.append("stock", stock || 0);
     formData.append("deliveryFee", deliveryFee || 0);
-
-    // IMPORTANT: must match backend multer field name
     formData.append("coverImage", image);
 
-    try {
-      console.log([...formData.entries()]);
+    const toastId = toast.loading("Uploading book...");
 
-      // example if you later use API:
+    try {
+      setIsSubmitting(true);
+
       await createBook(formData);
 
-      alert("Book ready to submit!");
-      router.push("/dashboard/librarian/inventory");
+      toast.success("Book uploaded successfully!", {
+        id: toastId,
+      });
+
+      // Small delay so the user can see the success toast
+      setTimeout(() => {
+        router.push("/dashboard/librarian/inventory");
+      }, 800);
     } catch (err) {
       console.error(err);
-      alert(err.message || "Something went wrong");
+
+      toast.error(err.message || "Failed to upload book.", {
+        id: toastId,
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-4 md:p-6">
-      <Card className="p-6 md:p-8 shadow-xl border border-default-200">
-        <h1 className="text-3xl font-bold mb-8">Add New Book</h1>
+    <div className="mx-auto max-w-3xl p-4 md:p-6">
+      <Card className="border border-default-200 p-6 shadow-xl md:p-8">
+        <h1 className="mb-8 text-3xl font-semibold">Add New Book</h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Cover Image */}
           <div className="w-full">
-            <label className="font-medium block mb-3">Cover Image</label>
+            <label className="mb-3 block font-medium">Cover Image</label>
 
-            <label htmlFor="coverImage" className="cursor-pointer block">
-              <div className="border-2 border-dashed border-default-300 rounded-2xl h-[220px] w-full flex items-center justify-center overflow-hidden hover:border-primary transition">
+            <label htmlFor="coverImage" className="block cursor-pointer">
+              <div className="flex h-[220px] w-full items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-default-300 transition hover:border-primary">
                 {preview ? (
                   <Image
                     src={preview}
                     alt="Cover Preview"
                     width={800}
                     height={220}
-                    className="w-full h-full object-cover"
+                    className="h-full w-full object-cover"
                   />
                 ) : (
                   <div className="text-center">
-                    <div className="text-5xl mb-2">📚</div>
+                    <div className="mb-2 text-5xl">📚</div>
                     <p className="font-medium">Click to upload</p>
                     <p className="text-sm text-default-500">JPG, PNG, WEBP</p>
                   </div>
@@ -104,83 +118,104 @@ export default function AddBookPage() {
               type="file"
               accept="image/*"
               hidden
+              disabled={isSubmitting}
               onChange={handleImageChange}
             />
           </div>
 
           {/* Title */}
           <div className="w-full">
-            <label className="font-medium block mb-2">Book Title</label>
+            <label className="mb-2 block font-medium">Book Title</label>
             <Input
               className="w-full"
               name="title"
               variant="bordered"
               placeholder="Atomic Habits"
               required
+              isDisabled={isSubmitting}
             />
           </div>
 
           {/* Author */}
           <div className="w-full">
-            <label className="font-medium block mb-2">Author</label>
+            <label className="mb-2 block font-medium">Author</label>
             <Input
               className="w-full"
               name="author"
               variant="bordered"
               placeholder="James Clear"
               required
+              isDisabled={isSubmitting}
             />
           </div>
 
           {/* Category */}
           <div className="w-full">
-            <label className="font-medium block mb-2">Category</label>
+            <label className="mb-2 block font-medium">Category</label>
             <Input
               className="w-full"
               name="category"
               variant="bordered"
               placeholder="Self Help"
+              required
+              isDisabled={isSubmitting}
             />
           </div>
 
           {/* Stock */}
           <div className="w-full">
-            <label className="font-medium block mb-2">Stock</label>
+            <label className="mb-2 block font-medium">Stock</label>
             <Input
               className="w-full"
               name="stock"
               type="number"
               variant="bordered"
               placeholder="10"
+              isDisabled={isSubmitting}
             />
           </div>
 
           {/* Delivery Fee */}
           <div className="w-full">
-            <label className="font-medium block mb-2">Delivery Fee</label>
+            <label className="mb-2 block font-medium">Delivery Fee</label>
             <Input
               className="w-full"
               name="deliveryFee"
               type="number"
               variant="bordered"
               placeholder="50"
+              isDisabled={isSubmitting}
             />
           </div>
 
           {/* Description */}
           <div className="w-full">
-            <label className="font-medium block mb-2">Description</label>
+            <label className="mb-2 block font-medium">Description</label>
             <TextArea
               className="w-full"
               name="description"
               variant="bordered"
-              minrows={18}
+              minRows={8}
               placeholder="Write a short description about the book..."
+              isDisabled={isSubmitting}
             />
           </div>
 
-          <Button color="primary" size="lg" type="submit" className="w-full">
-            Add Book
+          <Button
+            color="primary"
+            size="lg"
+            type="submit"
+            className="w-full"
+            isDisabled={isSubmitting}
+          >
+            {isSubmitting ? (
+              <div className="flex items-center gap-3">
+                <Spinner size="sm" color="current" />
+                <span>Uploading Book...</span>
+              </div>
+            ) : (
+              "Add Book"
+            )}
           </Button>
         </form>
       </Card>

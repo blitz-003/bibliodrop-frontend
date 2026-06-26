@@ -31,7 +31,7 @@ export default function BookCard({ book }) {
     >
       <div>
         {/* COVER IMAGE */}
-        <div className="w-full h-56 bg-gray-50 relative overflow-hidden flex items-center justify-center border-b border-gray-100">
+        <div className="w-full h-56 bg-white relative overflow-hidden flex items-center justify-center border-b border-gray-100">
           {coverImageSrc ? (
             /* eslint-disable-next-line @next/next/no-img-element */
             <img
@@ -52,7 +52,7 @@ export default function BookCard({ book }) {
           {/* OVERLAY BADGES */}
           <div className="absolute top-3 left-3 z-10">
             <span
-              className={`text-xs font-bold px-2.5 py-1 rounded-lg border shadow-sm backdrop-blur-md uppercase tracking-wider ${badgeClass}`}
+              className={`text-xs font-semibold px-2.5 py-1 rounded-lg border shadow-sm backdrop-blur-md uppercase  ${badgeClass}`}
             >
               {book.category || "General"}
             </span>
@@ -60,7 +60,7 @@ export default function BookCard({ book }) {
 
           <div className="absolute top-3 right-3 z-10">
             <span
-              className={`text-xs font-bold px-2.5 py-1 rounded-lg shadow-sm ${
+              className={`text-xs font-semibold px-2.5 py-1 rounded-lg shadow-sm ${
                 book.available !== false
                   ? "bg-green-500 text-white"
                   : "bg-red-500 text-white"
@@ -74,7 +74,7 @@ export default function BookCard({ book }) {
         {/* BOOK TEXT DETAILS */}
         <div className="p-5 space-y-3">
           <div className="space-y-1">
-            <h3 className="text-lg font-bold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2 leading-snug">
+            <h3 className="text-lg font-semibold text-gray-900 group-hover:text-blue-600 transition-colors line-clamp-2 leading-snug">
               {book.title}
             </h3>
             <div className="flex items-center gap-1.5 text-base font-medium text-gray-500 pt-1">
@@ -99,7 +99,7 @@ export default function BookCard({ book }) {
               e.stopPropagation(); // Prevents clicking the button from firing navigateToDetails twice
               navigateToDetails();
             }}
-            className="inline-flex items-center gap-1.5 text-base font-bold text-blue-600 group-hover:text-white transition-colors bg-blue-50/60 group-hover:bg-blue-600 px-4 py-2 rounded-xl border border-transparent"
+            className="inline-flex items-center gap-1.5 text-base font-semibold text-blue-600 group-hover:text-white transition-colors bg-blue-50/60 group-hover:bg-blue-600 px-4 py-2 rounded-xl border border-transparent"
           >
             <Bookmark className="w-4 h-4" />
             <span>View Info</span>

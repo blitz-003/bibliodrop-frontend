@@ -77,12 +77,12 @@ export default function BrowseBooksPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800 font-sans py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-slate-50 text-gray-800  py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
       <div className="max-w-[1400px] mx-auto space-y-10">
         {/* HEADER SECTION (Light Theme Layout) */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 border-b border-gray-200 pb-6">
           <div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+            <h1 className="text-3xl font-semibold text-gray-900 sm:text-4xl">
               Browse Books
             </h1>
             <p className="text-base text-gray-500 mt-1">
@@ -92,7 +92,7 @@ export default function BrowseBooksPage() {
           </div>
 
           {/* COLORFUL GRADIENT TOTAL BADGE */}
-          <div className="inline-flex items-center gap-2 self-start md:self-auto bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 px-4 py-2 rounded-xl text-base font-bold text-blue-600 shadow-sm">
+          <div className="inline-flex items-center gap-2 self-start md:self-auto bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 px-4 py-2 rounded-xl text-base font-semibold text-blue-600 shadow-sm">
             <BookOpen className="w-5 h-5 text-blue-500" />
             <span>{totalBooks} Books Available</span>
           </div>
@@ -108,7 +108,7 @@ export default function BrowseBooksPage() {
               placeholder="Search books by title, author..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              className="w-full bg-gray-50 text-base placeholder-gray-400 text-gray-800 pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
+              className="w-full bg-white text-base placeholder-gray-400 text-gray-800 pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all"
             />
           </div>
 
@@ -118,7 +118,7 @@ export default function BrowseBooksPage() {
             <select
               value={category}
               onChange={(e) => updateURL("category", e.target.value)}
-              className="w-full bg-gray-50 text-base text-gray-700 pl-12 pr-10 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white appearance-none cursor-pointer transition-all"
+              className="w-full bg-white text-base text-gray-700 pl-12 pr-10 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white appearance-none cursor-pointer transition-all"
             >
               <option value="">All Categories</option>
               {globalCategories.map((cat) => (
@@ -143,7 +143,7 @@ export default function BrowseBooksPage() {
 
         {isError && (
           <div className="bg-red-50 border border-red-100 text-red-700 p-6 rounded-xl text-center max-w-md mx-auto">
-            <p className="text-base font-bold">
+            <p className="text-base font-semibold">
               Failed to load system book catalog stream.
             </p>
           </div>
@@ -177,13 +177,13 @@ export default function BrowseBooksPage() {
                 <button
                   onClick={() => handlePageChange(page - 1)}
                   disabled={page === 1}
-                  className="p-2.5 bg-white border border-gray-200 rounded-xl text-gray-500 hover:text-gray-900 shadow-sm hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  className="p-2.5 bg-white border border-gray-200 rounded-xl text-gray-500 hover:text-gray-900 shadow-sm hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                   aria-label="Previous Page"
                 >
                   <ChevronLeft className="w-5 h-5" />
                 </button>
 
-                <div className="flex items-center gap-1.5 font-bold text-base px-4 py-2 bg-white border border-gray-200 rounded-xl shadow-sm">
+                <div className="flex items-center gap-1.5 font-semibold text-base px-4 py-2 bg-white border border-gray-200 rounded-xl shadow-sm">
                   <span className="text-gray-900">Page {page}</span>
                   <span className="text-gray-400 font-normal">/</span>
                   <span className="text-gray-500">{totalPages}</span>
@@ -192,7 +192,7 @@ export default function BrowseBooksPage() {
                 <button
                   onClick={() => handlePageChange(page + 1)}
                   disabled={page === totalPages}
-                  className="p-2.5 bg-white border border-gray-200 rounded-xl text-gray-500 hover:text-gray-900 shadow-sm hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+                  className="p-2.5 bg-white border border-gray-200 rounded-xl text-gray-500 hover:text-gray-900 shadow-sm hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
                   aria-label="Next Page"
                 >
                   <ChevronRight className="w-5 h-5" />

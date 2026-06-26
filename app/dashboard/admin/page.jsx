@@ -69,9 +69,9 @@ function AdminOverviewContent() {
   const { stats, charts } = data;
 
   return (
-    <div className="w-full space-y-6 p-4 md:p-8 font-sans text-gray-700 max-w-[1400px] mx-auto">
+    <div className="w-full space-y-6 p-4 md:p-8  text-gray-700 max-w-[1400px] mx-auto">
       <div>
-        <h1 className="text-xl md:text-2xl font-black text-gray-900 tracking-tight">
+        <h1 className="text-xl md:text-2xl font-black text-gray-900 ">
           Ecosystem Control Panel
         </h1>
         <p className="text-xs text-gray-400 mt-0.5">
@@ -84,7 +84,7 @@ function AdminOverviewContent() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="bg-indigo-50/60 border border-indigo-100 rounded-xl p-5 flex items-center justify-between shadow-sm">
           <div className="space-y-1">
-            <span className="text-xs font-bold text-indigo-700 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-indigo-700 uppercase ">
               Total Profiles
             </span>
             <h2 className="text-xl md:text-2xl font-black text-indigo-900">
@@ -98,7 +98,7 @@ function AdminOverviewContent() {
 
         <div className="bg-sky-50/60 border border-sky-100 rounded-xl p-5 flex items-center justify-between shadow-sm">
           <div className="space-y-1">
-            <span className="text-xs font-bold text-sky-700 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-sky-700 uppercase ">
               Total Books
             </span>
             <h2 className="text-xl md:text-2xl font-black text-sky-900">
@@ -112,7 +112,7 @@ function AdminOverviewContent() {
 
         <div className="bg-amber-50/60 border border-amber-100 rounded-xl p-5 flex items-center justify-between shadow-sm">
           <div className="space-y-1">
-            <span className="text-xs font-bold text-amber-700 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-amber-700 uppercase ">
               Approval Pendings
             </span>
             <h2 className="text-xl md:text-2xl font-black text-amber-900">
@@ -126,7 +126,7 @@ function AdminOverviewContent() {
 
         <div className="bg-emerald-50/60 border border-emerald-100 rounded-xl p-5 flex items-center justify-between shadow-sm">
           <div className="space-y-1">
-            <span className="text-xs font-bold text-emerald-700 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-emerald-700 uppercase ">
               Platform Gross GMV
             </span>
             <h2 className="text-xl md:text-2xl font-black text-emerald-900">
@@ -142,7 +142,7 @@ function AdminOverviewContent() {
       {/* PLOT ANALYTICS MODULES */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div className="bg-white border border-gray-100 p-4 md:p-5 rounded-xl shadow-sm space-y-4">
-          <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
+          <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
             <TrendingUp className="w-4 h-4 text-indigo-600" /> Platform Profile
             Registrations
           </h3>
@@ -164,7 +164,7 @@ function AdminOverviewContent() {
                 </LineChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-full w-full flex items-center justify-center text-gray-400 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+              <div className="h-full w-full flex items-center justify-center text-gray-400 bg-white rounded-xl border border-dashed border-gray-200">
                 No profile growth tracked.
               </div>
             )}
@@ -172,7 +172,7 @@ function AdminOverviewContent() {
         </div>
 
         <div className="bg-white border border-gray-100 p-4 md:p-5 rounded-xl shadow-sm space-y-4">
-          <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
+          <h3 className="text-sm font-semibold text-gray-900 flex items-center gap-2">
             <Activity className="w-4 h-4 text-emerald-600" /> Site-wide
             Financial Volume Velocity
           </h3>
@@ -192,7 +192,7 @@ function AdminOverviewContent() {
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <div className="h-full w-full flex items-center justify-center text-gray-400 bg-gray-50 rounded-xl border border-dashed border-gray-200">
+              <div className="h-full w-full flex items-center justify-center text-gray-400 bg-white rounded-xl border border-dashed border-gray-200">
                 No system transaction velocity logs.
               </div>
             )}

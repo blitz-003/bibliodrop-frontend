@@ -106,7 +106,7 @@ export default function AdminManageBooksPage() {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-gray-50 border-b border-gray-100 text-xs font-bold uppercase tracking-wider text-gray-600">
+              <tr className="bg-white border-b border-gray-100 text-xs font-semibold uppercase  text-gray-600">
                 <th className="p-4">Title</th>
                 <th className="p-4">Author</th>
                 <th className="p-4">Delivery Fee</th>
@@ -119,11 +119,11 @@ export default function AdminManageBooksPage() {
               {books?.map((book) => (
                 <tr
                   key={book._id}
-                  className="hover:bg-gray-50/50 transition-colors"
+                  className="hover:bg-white/50 transition-colors"
                 >
                   {/* Title */}
                   <td
-                    className="p-4 font-bold text-gray-900 max-w-[200px] truncate"
+                    className="p-4 font-semibold text-gray-900 max-w-[200px] truncate"
                     title={book.title}
                   >
                     {book.title}
@@ -154,7 +154,7 @@ export default function AdminManageBooksPage() {
                   {/* Publishing Status */}
                   <td className="p-4">
                     <span
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wider ${
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase  ${
                         book.publishStatus === "approved"
                           ? "bg-green-100 text-green-700"
                           : book.publishStatus === "pending"
