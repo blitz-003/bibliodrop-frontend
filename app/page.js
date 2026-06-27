@@ -7,7 +7,7 @@ import TeaserSection from "@/components/TeaserSection";
 // --- PREMIUM IMAGES (Books, Coffee, Cafes) ---
 const IMAGES = {
   heroBg:
-    "https://images.unsplash.com/photo-1706195546853-a81b6a190daf?q=80&w=2340&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Woman reading book with a coffee mug beside
+    "https://images.unsplash.com/photo-1703985337873-843c82c8538f?q=80&w=735&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3Dnn", // Woman reading book with a coffee mug beside
   book1:
     "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=600",
   book2:
@@ -233,7 +233,7 @@ export default function HomePage() {
           <img
             src={IMAGES.heroBg}
             alt="A woman reading a book with a steaming hot coffee cup alongside"
-            className="w-full h-full object-cover object-center filter contrast-[102%] lg:rounded-3xl shadow-md"
+            className="w-full h-[100vh] object-cover object-center filter contrast-[102%] lg:rounded-3xl shadow-md"
           />
         </div>
       </section>
