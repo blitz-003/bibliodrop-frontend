@@ -3,6 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import TeaserSection from "@/components/TeaserSection";
+import StickyReveal from "@/components/home/StickyReveal/StickyReveal";
+import FeaturedBooks from "@/components/FeaturedBooks/FeaturedBooks";
 
 // --- PREMIUM IMAGES (Books, Coffee, Cafes) ---
 const IMAGES = {
@@ -379,6 +381,8 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      <FeaturedBooks />
 
       {/* ================= 4. CURATED CATEGORIES GRID ================= */}
       <section className="py-24 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">

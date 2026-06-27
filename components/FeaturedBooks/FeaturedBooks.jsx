@@ -3,11 +3,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import Image from "next/image";
 import Link from "next/link";
 
+// Fetch function for TanStack Query
 const fetchFeaturedBooks = async () => {
-  // Fallback to relative path if env variable is breaking
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || "";
   const res = await fetch(`${baseUrl}/books?limit=6`);
   if (!res.ok) throw new Error("Failed to fetch featured books");
@@ -16,35 +15,36 @@ const fetchFeaturedBooks = async () => {
 
 export default function FeaturedBooks() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [direction, setDirection] = useState(1);
+  const [direction, setDirection] = useState(1); // 1 = next, -1 = prev
   const timerRef = useRef(null);
 
+  // TanStack Query
   const { data, isLoading, error } = useQuery({
     queryKey: ["featuredBooks"],
     queryFn: fetchFeaturedBooks,
-    staleTime: 1000 * 60 * 10,
+    staleTime: 1000 * 60 * 10, // Cache for 10 minutes
   });
 
-  // 💡 DEVELOPER CHECK: Unbox your API response structure safely
-  // If your API returns { data: [...] } instead of raw array, handle it here:
-  const books = Array.isArray(data) ? data : data?.data || data?.books || [];
+  // Extract array safely from API response structure
+  const books = data?.books || [];
 
+  // Resets and restarts the 7-second automatic sliding timer
   const resetTimer = () => {
     if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {
       setDirection(1);
       setCurrentIndex((prevIndex) => (prevIndex + 1) % (books.length || 1));
-    }, 5000);
+    }, 7000); // Updated to 7 seconds
   };
 
   useEffect(() => {
-    if (books.length > 0) {
+    if (books && books.length > 0) {
       resetTimer();
     }
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [books.length, currentIndex]);
+  }, [books, currentIndex]);
 
   if (isLoading) {
     return (
@@ -54,38 +54,19 @@ export default function FeaturedBooks() {
     );
   }
 
-  // 💡 VISUAL DEBUGGER: Instead of returning null silently, show the error message
-  if (error) {
-    return (
-      <div className="p-6 text-center text-red-500 bg-red-50 font-mono text-xs">
-        Failed to load API: {error.message}
-      </div>
-    );
-  }
+  if (error || !books || books.length === 0) return null;
 
-  // If data came back but array parsing found zero entries
-  if (books.length === 0) {
-    return (
-      <div className="p-6 text-center text-amber-600 bg-amber-50 font-mono text-xs">
-        API connected successfully, but returned an empty list or unexpected
-        format. Check console network tab!
-      </div>
-    );
-  }
+  const currentBook = books?.[currentIndex];
 
-  const currentBook = books[currentIndex];
+  // Safe-guard against transitioning indexes
   if (!currentBook) return null;
 
-  // mapping out variable safety hooks in case your DB uses different field names:
-  const bookTitle = currentBook.title || "Untitled Book";
+  const bookTitle = currentBook.title || "Untitled Selection";
   const bookAuthor = currentBook.author || "Unknown Author";
   const bookCategory = currentBook.category || "General";
   const bookDescription = currentBook.description || "No description provided.";
   const bookImage =
-    currentBook.coverImage ||
-    currentBook.image ||
-    currentBook.img ||
-    "https://images.unsplash.com/photo-1544947950-fa07a98d237f";
+    currentBook.coverImage || currentBook.image || currentBook.img;
 
   const handleNext = () => {
     setDirection(1);
@@ -97,68 +78,80 @@ export default function FeaturedBooks() {
     setCurrentIndex((prev) => (prev - 1 + books.length) % books.length);
   };
 
-  const slideVariants = {
-    enter: (dir) => ({
+  // Blur + Dissolve (Fade out) crossfade configuration
+  const crossfadeVariants = {
+    enter: {
       opacity: 0,
-      x: dir > 0 ? 40 : -40,
-      filter: "blur(12px)",
-    }),
+      filter: "blur(15px)",
+      scale: 1.02,
+    },
     center: {
       opacity: 1,
-      x: 0,
       filter: "blur(0px)",
-      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+      scale: 1,
+      transition: { duration: 0.8, ease: "easeInOut" },
     },
-    exit: (dir) => ({
+    exit: {
       opacity: 0,
-      x: dir > 0 ? -40 : 40,
-      filter: "blur(12px)",
-      transition: { duration: 0.4, ease: "easeIn" },
-    }),
+      filter: "blur(15px)", // Smooth dissolve blur
+      scale: 0.98,
+      transition: { duration: 0.6, ease: "easeInOut" },
+    },
   };
 
   return (
-    <section className="relative py-20 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto border-t border-b border-stone-200/60 my-12">
+    <section className="relative py-24 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto border-t border-b border-stone-200/60 my-12">
+      {/* Dynamic Section Title Heading */}
+      <div className="mb-4">
+        <span className="text-xs uppercase tracking-widest text-stone-400 font-semibold block mb-2">
+          Curated Showcase
+        </span>
+        <h2 className="text-3xl md:text-4xl font-serif font-light text-stone-900">
+          Featured Books
+        </h2>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-12 items-center gap-12 lg:gap-20">
+        {/* LEFT COLUMN: Visual Media Frame matching image_7f19c7.png */}
         <div className="lg:col-span-6 relative aspect-square w-full max-w-[500px] mx-auto lg:max-w-none">
-          <AnimatePresence mode="wait" custom={direction}>
+          <AnimatePresence mode="wait">
             <motion.div
               key={currentIndex}
-              custom={direction}
-              variants={slideVariants}
+              variants={crossfadeVariants}
               initial="enter"
               animate="center"
               exit="exit"
               className="absolute inset-0 w-full h-full rounded-[2.5rem] overflow-hidden shadow-2xl shadow-stone-300/50 bg-stone-100"
             >
-              <Image
-                src={bookImage}
-                alt={bookTitle}
-                fill
-                priority
-                className="object-cover object-center filter contrast-[102%]"
-              />
+              {bookImage && (
+                <img
+                  src={bookImage}
+                  alt={bookTitle}
+                  className="w-full h-full object-cover object-center filter contrast-[102%] min-h-[500px]"
+                  loading="eager"
+                />
+              )}
             </motion.div>
           </AnimatePresence>
         </div>
 
+        {/* RIGHT COLUMN: Media Typography Content & Controls */}
         <div className="lg:col-span-6 flex flex-col justify-center space-y-6 min-h-[350px] relative">
-          <AnimatePresence mode="wait" custom={direction}>
+          <AnimatePresence mode="wait">
             <motion.div
               key={currentIndex}
-              custom={direction}
-              variants={slideVariants}
+              variants={crossfadeVariants}
               initial="enter"
               animate="center"
               exit="exit"
               className="space-y-4"
             >
               <span className="text-xs uppercase tracking-wider text-stone-400 font-semibold block">
-                Featured Book / {bookCategory}
+                Category / {bookCategory}
               </span>
-              <h2 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-light text-stone-900 leading-tight tracking-tight">
+              <h3 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-light text-stone-900 leading-tight tracking-tight">
                 {bookTitle}
-              </h2>
+              </h3>
               <p className="text-sm font-mono text-stone-500 italic">
                 by {bookAuthor}
               </p>
@@ -168,6 +161,7 @@ export default function FeaturedBooks() {
             </motion.div>
           </AnimatePresence>
 
+          {/* Bottom Actions Container */}
           <div className="pt-8 flex items-center justify-between border-t border-stone-200 max-w-xl">
             <Link
               href={`/browse-books?id=${currentBook.id || currentBook._id}`}
@@ -177,9 +171,11 @@ export default function FeaturedBooks() {
               </button>
             </Link>
 
+            {/* Slider Navigation Controls */}
             <div className="flex items-center gap-3">
               <button
                 onClick={handlePrev}
+                aria-label="Previous Book"
                 className="w-10 h-10 border border-stone-200 rounded-full flex items-center justify-center text-stone-600 hover:border-stone-900 hover:text-stone-900 transition-all duration-200 bg-white shadow-sm active:scale-95"
               >
                 ←
@@ -190,6 +186,7 @@ export default function FeaturedBooks() {
               </span>
               <button
                 onClick={handleNext}
+                aria-label="Next Book"
                 className="w-10 h-10 border border-stone-200 rounded-full flex items-center justify-center text-stone-600 hover:border-stone-900 hover:text-stone-900 transition-all duration-200 bg-white shadow-sm active:scale-95"
               >
                 →
