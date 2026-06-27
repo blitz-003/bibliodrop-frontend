@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 
 // Easily adjust backend pagination item threshold defaults globally right here
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 8;
 
 export default function BrowseBooksPage() {
   const router = useRouter();
