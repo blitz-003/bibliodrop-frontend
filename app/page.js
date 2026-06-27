@@ -175,7 +175,7 @@ export default function HomePage() {
       <section className="relative min-h-screen grid grid-cols-1 lg:grid-cols-12 items-stretch">
         {/* Left Panel */}
         {/* UPDATED: lg:pt-36 pushes content down safely past your floating navbar */}
-        <div className="lg:col-span-6 flex flex-col justify-center px-6 sm:px-12 lg:px-20 pt-28 pb-16 lg:pt-36 lg:pb-24 z-10 bg-slate-50 backdrop-blur-sm lg:backdrop-blur-none">
+        <div className="lg:col-span-6 flex flex-col justify-center px-6 sm:px-12 lg:px-20 pt-28 pb-16 lg:pt-20 lg:pb-24 z-10 bg-slate-50 backdrop-blur-sm lg:backdrop-blur-none">
           <motion.div
             variants={containerVariants}
             initial="hidden"
