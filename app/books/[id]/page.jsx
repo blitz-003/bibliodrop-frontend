@@ -154,8 +154,8 @@ function BookDetailsContent() {
     },
   });
 
-  // ✅ FIX: Adjusted conditions to prevent loading screens blocking the content layout awkwardly
-  if (isAuthLoading || isBookLoading) {
+  // FIX: Adjusted conditions to prevent loading screens blocking the content layout awkwardly
+  if (isAuthLoading && isBookLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background px-6">
         <div className="flex flex-col items-center gap-6 text-center">
