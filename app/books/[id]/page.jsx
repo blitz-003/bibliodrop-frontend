@@ -15,7 +15,6 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import LibrarianBookActions from "@/components/LibrarianBookActions";
 import { authClient } from "@/lib/auth-client";
 import { Spinner } from "@heroui/react";
-import { data } from "framer-motion/client";
 
 function BookDetailsContent() {
   const params = useParams();
@@ -155,7 +154,7 @@ function BookDetailsContent() {
   });
 
   // FIX: Adjusted conditions to prevent loading screens blocking the content layout awkwardly
-  if (isAuthLoading && isBookLoading) {
+  if (isAuthLoading || (isBookLoading && !data)) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background px-6">
         <div className="flex flex-col items-center gap-6 text-center">
