@@ -76,6 +76,19 @@ export async function getBooks(filters = {}) {
     queryParams.append("limit", filters.limit);
   }
 
+  // New additions for sorting and delivery fee filtering
+  if (filters.sort) {
+    queryParams.append("sort", filters.sort);
+  }
+
+  if (filters.minDeliveryFee !== undefined && filters.minDeliveryFee !== "") {
+    queryParams.append("minDeliveryFee", filters.minDeliveryFee);
+  }
+
+  if (filters.maxDeliveryFee !== undefined && filters.maxDeliveryFee !== "") {
+    queryParams.append("maxDeliveryFee", filters.maxDeliveryFee);
+  }
+
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/books?${queryParams.toString()}`,
   );

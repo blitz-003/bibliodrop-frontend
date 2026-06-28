@@ -82,6 +82,9 @@ export default function BookCard({ book }) {
               <span className="truncate">
                 {book.author || "Unknown Author"}
               </span>
+              <span className="text-base font-bold text-green-600 bg-green-50 px-2.5 py-1 rounded-lg border border-green-100">
+                ${book.deliveryFee?.toFixed(2) || "0.00"}
+              </span>
             </div>
           </div>
         </div>
