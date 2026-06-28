@@ -17,16 +17,6 @@ import { authClient } from "@/lib/auth-client";
 import { Spinner } from "@heroui/react";
 import { data } from "framer-motion/client";
 
-// ✅ FIX: Define the client outside the component function so it is never recreated during renders.
-const standaloneDetailsClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      retry: false,
-    },
-  },
-});
-
 function BookDetailsContent() {
   const params = useParams();
   const searchParams = useSearchParams();
@@ -62,7 +52,6 @@ function BookDetailsContent() {
   const { data: clientToken, isLoading: isAuthLoading } = useQuery({
     queryKey: ["auth-token"],
     queryFn: getClientToken,
-    staleTime: 1000 * 60 * 5,
   });
 
   const userIsLoggedIn = !!clientToken;
@@ -73,7 +62,7 @@ function BookDetailsContent() {
     isLoading: isBookLoading,
     isError,
   } = useQuery({
-    queryKey: ["book-details", id, clientToken, data?.book?._id],
+    queryKey: ["book-details", id, clientToken],
     queryFn: async () => {
       const headers = {};
       if (clientToken) {
@@ -476,9 +465,5 @@ function BookDetailsContent() {
 }
 
 export default function BookDetailsPage() {
-  return (
-    <QueryClientProvider client={standaloneDetailsClient}>
-      <BookDetailsContent />
-    </QueryClientProvider>
-  );
+  return <BookDetailsContent />;
 }

@@ -141,7 +141,7 @@ export default function ManageDeliveriesPage() {
                         }
                         className="bg-green-600 hover:bg-green-700 text-white font-medium text-xs px-4 py-1.5 rounded-lg shadow-sm transition-colors"
                       >
-                        Deliver Button
+                        Mark Deliver
                       </button>
                     )}
                     {d.status === "delivered" && (

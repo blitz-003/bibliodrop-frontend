@@ -5,8 +5,10 @@ import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Mail, Lock, BookOpen } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function LoginPage() {
+  const queryClient = useQueryClient();
   const router = useRouter();
 
   const [form, setForm] = useState({
@@ -35,15 +37,24 @@ export default function LoginPage() {
         return;
       }
 
+      // Refetch auth-related queries
+      await queryClient.invalidateQueries({
+        queryKey: ["auth-token"],
+      });
+
+      await queryClient.invalidateQueries({
+        queryKey: ["book-details"],
+      });
+
       router.push("/");
       router.refresh();
     } catch (err) {
+      console.error(err);
       setError("Something went wrong");
     } finally {
       setLoading(false);
     }
   }
-
   async function handleGoogleLogin() {
     try {
       setGoogleLoading(true);
