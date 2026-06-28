@@ -15,6 +15,7 @@ import { CheckCircle2, XCircle } from "lucide-react";
 import LibrarianBookActions from "@/components/LibrarianBookActions";
 import { authClient } from "@/lib/auth-client";
 import { Spinner } from "@heroui/react";
+import { data } from "framer-motion/client";
 
 // ✅ FIX: Define the client outside the component function so it is never recreated during renders.
 const standaloneDetailsClient = new QueryClient({
@@ -72,7 +73,7 @@ function BookDetailsContent() {
     isLoading: isBookLoading,
     isError,
   } = useQuery({
-    queryKey: ["book-details", id, clientToken],
+    queryKey: ["book-details", id, clientToken, data?.book?._id],
     queryFn: async () => {
       const headers = {};
       if (clientToken) {
