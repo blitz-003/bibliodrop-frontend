@@ -37,7 +37,7 @@ export default function LoginPage() {
         return;
       }
 
-      // Refetch auth-related queries
+      // Refresh auth cache
       await queryClient.invalidateQueries({
         queryKey: ["auth-token"],
       });
@@ -46,7 +46,16 @@ export default function LoginPage() {
         queryKey: ["book-details"],
       });
 
-      router.push("/");
+      const { data: session } = await authClient.getSession();
+
+      const role = session.user.role;
+      console.log(session, role);
+      if (role === "admin" || role === "librarian") {
+        router.push("/dashboard");
+      } else {
+        router.push("/");
+      }
+
       router.refresh();
     } catch (err) {
       console.error(err);
