@@ -3,14 +3,22 @@
 import { authClient } from "@/lib/auth-client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast"; // 1. Import toast
+import {
+  Alert,
+  Button,
+  PageHeader,
+  EmptyState,
+  DataTable,
+  DataTableHead,
+  DataTableTh,
+  DataTableBody,
+  DataTableRow,
+  DataTableCell,
+  StatusBadge,
+} from "@/components/ui";
 
-export default function ApprovalsClient({ token }) {
+export default function ApprovalsClient() {
   const queryClient = useQueryClient();
-
-  // const fetchHeaders = {
-  //   "Content-Type": "application/json",
-  //   ...(token && { Authorization: `Bearer ${token}` }),
-  // };
 
   // Fetching pending books
   const {
@@ -77,94 +85,99 @@ export default function ApprovalsClient({ token }) {
     },
   });
 
-  // 3. Helper function to trigger the promise-based toast notification
+  // 3. Helper to trigger the mutation (toasts fire from onSuccess/onError)
   const handleAction = (bookId, status) => {
-    // toast.promise takes the actual mutation promise execution
-    toast.promise(
-      mutation.mutateAsync({ bookId, status }), // Note: Use mutateAsync here to pass the promise
-      {
-        loading: `Updating book status to ${status}...`,
-        success: <b>Book successfully {status}!</b>,
-        error: <b>Could not update book status.</b>,
-      },
-    );
+    mutation.mutate({ bookId, status });
   };
 
   if (isLoading)
     return (
-      <div className="p-8 text-center text-gray-500">
-        Loading pending requests...
+      <div aria-busy="true" className="mx-auto w-full max-w-app">
+        <span className="sr-only">Loading pending requests</span>
       </div>
     );
   if (isError)
     return (
-      <div className="p-8 text-center text-red-500">Error: {error.message}</div>
+      <div className="mx-auto w-full max-w-app">
+        <Alert tone="danger" className="mx-auto max-w-md inline-flex">
+          <p className="text-base font-semibold">
+            Error loading approval requests
+          </p>
+          <p className="mt-1 text-sm">{error.message}</p>
+        </Alert>
+      </div>
     );
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-6 text-gray-800">
-        Admin Approval Management
-      </h1>
+    <div className="mx-auto w-full max-w-app space-y-6">
+      <PageHeader
+        title="Admin Approval Management"
+        subtitle="Review catalog submissions submitted by librarians."
+      />
 
       {pendingBooks.length === 0 ? (
-        <div className="p-8 bg-white border rounded-lg text-center text-gray-500">
-          No books are currently waiting for approval.
-        </div>
+        <EmptyState
+          title="No books awaiting approval"
+          description="Librarian submissions will appear here for review."
+        />
       ) : (
-        <div className="overflow-x-auto border border-gray-200 rounded-lg shadow-sm">
-          <table className="w-full text-left border-collapse bg-white text-sm text-gray-500">
-            <thead className="bg-white text-xs font-semibold uppercase text-gray-700 border-b">
-              <tr>
-                <th className="px-6 py-4">Book Title</th>
-                <th className="px-6 py-4">Librarian (Owner)</th>
-                <th className="px-6 py-4">Stock</th>
-                <th className="px-6 py-4">Publish Status</th>
-                <th className="px-6 py-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {pendingBooks.map((book) => (
-                <tr key={book._id} className="hover:bg-white transition-colors">
-                  <td className="px-6 py-4 font-medium text-gray-900">
-                    {book.title}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div>{book.ownerName}</div>
-                    <div className="text-xs text-gray-400">
-                      {book.ownerEmail}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">{book.totalStock}</td>
-                  <td className="px-6 py-4">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-yellow-50 px-2.5 py-0.5 text-xs font-medium text-yellow-700 border border-yellow-200 uppercase">
-                      {book.publishStatus}
-                    </span>
-                  </td>
+        <DataTable minWidth="min-w-[720px]">
+          <DataTableHead>
+            <tr>
+              <DataTableTh>Book Title</DataTableTh>
+              <DataTableTh>Librarian (Owner)</DataTableTh>
+              <DataTableTh>Stock</DataTableTh>
+              <DataTableTh>Publish Status</DataTableTh>
+              <DataTableTh align="right">Actions</DataTableTh>
+            </tr>
+          </DataTableHead>
 
-                  <td className="px-6 py-4 text-right">
-                    <div className="flex justify-end gap-2">
-                      <button
-                        onClick={() => handleAction(book._id, "approved")}
-                        disabled={mutation.isPending}
-                        className="px-3 py-1.5 text-xs font-medium text-white bg-green-600 hover:bg-green-700 rounded-md disabled:opacity-50 transition-all"
-                      >
-                        Approve
-                      </button>
-                      <button
-                        onClick={() => handleAction(book._id, "rejected")}
-                        disabled={mutation.isPending}
-                        className="px-3 py-1.5 text-xs font-medium text-white bg-red-600 hover:bg-red-700 rounded-md disabled:opacity-50 transition-all"
-                      >
-                        Reject
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+          <DataTableBody>
+            {pendingBooks.map((book) => (
+              <DataTableRow key={book._id}>
+                <DataTableCell className="font-medium text-content-strong">
+                  {book.title}
+                </DataTableCell>
+
+                <DataTableCell>
+                  <span className="block">{book.ownerName}</span>
+                  <span className="block text-xs text-content-subtle">
+                    {book.ownerEmail}
+                  </span>
+                </DataTableCell>
+
+                <DataTableCell className="tabular-nums">
+                  {book.totalStock}
+                </DataTableCell>
+
+                <DataTableCell>
+                  <StatusBadge kind="publish" value={book.publishStatus} />
+                </DataTableCell>
+
+                <DataTableCell align="right">
+                  <span className="flex justify-end gap-2">
+                    <Button
+                      size="sm"
+                      variant="success"
+                      disabled={mutation.isPending}
+                      onClick={() => handleAction(book._id, "approved")}
+                    >
+                      Approve
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="danger"
+                      disabled={mutation.isPending}
+                      onClick={() => handleAction(book._id, "rejected")}
+                    >
+                      Reject
+                    </Button>
+                  </span>
+                </DataTableCell>
+              </DataTableRow>
+            ))}
+          </DataTableBody>
+        </DataTable>
       )}
     </div>
   );

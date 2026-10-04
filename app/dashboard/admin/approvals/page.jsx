@@ -16,5 +16,5 @@ export default async function ApprovalsPage() {
   }
 
   // 3. User passes guards, render the Client dashboard
-  return <ApprovalsClient token={session.accessToken || ""} />;
+  return <ApprovalsClient />;
 }

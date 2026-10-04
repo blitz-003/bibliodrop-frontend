@@ -15,39 +15,44 @@ export default function SidebarLayout({
     h-full
     bg-slate-900
     border border-slate-800
-    rounded-3xl
-    shadow-xl
+    rounded-card
+    shadow-panel
     flex flex-col
     p-6
     text-slate-300
-    
   "
     >
-      {/* 1. BRAND TITLE HEADER BLOCK (Updated to Bibliodrop) */}
+      {/* 1. BRAND TITLE HEADER BLOCK */}
       <div className="border-b border-slate-800/80 pb-5">
-        <span className="block text-xs uppercase  font-semibold text-blue-500">
+        <span className="block text-xs font-semibold uppercase text-blue-400">
           {title}
         </span>
-        <h2 className="text-xl font-semibold text-white mt-1 ">Bibliodrop</h2>
+        <h2 className="mt-1 text-xl font-semibold text-white">Bibliodrop</h2>
       </div>
 
-      {/* 2. IDENTITY PROFILE BOX (Swapped violet to HeroUI primary blue-600) */}
-      <div className="mt-5 mb-8 bg-slate-800/50 border border-slate-800 rounded-xl p-4 flex items-center gap-3">
-        <div className="w-10 h-10 rounded-full bg-blue-600 flex items-center justify-center text-white text-base font-semibold select-none shadow-sm shadow-blue-600/20">
+      {/* 2. IDENTITY PROFILE BOX */}
+      <div className="mt-5 mb-8 flex items-center gap-3 rounded-control border border-slate-800 bg-slate-800/50 p-4">
+        <div
+          aria-hidden="true"
+          className="flex h-10 w-10 select-none items-center justify-center rounded-full bg-accent text-base font-semibold text-white shadow-sm"
+        >
           {user.name ? user.name.charAt(0).toUpperCase() : "U"}
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold text-white truncate leading-normal">
+          <p className="truncate text-sm font-semibold leading-normal text-white">
             {user.name}
           </p>
-          <p className="text-xs text-slate-400 capitalize truncate leading-normal">
+          <p className="truncate text-xs capitalize leading-normal text-slate-400">
             {user.role} Account
           </p>
         </div>
       </div>
 
       {/* 3. ACTIVE LIVE NAVIGATION LINK GRID */}
-      <nav className="flex-1 flex flex-col gap-2 overflow-y-auto pr-1">
+      <nav
+        aria-label="Dashboard"
+        className="flex flex-1 flex-col gap-2 overflow-y-auto pr-1"
+      >
         {React.Children.map(children, (child) => {
           if (React.isValidElement(child)) {
             return React.cloneElement(child, { onClick: closeMobileMenu });
@@ -59,23 +64,27 @@ export default function SidebarLayout({
   );
 }
 
-// SHARED TARGET ACTIVE LINK STYLING UTILITY (Updated to HeroUI primary blue)
+// SHARED TARGET ACTIVE LINK STYLING UTILITY
 export function SidebarLink({ href, icon: Icon, children, onClick }) {
   const pathname = usePathname();
-  const isActive = pathname === href;
+  // Exact equality only meant no link was ever highlighted when a user was on
+  // a nested route such as /dashboard/admin/users. A prefix match fixes that.
+  const isActive = pathname === href || pathname.startsWith(`${href}/`);
 
   return (
     <a
       href={href}
       onClick={onClick}
-      className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all duration-150 leading-normal select-none ${
+      aria-current={isActive ? "page" : undefined}
+      className={`flex select-none items-center gap-3 rounded-control px-4 py-3 text-sm font-medium leading-normal transition-colors duration-150 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-400 ${
         isActive
-          ? "bg-blue-600 text-white shadow-md shadow-blue-600/15"
+          ? "bg-accent text-white shadow-card"
           : "text-slate-400 hover:bg-slate-800/70 hover:text-slate-200"
       }`}
     >
       <Icon
-        className={`w-5 h-5 flex-shrink-0 transition-colors ${isActive ? "text-white" : "text-slate-400 group-hover:text-slate-200"}`}
+        aria-hidden="true"
+        className={`h-5 w-5 shrink-0 transition-colors ${isActive ? "text-white" : "text-slate-400"}`}
       />
       <span>{children}</span>
     </a>

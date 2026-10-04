@@ -2,24 +2,9 @@
 
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import {
-  useQuery,
-  useMutation,
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { authClient } from "@/lib/auth-client";
-
-// Initialize a standalone Query Client instance specifically for this route tree
-const standaloneEditClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      retry: false,
-    },
-  },
-});
 
 function EditBookFormContent() {
   const { id } = useParams();
@@ -227,9 +212,5 @@ function EditBookFormContent() {
 }
 
 export default function EditBookPage() {
-  return (
-    <QueryClientProvider client={standaloneEditClient}>
-      <EditBookFormContent />
-    </QueryClientProvider>
-  );
+  return <EditBookFormContent />;
 }

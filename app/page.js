@@ -2,8 +2,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import TeaserSection from "@/components/TeaserSection";
-import StickyReveal from "@/components/home/StickyReveal/StickyReveal";
 import FeaturedBooks from "@/components/FeaturedBooks/FeaturedBooks";
 
 // --- PREMIUM IMAGES (Books, Coffee, Cafes) ---
@@ -232,10 +230,21 @@ export default function HomePage() {
         {/* UPDATED: Added lg:col-span-7, lg:p-6 (space on all sides), and rounded-3xl corners */}
         <div className="absolute inset-0 lg:relative lg:col-span-6 h-full w-full -z-10 lg:z-0 lg:p-6 lg:pl-0">
           <div className="absolute inset-0 bg-gradient-to-r from-[#FAF9F5] via-[#FAF9F5]/40 to-transparent lg:hidden z-10" />
-          <img
+          {/*
+            No `fill` here on purpose. `fill` absolutely positions against the
+            parent's padding box, which silently discarded this panel's
+            `lg:p-6 lg:pl-0` inset and pushed the photo up under the floating
+            navbar. A sized image stays in normal flow, so the inset applies
+            and `h-[100vh]` is honoured.
+          */}
+          <Image
             src={IMAGES.heroBg}
             alt="A woman reading a book with a steaming hot coffee cup alongside"
-            className="w-full h-[100vh] object-cover object-center filter contrast-[102%] lg:rounded-3xl shadow-md"
+            width={1400}
+            height={1750}
+            priority
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            className="h-[100vh] w-full object-cover object-center shadow-md filter contrast-[102%] lg:rounded-3xl"
           />
         </div>
       </section>
@@ -323,11 +332,16 @@ export default function HomePage() {
               alongside custom protective sleeves to preserve the physical text
               ecosystem.
             </p>
-            <div className="pt-6 hidden md:block max-w-sm rounded-none overflow-hidden aspect-video border border-stone-200">
-              <img
+            {/* `relative` is required: `fill` resolves against the nearest
+                positioned ancestor, which was the section container, so the
+                photo expanded to fill the whole grid. */}
+            <div className="relative pt-6 hidden md:block max-w-sm rounded-none overflow-hidden aspect-video border border-stone-200">
+              <Image
                 src={IMAGES.cafe1}
                 alt="Cafe brewing workspace"
-                className="w-full h-full object-cover filter contrast-[95%]"
+                fill
+                sizes="(max-width: 768px) 100vw, 384px"
+                className="object-cover filter contrast-[95%]"
               />
             </div>
           </div>
@@ -347,12 +361,18 @@ export default function HomePage() {
                   href="/browse-books"
                   className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 w-full cursor-pointer"
                 >
-                  {/* Portrait Avatar */}
-                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden bg-stone-100 shrink-0 border border-stone-200">
-                    <img
+                  {/* Portrait Avatar — `relative` is required for the same
+                      reason as the cafe image above. Without it the containing
+                      block became the framer-motion card (its `y` transform
+                      establishes one) and the portrait filled the entire card,
+                      escaping this element's `overflow-hidden` circle. */}
+                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden bg-stone-100 shrink-0 border border-stone-200">
+                    <Image
                       src={lib.img}
                       alt={lib.name}
-                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                      fill
+                      sizes="96px"
+                      className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
                     />
                   </div>
                   <div className="text-center sm:text-left space-y-1 w-full">

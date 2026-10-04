@@ -2,6 +2,18 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { authClient } from "@/lib/auth-client";
+import {
+  Alert,
+  PageHeader,
+  DataTable,
+  DataTableHead,
+  DataTableTh,
+  DataTableBody,
+  DataTableRow,
+  DataTableCell,
+  DataTableEmpty,
+  StatusBadge,
+} from "@/components/ui";
 export default function AdminTransactionsPage() {
   // Fetch compiled admin ledger stream via TanStack Query
 
@@ -33,127 +45,88 @@ export default function AdminTransactionsPage() {
 
   if (isLoading)
     return (
-      <p className="p-6 text-gray-500 font-medium">Loading ledger streams...</p>
+      <div aria-busy="true" className="mx-auto w-full max-w-app">
+        <span className="sr-only">Loading ledger streams</span>
+      </div>
     );
   if (isError)
     return (
-      <p className="p-6 text-red-500 font-medium">
-        Error loading system transaction histories.
-      </p>
+      <div className="mx-auto w-full max-w-app">
+        <Alert tone="danger" className="mx-auto max-w-md inline-flex">
+          <p className="text-base font-semibold">
+            Error loading system transaction histories
+          </p>
+        </Alert>
+      </div>
     );
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <div className="mb-6">
-        <h1 className="text-2xl font-black text-gray-900 ">
-          System Transactions
-        </h1>
-        <p className="text-sm text-gray-500">
-          Master ledger monitoring overall global checkout logs and shipping
-          fulfillment statuses.
-        </p>
-      </div>
+    <div className="mx-auto w-full max-w-app space-y-6">
+      <PageHeader
+        title="System Transactions"
+        subtitle="Master ledger monitoring overall global checkout logs and shipping fulfillment statuses."
+      />
 
-      <div className="bg-white shadow-xl rounded-xl overflow-hidden border border-gray-100">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-white border-b border-gray-100 text-xs font-semibold uppercase  text-gray-600">
-                <th className="p-4">Transaction ID</th>
-                <th className="p-4">Amount</th>
-                <th className="p-4">Book Name</th>
-                <th className="p-4">User (Client ID)</th>
-                <th className="p-4">Librarian</th>
-                <th className="p-4">Time</th>
-                <th className="p-4">Delivery Status</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 text-sm text-gray-700">
-              {transactions?.map((tx) => (
-                <tr
-                  key={tx._id}
-                  className="hover:bg-white/50 transition-colors"
-                >
-                  {/* Transaction ID */}
-                  <td
-                    className="p-4 font-mono text-xs text-gray-400 select-all max-w-[120px] truncate"
-                    title={tx._id}
-                  >
-                    {tx._id}
-                  </td>
+      <DataTable minWidth="min-w-[900px]">
+        <DataTableHead>
+          <tr>
+            <DataTableTh>Transaction ID</DataTableTh>
+            <DataTableTh>Amount</DataTableTh>
+            <DataTableTh>Book Name</DataTableTh>
+            <DataTableTh>User (Client ID)</DataTableTh>
+            <DataTableTh>Librarian</DataTableTh>
+            <DataTableTh>Time</DataTableTh>
+            <DataTableTh>Delivery Status</DataTableTh>
+          </tr>
+        </DataTableHead>
 
-                  {/* Transaction Amount */}
-                  <td className="p-4 font-semibold text-gray-900">
-                    ${Number(tx.amountPaid).toFixed(2)}
-                  </td>
+        <DataTableBody>
+          {transactions?.map((tx) => (
+            <DataTableRow key={tx._id}>
+              <DataTableCell className="max-w-[120px] select-all truncate font-mono text-xs text-content-subtle">
+                <span title={tx._id}>{tx._id}</span>
+              </DataTableCell>
 
-                  {/* Book Name */}
-                  <td
-                    className="p-4 font-semibold text-indigo-950 max-w-[200px] truncate"
-                    title={tx.bookName}
-                  >
-                    {tx.bookName}
-                  </td>
+              <DataTableCell className="font-semibold tabular-nums text-content-strong">
+                ${Number(tx.amountPaid).toFixed(2)}
+              </DataTableCell>
 
-                  {/* User (Client ID) */}
-                  <td
-                    className="p-4 text-xs font-mono text-gray-500 truncate max-w-[100px]"
-                    title={tx.userId}
-                  >
-                    {tx.userId}
-                  </td>
+              <DataTableCell className="max-w-[200px] font-semibold text-indigo-950">
+                <span className="block truncate" title={tx.bookName}>
+                  {tx.bookName}
+                </span>
+              </DataTableCell>
 
-                  {/* Librarian */}
-                  <td className="p-4 font-medium text-gray-700">
-                    {tx.librarianName}
-                  </td>
+              <DataTableCell className="max-w-[100px] truncate font-mono text-xs text-content-muted">
+                <span title={tx.userId}>{tx.userId}</span>
+              </DataTableCell>
 
-                  {/* Time */}
-                  <td className="p-4 text-xs text-gray-500 whitespace-nowrap">
-                    {new Date(tx.createdAt).toLocaleString()}
-                  </td>
+              <DataTableCell className="font-medium text-content">
+                {tx.librarianName}
+              </DataTableCell>
 
-                  {/* Delivery Status (Color Coded badges with NO action buttons) */}
-                  <td className="p-4">
-                    <span
-                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold uppercase  ${
-                        tx.deliveryStatus === "pending"
-                          ? "bg-amber-50 text-amber-700 border border-amber-200"
-                          : tx.deliveryStatus === "dispatched"
-                            ? "bg-blue-50 text-blue-700 border border-blue-200"
-                            : "bg-green-50 text-green-700 border border-green-200"
-                      }`}
-                    >
-                      <span
-                        className={`h-1.5 w-1.5 rounded-full ${
-                          tx.deliveryStatus === "pending"
-                            ? "bg-amber-500"
-                            : tx.deliveryStatus === "dispatched"
-                              ? "bg-blue-500"
-                              : "bg-green-500"
-                        }`}
-                      />
-                      {tx.deliveryStatus}
-                    </span>
-                  </td>
-                </tr>
-              ))}
+              <DataTableCell className="whitespace-nowrap text-xs text-content-muted">
+                {new Date(tx.createdAt).toLocaleString()}
+              </DataTableCell>
 
-              {transactions?.length === 0 && (
-                <tr>
-                  <td
-                    colSpan="7"
-                    className="p-12 text-center text-gray-400 italic"
-                  >
-                    No financial transaction events identified across the
-                    network data streams.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+              <DataTableCell>
+                <StatusBadge
+                  kind="delivery"
+                  value={tx.deliveryStatus}
+                  dot
+                />
+              </DataTableCell>
+            </DataTableRow>
+          ))}
+
+          {(!transactions || transactions.length === 0) && (
+            <DataTableEmpty colSpan={7}>
+              No financial transaction events identified across the network data
+              streams.
+            </DataTableEmpty>
+          )}
+        </DataTableBody>
+      </DataTable>
     </div>
   );
 }

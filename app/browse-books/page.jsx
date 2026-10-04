@@ -7,7 +7,6 @@ import { getBooks } from "@/services/bookService";
 import BookCard from "@/components/BookCard";
 import {
   Search,
-  Filter,
   ChevronLeft,
   ChevronRight,
   BookOpen,
@@ -15,9 +14,18 @@ import {
   SlidersHorizontal,
   X,
   ArrowUpDown,
-  DollarSign,
 } from "lucide-react";
-import { Spinner } from "@heroui/react";
+import {
+  Alert,
+  Badge,
+  Button,
+  PageHeader,
+  Panel,
+  Input,
+  Select,
+  EmptyState,
+  LoadingScreen,
+} from "@/components/ui";
 
 const ITEMS_PER_PAGE = 8;
 
@@ -37,8 +45,16 @@ export default function BrowseBooksPage() {
   const [searchInput, setSearchInput] = useState(search);
   const [showFiltersPanel, setShowFiltersPanel] = useState(false);
 
-  // Sync debounce search query to router paths
+  // Sync debounce search query to router paths.
+  //
+  // `search` (the URL value) is in the dependency list, and the handler bails
+  // when the input already matches it. That guard is what makes the effect
+  // safe to re-run on URL change: without it, navigating to page 2 would change
+  // `searchParams`, retrigger this effect, and immediately push back to page 1,
+  // so pagination would never advance.
   useEffect(() => {
+    if (searchInput === search) return;
+
     const handler = setTimeout(() => {
       const params = new URLSearchParams(searchParams.toString());
       if (searchInput) {
@@ -51,7 +67,7 @@ export default function BrowseBooksPage() {
     }, 300);
 
     return () => clearTimeout(handler);
-  }, [searchInput]);
+  }, [searchInput, search, router, searchParams]);
 
   // React Query fetching data stream hooks
   const { data, isLoading, isError } = useQuery({
@@ -121,6 +137,10 @@ export default function BrowseBooksPage() {
     router.push("/browse-books"); // Navigates cleanly back to pristine defaults
   }
 
+  const hasFeeOrCategory = Boolean(
+    category || minDeliveryFee || maxDeliveryFee,
+  );
+
   // Boolean helper to display clear button when filters are active
   const hasActiveFilters = !!(
     search ||
@@ -131,202 +151,168 @@ export default function BrowseBooksPage() {
   );
 
   return (
-    <div className="min-h-screen bg-slate-50 text-gray-800 py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      <div className="max-w-[1400px] mx-auto space-y-8">
+    <div className="min-h-screen overflow-hidden bg-page px-4 py-12 text-content sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-app space-y-8">
         {/* HEADER SECTION */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-semibold text-gray-900 sm:text-4xl tracking-tight">
-              Browse Books
-            </h1>
-            <p className="text-base text-gray-500 mt-1">
-              Explore our unified catalog, ecosystem records, and reading
-              queues.
-            </p>
-          </div>
-
-          <div className="inline-flex items-center gap-2 self-start md:self-auto bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-100 px-4 py-2 rounded-xl text-base font-semibold text-blue-600 shadow-sm">
-            <BookOpen className="w-5 h-5 text-blue-500" />
-            <span>{totalBooks} Books Available</span>
-          </div>
-        </div>
+        <PageHeader
+          title="Browse Books"
+          subtitle="Explore our unified catalog, ecosystem records, and reading queues."
+          action={
+            <Badge tone="info" className="bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-2 text-base">
+              <BookOpen aria-hidden="true" className="h-5 w-5" />
+              <span>{totalBooks} Books Available</span>
+            </Badge>
+          }
+        />
 
         {/* PRIMARY FILTERS BAR CONTROLS */}
-        <div className="bg-white p-4 rounded-2xl border border-gray-200 shadow-sm space-y-4">
-          <div className="flex flex-col lg:flex-row gap-4 items-center">
+        <Panel className="space-y-4 p-4">
+          <div className="flex flex-col items-center gap-4 lg:flex-row">
             {/* SEARCH BAR INPUT */}
             <div className="relative w-full lg:flex-1">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <label htmlFor="book-search" className="sr-only">
+                Search books by title or author
+              </label>
+              <Search
+                aria-hidden="true"
+                className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-content-subtle"
+              />
               <input
+                id="book-search"
                 type="text"
                 placeholder="Search books by title, author..."
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                className="w-full bg-slate-50 hover:bg-slate-100/70 focus:bg-white text-base placeholder-gray-400 text-gray-800 pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                className="w-full rounded-control border border-border bg-surface-subtle pl-12 pr-4 py-3 text-base text-content transition-colors placeholder:text-content-subtle hover:bg-surface focus:border-accent focus:bg-surface focus:outline-none focus:ring-2 focus:ring-accent/30"
               />
             </div>
 
             {/* ACTION ELEMENTS CONTAINER */}
-            <div className="flex flex-wrap sm:flex-nowrap gap-3 w-full lg:w-auto items-center">
+            <div className="flex w-full flex-wrap items-center gap-3 sm:flex-nowrap lg:w-auto">
               {/* SORT BY DROPDOWN PANEL DESIGN */}
               <div className="relative w-full sm:w-60">
-                <ArrowUpDown className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+                <label htmlFor="book-sort" className="sr-only">
+                  Sort books
+                </label>
+                <ArrowUpDown
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-content-subtle"
+                />
                 <select
+                  id="book-sort"
                   value={sort}
                   onChange={(e) => updateURL("sort", e.target.value)}
-                  className="w-full bg-slate-50 hover:bg-slate-100/70 text-base font-medium text-gray-700 pl-12 pr-10 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer transition-all"
+                  className="w-full cursor-pointer appearance-none rounded-control border border-border bg-surface-subtle py-3 pl-12 pr-10 text-base font-medium text-content transition-colors hover:bg-surface focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
                 >
                   <option value="newest">Sort by: Newest</option>
                   <option value="oldest">Sort by: Oldest</option>
                   <option value="price_low">Price: Low to High</option>
                   <option value="price_high">Price: High to Low</option>
                 </select>
-                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-500 w-0 h-0" />
+                <div className="pointer-events-none absolute right-4 top-1/2 h-0 w-0 -translate-y-1/2 border-l-4 border-r-4 border-t-4 border-transparent border-t-content-muted" />
               </div>
 
               {/* COLLAPSIBLE TOGGLE FILTER BUTTON */}
-              <button
+              <Button
+                variant={showFiltersPanel || hasFeeOrCategory ? "primary" : "secondary"}
+                className="w-full whitespace-nowrap sm:w-auto"
+                aria-expanded={showFiltersPanel}
+                aria-controls="book-filters-panel"
                 onClick={() => setShowFiltersPanel(!showFiltersPanel)}
-                className={`flex items-center justify-center gap-2 px-5 py-3 rounded-xl font-medium text-base border transition-all w-full sm:w-auto whitespace-nowrap shadow-sm ${
-                  showFiltersPanel ||
-                  category ||
-                  minDeliveryFee ||
-                  maxDeliveryFee
-                    ? "bg-blue-50 text-blue-600 border-blue-200 ring-2 ring-blue-100"
-                    : "bg-white text-gray-700 border-gray-200 hover:bg-slate-50"
-                }`}
               >
-                <SlidersHorizontal className="w-5 h-5" />
+                <SlidersHorizontal aria-hidden="true" className="h-5 w-5" />
                 <span>Filters</span>
                 {(category || minDeliveryFee || maxDeliveryFee) && (
-                  <span className="ml-1 w-2 h-2 rounded-full bg-blue-600" />
+                  <span className="ml-1 h-2 w-2 rounded-full bg-current" />
                 )}
-              </button>
+              </Button>
 
               {/* CLEAR ALL BUTTON */}
               {hasActiveFilters && (
-                <button
+                <Button
+                  variant="danger"
+                  className="w-full bg-danger-subtle sm:w-auto"
                   onClick={handleClearAll}
-                  className="flex items-center justify-center gap-1.5 px-4 py-3 rounded-xl font-medium text-base text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100/70 border border-rose-100 transition-all w-full sm:w-auto"
                 >
-                  <X className="w-4 h-4 stroke-[2.5]" />
+                  <X aria-hidden="true" className="h-4 w-4" />
                   <span>Clear All</span>
-                </button>
+                </Button>
               )}
             </div>
           </div>
 
           {/* HIDDEN / EXPANDABLE FILTER SUBSYSTEM SECTION */}
           {showFiltersPanel && (
-            <div className="pt-4 border-t border-gray-100 animate-in fade-in slide-in-from-top-2 duration-200">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-50 p-5 rounded-xl border border-gray-100">
+            <div
+              id="book-filters-panel"
+              className="animate-in fade-in slide-in-from-top-2 border-t border-border-subtle pt-4 duration-200"
+            >
+              <div className="grid grid-cols-1 gap-6 rounded-control border border-border-subtle bg-surface-subtle p-5 md:grid-cols-3">
                 {/* CATEGORY DROPDOWN BOX */}
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 flex items-center gap-1.5">
-                    <Filter className="w-4 h-4 text-gray-400" /> Category
-                  </label>
-                  <div className="relative">
-                    <select
-                      value={category}
-                      onChange={(e) => updateURL("category", e.target.value)}
-                      className="w-full bg-white text-base text-gray-700 px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none cursor-pointer shadow-sm transition-all"
-                    >
-                      <option value="">All Categories</option>
-                      {globalCategories.map((cat) => (
-                        <option key={cat} value={cat}>
-                          {cat}
-                        </option>
-                      ))}
-                    </select>
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-500 w-0 h-0" />
-                  </div>
-                </div>
+                <Select
+                  label="Category"
+                  id="book-category"
+                  value={category}
+                  onChange={(e) => updateURL("category", e.target.value)}
+                >
+                  <option value="">All Categories</option>
+                  {globalCategories.map((cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  ))}
+                </Select>
 
-                {/* MIN DELIVERY FEE INPUT */}
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 flex items-center gap-1.5">
-                    <DollarSign className="w-4 h-4 text-gray-400" /> Min
-                    Delivery Fee
-                  </label>
-                  <input
-                    type="number"
-                    placeholder="Min fee (e.g. 0)"
-                    min="0"
-                    value={minDeliveryFee}
-                    onChange={(e) =>
-                      updateDeliveryFees(e.target.value, maxDeliveryFee)
-                    }
-                    className="w-full bg-white text-base px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all"
-                  />
-                </div>
-
-                {/* MAX DELIVERY FEE INPUT */}
-                <div className="space-y-2">
-                  <label className="text-sm font-semibold text-gray-700 flex items-center gap-1.5">
-                    <DollarSign className="w-4 h-4 text-gray-400" /> Max
-                    Delivery Fee
-                  </label>
-                  <input
-                    type="number"
-                    placeholder="Max fee (e.g. 15)"
-                    min="0"
-                    value={maxDeliveryFee}
-                    onChange={(e) =>
-                      updateDeliveryFees(minDeliveryFee, e.target.value)
-                    }
-                    className="w-full bg-white text-base px-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm transition-all"
-                  />
-                </div>
+                {/* MIN / MAX DELIVERY FEE INPUTS */}
+                <Input
+                  type="number"
+                  label="Min Delivery Fee"
+                  id="book-min-fee"
+                  min="0"
+                  placeholder="Min fee (e.g. 0)"
+                  value={minDeliveryFee}
+                  onChange={(e) =>
+                    updateDeliveryFees(e.target.value, maxDeliveryFee)
+                  }
+                />
+                <Input
+                  type="number"
+                  label="Max Delivery Fee"
+                  id="book-max-fee"
+                  min="0"
+                  placeholder="Max fee (e.g. 15)"
+                  value={maxDeliveryFee}
+                  onChange={(e) =>
+                    updateDeliveryFees(minDeliveryFee, e.target.value)
+                  }
+                />
               </div>
             </div>
           )}
-        </div>
+        </Panel>
 
         {/* LOADING & ERROR LAYOUT PANELS */}
-        {isLoading && (
-          <div className="flex min-h-screen items-center justify-center bg-background px-6">
-            <div className="flex flex-col items-center gap-6 text-center">
-              <Spinner
-                size="lg"
-                color="primary"
-                className="scale-150 md:scale-[1.8]"
-              />
-
-              <div>
-                <h1 className="text-2xl font-semibold text-foreground sm:text-3xl">
-                  Loading...
-                </h1>
-                <p className="mt-2 text-sm text-default-500 sm:text-base">
-                  Please wait while we prepare everything for you.
-                </p>
-              </div>
-            </div>
-          </div>
-        )}
+        {isLoading && <LoadingScreen title="Loading books" />}
 
         {isError && (
-          <div className="bg-red-50 border border-red-100 text-red-700 p-6 rounded-xl text-center max-w-md mx-auto">
+          <Alert tone="danger" className="mx-auto max-w-md">
             <p className="text-base font-semibold">
               Failed to load system book catalog stream.
             </p>
-          </div>
+          </Alert>
         )}
 
         {/* CARDS RENDERING GRID ZONE */}
         {!isLoading && !isError && (
           <>
             {booksList.length === 0 ? (
-              <div className="text-center py-20 bg-white border border-dashed border-gray-200 rounded-2xl shadow-sm">
-                <Layers className="w-10 h-10 text-gray-300 mx-auto mb-3" />
-                <p className="text-lg text-gray-500 font-medium">
-                  No results matched your parameters.
-                </p>
-                <p className="text-sm text-gray-400 mt-1">
-                  Try modifying your search query filters.
-                </p>
-              </div>
+              <EmptyState
+                icon={Layers}
+                title="No results matched your parameters."
+                description="Try modifying your search query filters."
+              />
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 sm:gap-8">
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3 xl:grid-cols-4">
                 {booksList.map((book) => (
                   <BookCard key={book._id || book.id} book={book} />
                 ))}
@@ -335,31 +321,43 @@ export default function BrowseBooksPage() {
 
             {/* INTERACTIVE PAGINATION GRID */}
             {totalPages > 1 && (
-              <div className="flex items-center justify-center gap-2 pt-12 border-t border-gray-200">
-                <button
+              <nav
+                aria-label="Pagination"
+                className="flex items-center justify-center gap-2 border-t border-border pt-12"
+              >
+                <Button
+                  variant="secondary"
+                  size="md"
+                  className="p-2.5"
                   onClick={() => handlePageChange(page - 1)}
                   disabled={page === 1}
-                  className="p-2.5 bg-white border border-gray-200 rounded-xl text-gray-500 hover:text-gray-900 shadow-sm hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                  aria-label="Previous Page"
+                  aria-label="Previous page"
                 >
-                  <ChevronLeft className="w-5 h-5" />
-                </button>
+                  <ChevronLeft aria-hidden="true" className="h-5 w-5" />
+                </Button>
 
-                <div className="flex items-center gap-1.5 font-semibold text-base px-4 py-2 bg-white border border-gray-200 rounded-xl shadow-sm">
-                  <span className="text-gray-900">Page {page}</span>
-                  <span className="text-gray-400 font-normal">/</span>
-                  <span className="text-gray-500">{totalPages}</span>
-                </div>
+                <p
+                  aria-current="page"
+                  className="flex items-center gap-1.5 rounded-control border border-border bg-surface px-4 py-2 text-base font-semibold shadow-panel"
+                >
+                  <span className="text-content-strong">Page {page}</span>
+                  <span className="font-normal text-content-subtle" aria-hidden="true">
+                    /
+                  </span>
+                  <span className="text-content-muted">{totalPages}</span>
+                </p>
 
-                <button
+                <Button
+                  variant="secondary"
+                  size="md"
+                  className="p-2.5"
                   onClick={() => handlePageChange(page + 1)}
                   disabled={page === totalPages}
-                  className="p-2.5 bg-white border border-gray-200 rounded-xl text-gray-500 hover:text-gray-900 shadow-sm hover:bg-white disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                  aria-label="Next Page"
+                  aria-label="Next page"
                 >
-                  <ChevronRight className="w-5 h-5" />
-                </button>
-              </div>
+                  <ChevronRight aria-hidden="true" className="h-5 w-5" />
+                </Button>
+              </nav>
             )}
           </>
         )}

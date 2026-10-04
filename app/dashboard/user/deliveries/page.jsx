@@ -2,6 +2,19 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { authClient } from "@/lib/auth-client";
+import {
+  Alert,
+  PageHeader,
+  DataTable,
+  DataTableHead,
+  DataTableTh,
+  DataTableBody,
+  DataTableRow,
+  DataTableCell,
+  DataTableEmpty,
+  StatusBadge,
+} from "@/components/ui";
+
 export default function UserDeliveryHistoryPage() {
   const {
     data: deliveries,
@@ -13,9 +26,7 @@ export default function UserDeliveryHistoryPage() {
       const { data, error } = await authClient.token();
 
       if (error) {
-        console.error(error);
-      } else {
-        console.log(data.token);
+        throw new Error("Failed to retrieve authentication token.");
       }
 
       const res = await fetch(
@@ -35,71 +46,87 @@ export default function UserDeliveryHistoryPage() {
     },
   });
 
-  if (isLoading) return <p className="p-6">Loading delivery records...</p>;
-  if (isError)
+  if (isLoading) {
     return (
-      <p className="p-6 text-red-500">Error fetching delivery tracking logs.</p>
+      <div aria-busy="true" className="mx-auto w-full max-w-app">
+        <span className="sr-only">Loading delivery records</span>
+        <DataTable>
+          <DataTableBody>
+            {[...Array(4)].map((_, i) => (
+              <DataTableRow key={i}>
+                <DataTableCell className="h-12 animate-pulse bg-gray-100" />
+                <DataTableCell className="h-12 animate-pulse bg-gray-100" />
+                <DataTableCell className="h-12 animate-pulse bg-gray-100" />
+                <DataTableCell className="h-12 animate-pulse bg-gray-100" />
+                <DataTableCell className="h-12 animate-pulse bg-gray-100" />
+              </DataTableRow>
+            ))}
+          </DataTableBody>
+        </DataTable>
+      </div>
     );
+  }
+
+  if (isError) {
+    return (
+      <div className="mx-auto w-full max-w-app">
+        <Alert tone="danger" className="mx-auto max-w-md inline-flex">
+          <p className="text-base font-semibold">
+            Error fetching delivery tracking logs
+          </p>
+        </Alert>
+      </div>
+    );
+  }
+
+  const rows = Array.isArray(deliveries) ? deliveries : [];
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
-      <h1 className="text-2xl font-black mb-6 text-gray-900">
-        Your Delivery History
-      </h1>
-      <div className="bg-white shadow rounded-xl overflow-hidden border border-gray-100">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-white border-b border-gray-100 text-sm font-semibold text-gray-600">
-                <th className="p-4">Book Title</th>
-                <th className="p-4">Delivery Fee</th>
-                <th className="p-4">Request Date</th>
-                <th className="p-4">Status</th>
-                <th className="p-4">Transaction ID</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 text-sm text-gray-700">
-              {deliveries?.map((d) => (
-                <tr key={d._id} className="hover:bg-white/50">
-                  <td className="p-4 font-semibold text-gray-900">
-                    {d.bookTitle}
-                  </td>
-                  <td className="p-4">${d.deliveryFee.toFixed(2)}</td>
-                  <td className="p-4">
-                    {new Date(d.createdAt).toLocaleDateString()}
-                  </td>
-                  <td className="p-4">
-                    <span
-                      className={`px-2.5 py-1 rounded-full text-xs font-semibold uppercase  ${
-                        d.status === "pending"
-                          ? "bg-amber-50 text-amber-700 border border-amber-200"
-                          : d.status === "dispatched"
-                            ? "bg-blue-50 text-blue-700 border border-blue-200"
-                            : "bg-green-50 text-green-700 border border-green-200"
-                      }`}
-                    >
-                      {d.status}
-                    </span>
-                  </td>
-                  <td className="p-4 text-xs font-mono text-gray-400">
-                    {d.transactionId}
-                  </td>
-                </tr>
-              ))}
-              {deliveries?.length === 0 && (
-                <tr>
-                  <td
-                    colSpan="5"
-                    className="p-8 text-center text-gray-400 italic"
-                  >
-                    No delivery history records identified.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+    <div className="mx-auto w-full max-w-app space-y-6">
+      <PageHeader
+        title="Your Delivery History"
+        subtitle="Track the status of every book you have requested."
+      />
+
+      <DataTable>
+        <DataTableHead>
+          <tr>
+            <DataTableTh>Book Title</DataTableTh>
+            <DataTableTh>Delivery Fee</DataTableTh>
+            <DataTableTh>Request Date</DataTableTh>
+            <DataTableTh>Status</DataTableTh>
+            <DataTableTh>Transaction ID</DataTableTh>
+          </tr>
+        </DataTableHead>
+
+        <DataTableBody>
+          {rows.map((d) => (
+            <DataTableRow key={d._id}>
+              <DataTableCell className="font-semibold text-content-strong">
+                {d.bookTitle}
+              </DataTableCell>
+              <DataTableCell className="tabular-nums">
+                ${d.deliveryFee.toFixed(2)}
+              </DataTableCell>
+              <DataTableCell>
+                {new Date(d.createdAt).toLocaleDateString()}
+              </DataTableCell>
+              <DataTableCell>
+                <StatusBadge kind="delivery" value={d.status} />
+              </DataTableCell>
+              <DataTableCell className="font-mono text-xs text-content-subtle">
+                {d.transactionId}
+              </DataTableCell>
+            </DataTableRow>
+          ))}
+
+          {rows.length === 0 && (
+            <DataTableEmpty colSpan={5}>
+              No delivery history records identified.
+            </DataTableEmpty>
+          )}
+        </DataTableBody>
+      </DataTable>
     </div>
   );
 }

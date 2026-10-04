@@ -1,9 +1,16 @@
 import { getServerSession } from "@/lib/getServerSession";
 import { redirect } from "next/navigation";
-import Sidebar from "@/components/dashboard/sidebar/Sidebar";
 
 export const dynamic = "force-dynamic";
 
+/**
+ * Role guard only.
+ *
+ * See the note in `app/dashboard/admin/layout.jsx`: the inline-styled flex
+ * wrapper and second `<main>` this used to render duplicated the shell that
+ * `app/dashboard/layout.jsx` already provides, and the hardcoded `padding: 20`
+ * stacked on the shell's own `p-4 md:p-8`.
+ */
 export default async function LibrarianLayout({ children }) {
   const session = await getServerSession();
 
@@ -15,9 +22,5 @@ export default async function LibrarianLayout({ children }) {
     redirect("/dashboard");
   }
 
-  return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
-      <main style={{ flex: 1, padding: 20 }}>{children}</main>
-    </div>
-  );
+  return children;
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, LogOut, LayoutDashboard } from "lucide-react";
@@ -19,11 +19,23 @@ export default function Navbar({ user }) {
     window.location.href = "/";
   }
 
+  // Every link in the drawer already closes it on click; Escape was the one
+  // remaining way out for keyboard users.
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function onKeyDown(event) {
+      if (event.key === "Escape") setIsOpen(false);
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [isOpen]);
+
   return (
-    // UPDATED: Added lg:w-3/4, mx-auto, lg:mt-4, lg:rounded-full, and handled borders for a floating look
-    <nav className="bg-white border-b lg:border border-gray-200 sticky top-0 lg:top-2 z-50 w-full lg:w-90/100 mx-auto lg:rounded-full  text-gray-700 shadow-sm">
-      {/* UPDATED: Adjusted internal horizontal padding for the pill shape on desktop */}
-      <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-10 h-16 flex items-center justify-between">
+    <nav className="sticky top-0 z-50 mx-auto w-full border-b border-border bg-surface text-content shadow-card lg:top-2 lg:w-90/100 lg:rounded-full lg:border">
+      <div className="mx-auto flex h-16 max-w-app items-center justify-between px-4 sm:px-6 lg:px-10">
         {/* BRAND LOGO & CORE LINKS */}
         <div className="flex items-center gap-8">
           <Link
@@ -93,11 +105,24 @@ export default function Navbar({ user }) {
 
         {/* MOBILE UNIFIED HAMBURGER MENU BUTTON */}
         <div className="lg:hidden">
+          {/*
+            Two problems here: `focus:outline-none` removed the focus ring
+            without replacing it, and the button had no accessible name at all
+            (icon only, no label), so it was announced as an unlabelled button.
+          */}
           <button
+            type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="p-2 rounded-xl text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors focus:outline-none"
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
+            aria-label={isOpen ? "Close menu" : "Open menu"}
+            className="rounded-control p-2 text-content-muted transition-colors hover:bg-surface-subtle hover:text-content-strong focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
           >
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isOpen ? (
+              <X aria-hidden="true" className="h-6 w-6" />
+            ) : (
+              <Menu aria-hidden="true" className="h-6 w-6" />
+            )}
           </button>
         </div>
       </div>
@@ -105,7 +130,10 @@ export default function Navbar({ user }) {
       {/* MOBILE UNIFIED EXPANDABLE MENU DRAWER */}
       {isOpen && (
         // UPDATED: Added lg:hidden safeguard and rounded adjustments if screen transitions
-        <div className="lg:hidden border-t border-gray-100 bg-white shadow-xl max-h-[calc(100vh-64px)] overflow-y-auto px-4 py-5 space-y-6 rounded-b-xl">
+        <div
+          id="mobile-menu"
+          className="max-h-[calc(100vh-64px)] space-y-6 overflow-y-auto rounded-b-card border-t border-border-subtle bg-surface px-4 py-5 shadow-panel lg:hidden"
+        >
           {/* SECTION A: PRIMARY BASE CORE ROUTES */}
           <div className="space-y-2">
             <span className="block text-[10px] font-semibold text-gray-400 uppercase  px-3">

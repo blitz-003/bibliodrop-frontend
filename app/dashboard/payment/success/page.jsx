@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { CheckCircle2 } from "lucide-react";
+import { Panel, Button } from "@/components/ui";
 
 export default function PaymentSuccessPage() {
   const router = useRouter();
@@ -27,48 +29,43 @@ export default function PaymentSuccessPage() {
   }, [countdown, router]);
 
   return (
-    <div className="min-h-[calc(100vh-64px)] flex items-center justify-center bg-white p-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 text-center border border-gray-100">
-        <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-          <svg
-            className="w-8 h-8 text-green-600"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2.5"
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
+    <div className="flex min-h-[calc(100vh-64px)] items-center justify-center bg-page p-4">
+      <Panel className="w-full max-w-narrow p-8 text-center">
+        <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-success-subtle">
+          <CheckCircle2 aria-hidden="true" className="h-8 w-8 text-success" />
         </div>
-        <h1 className="text-2xl font-black text-gray-900 mb-2">
+
+        <h1 className="text-2xl font-semibold tracking-tight text-content-strong">
           Payment Successful!
         </h1>
-        <p className="text-gray-600 mb-6">
+
+        <p className="mt-2 text-content-muted">
           Thank you! Your delivery fee transaction was safely processed. The
           inventory stock has been updated.
         </p>
 
         {countdown > 0 ? (
-          <p className="text-xs text-gray-400 mb-4 ">
-            Redirecting to dashboard in <b>{countdown}</b> seconds...
+          <p
+            aria-live="polite"
+            className="mb-4 mt-6 text-xs text-content-subtle"
+          >
+            Redirecting to dashboard in{" "}
+            <b className="tabular-nums text-content">{countdown}</b>{" "}
+            seconds...
           </p>
         ) : (
-          <p className="text-xs text-green-600 font-medium mb-4 ">
+          <p
+            aria-live="polite"
+            className="mb-4 mt-6 text-xs font-medium text-success"
+          >
             Redirecting now...
           </p>
         )}
 
-        <Link
-          href="/dashboard"
-          className="inline-block w-full bg-[#635BFF] hover:bg-[#5249E0] text-white font-medium px-6 py-3 rounded-xl transition-colors shadow-sm"
-        >
+        <Button as={Link} variant="brand" size="lg" className="w-full">
           Go to Dashboard Now
-        </Link>
-      </div>
+        </Button>
+      </Panel>
     </div>
   );
 }

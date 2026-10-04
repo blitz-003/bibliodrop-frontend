@@ -1,31 +1,100 @@
 @import "tailwindcss";
-@import "@heroui/styles"; 
 
-:root {
-  --background: #f8fafc;
-  --foreground: #171717;
+/*
+ * Design tokens.
+ *
+ * `app/browse-books/page.jsx` is the visual reference for this system:
+ * slate page, white surfaces, gray text scale, blue accent,
+ * 2xl cards / xl controls.
+ *
+ * The homepage (serif / stone / editorial) is a sanctioned second theme
+ * and keeps its own palette via the `--color-ink-*` / `--color-editorial-*`
+ * tokens declared at the bottom of this file.
+ */
+
+@theme {
+  /* ---- Surfaces --------------------------------------------------- */
+  --color-page: #f8fafc; /* slate-50  — page background */
+  --color-surface: #ffffff; /* white    — cards, panels */
+  --color-surface-subtle: #f8fafc; /* slate-50  — nested/inset panels */
+
+  /* ---- Lines ------------------------------------------------------ */
+  --color-border: #e5e7eb; /* gray-200  — control + card borders */
+  --color-border-subtle: #f3f4f6; /* gray-100  — dividers inside a card */
+
+  /* ---- Text ------------------------------------------------------- */
+  --color-content: #1f2937; /* gray-800  — body copy */
+  --color-content-strong: #111827; /* gray-900  — headings */
+  --color-content-muted: #6b7280; /* gray-500  — secondary copy */
+  /*
+   * gray-400 (#9ca3af) is 2.6:1 on white and fails WCAG AA. Every use of it
+   * as meaningful copy was promoted to this AA-safe value; the literal
+   * gray-400 class is no longer used for text.
+   */
+  --color-content-subtle: #4b5563; /* gray-600  — AA-safe captions */
+
+  /* ---- Accent (primary UI actions) -------------------------------- */
+  --color-accent: #2563eb; /* blue-600 */
+  --color-accent-hover: #1d4ed8; /* blue-700 */
+  --color-accent-subtle: #eff6ff; /* blue-50 */
+
+  /* ---- Brand (Stripe / payment CTAs — preserved hex) -------------- */
+  --color-brand: #635bff;
+  --color-brand-hover: #5249e0;
+
+  /* ---- Status ----------------------------------------------------- */
+  --color-success: #16a34a;
+  --color-success-hover: #15803d;
+  --color-success-subtle: #f0fdf4;
+  --color-warning: #b45309;
+  --color-warning-subtle: #fffbeb;
+  --color-danger: #e11d48;
+  --color-danger-hover: #be123c;
+  --color-danger-subtle: #fff1f2;
+  --color-info: #1d4ed8;
+  --color-info-subtle: #eff6ff;
+
+  /* ---- Radius — 9 loose values collapsed to 2 (rounded-full covers pills) --- */
+  --radius-control: 0.75rem; /* rounded-xl — inputs, buttons, badges */
+  --radius-card: 1rem; /* rounded-2xl — cards, panels, modals */
+
+  /* ---- Layout ----------------------------------------------------- */
+  --container-app: 1400px; /* replaces the max-w-[1400px] / max-w-7xl split */
+  --container-narrow: 896px; /* replaces max-w-4xl reading-width panels */
+  --container-read: 768px; /* replaces max-w-3xl on detail/checkout panels */
+  --container-detail: 1152px; /* book-detail card + comments panel: max-w-read +25% per side */
+
+  /* ---- Elevation -------------------------------------------------- */
+  --shadow-card: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-panel: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+
+  /* ---- Type ------------------------------------------------------- */
+  /*
+   * The project ships no next/font setup, so --font-geist-sans was always
+   * undefined and `font-sans` resolved to nothing. Wired to the stack the
+   * body has always rendered with, so this fixes the token without changing
+   * how anything currently looks.
+   */
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-serif: Georgia, Cambria, "Times New Roman", Times, serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
 body {
   margin: 0;
-  padding: 0;
-  }
+  background-color: var(--color-page);
+  color: var(--color-content);
+  font-family: var(--font-sans);
+}
+
+/*
+ * Editorial theme — homepage only.
+ * Serif headings on a stone scale with square corners, deliberately
+ * distinct from the application surface above.
+ */
+@theme {
+  --color-ink: #1c1917; /* stone-900 */
+  --color-ink-soft: #57534e; /* stone-600 */
+  --color-ink-muted: #78716c; /* stone-500 */
+  --color-editorial-line: #e7e5e4; /* stone-200 */
+  --color-editorial-fill: #f5f5f4; /* stone-100 */
+}

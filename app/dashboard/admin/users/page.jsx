@@ -3,7 +3,23 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import { AlertTriangle } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import {
+  Alert,
+  Button,
+  PageHeader,
+  Modal,
+  Select,
+  DataTable,
+  DataTableHead,
+  DataTableTh,
+  DataTableBody,
+  DataTableRow,
+  DataTableCell,
+  DataTableEmpty,
+  StatusBadge,
+} from "@/components/ui";
 
 export default function AdminManageUsersPage() {
   const queryClient = useQueryClient();
@@ -122,189 +138,142 @@ export default function AdminManageUsersPage() {
   });
   if (isLoading)
     return (
-      <p className="p-6 text-gray-500 font-medium">
-        Gathering directory streams...
-      </p>
+      <div aria-busy="true" className="mx-auto w-full max-w-app">
+        <span className="sr-only">Gathering directory streams</span>
+      </div>
     );
   if (isError)
     return (
-      <p className="p-6 text-red-500 font-medium">
-        Error loading user profile directory.
-      </p>
+      <div className="mx-auto w-full max-w-app">
+        <Alert tone="danger" className="mx-auto max-w-md inline-flex">
+          <p className="text-base font-semibold">
+            Error loading user profile directory
+          </p>
+        </Alert>
+      </div>
     );
 
   return (
-    <div className="p-6 max-w-7xl mx-auto relative">
-      <div className="mb-6">
-        <h1 className="text-2xl font-black text-gray-900 ">Manage Users</h1>
-        <p className="text-sm text-gray-500">
-          View registered accounts, alter account group privileges, or revoke
-          system access logs.
-        </p>
-      </div>
+    <div className="mx-auto w-full max-w-app space-y-6">
+      <PageHeader
+        title="Manage Users"
+        subtitle="View registered accounts, alter account group privileges, or revoke system access logs."
+      />
 
       {/* Main Data Table */}
-      <div className="bg-white shadow-xl rounded-xl overflow-hidden border border-gray-100">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-white border-b border-gray-100 text-xs font-semibold uppercase  text-gray-600">
-                <th className="p-4">Username</th>
-                <th className="p-4">Email</th>
-                <th className="p-4">Role</th>
-                <th className="p-4">Joined</th>
-                <th className="p-4 text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-100 text-sm text-gray-700">
-              {users?.map((u) => (
-                <tr key={u._id} className="hover:bg-white/50 transition-colors">
-                  <td className="p-4 font-semibold text-gray-900">
-                    {u.name || "No Username"}
-                  </td>
-                  <td className="p-4 font-medium text-gray-600">{u.email}</td>
-                  <td className="p-4">
-                    <span
-                      className={`px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase  ${
-                        u.role === "admin"
-                          ? "bg-purple-100 text-purple-700"
-                          : u.role === "librarian"
-                            ? "bg-indigo-100 text-indigo-700"
-                            : "bg-gray-100 text-gray-700"
-                      }`}
-                    >
-                      {u.role}
-                    </span>
-                  </td>
-                  <td className="p-4 text-xs text-gray-400">
-                    {u.createdAt
-                      ? new Date(u.createdAt).toLocaleDateString()
-                      : "N/A"}
-                  </td>
-                  <td className="p-4 flex items-center justify-center gap-2">
-                    <button
-                      onClick={() => {
-                        setRoleModalUser(u);
-                        setSelectedRole(u.role);
-                      }}
-                      className="bg-white hover:bg-white text-gray-700 border border-gray-200 font-semibold text-xs px-3 py-1.5 rounded-lg shadow-sm transition-colors"
-                    >
-                      Change Role
-                    </button>
-                    <button
-                      onClick={() => setDeleteModalUser(u)}
-                      className="bg-red-50 hover:bg-red-100 text-red-600 font-semibold text-xs px-3 py-1.5 rounded-lg border border-red-200 transition-colors"
-                    >
-                      Delete Account
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <DataTable minWidth="min-w-[680px]">
+        <DataTableHead>
+          <tr>
+            <DataTableTh>Username</DataTableTh>
+            <DataTableTh>Email</DataTableTh>
+            <DataTableTh>Role</DataTableTh>
+            <DataTableTh>Joined</DataTableTh>
+            <DataTableTh align="center">Actions</DataTableTh>
+          </tr>
+        </DataTableHead>
+
+        <DataTableBody>
+          {users?.map((u) => (
+            <DataTableRow key={u._id}>
+              <DataTableCell className="font-semibold text-content-strong">
+                {u.name || "No Username"}
+              </DataTableCell>
+              <DataTableCell className="font-medium text-content-muted">
+                {u.email}
+              </DataTableCell>
+              <DataTableCell>
+                <StatusBadge kind="role" value={u.role} />
+              </DataTableCell>
+              <DataTableCell className="text-xs text-content-subtle">
+                {u.createdAt
+                  ? new Date(u.createdAt).toLocaleDateString()
+                  : "N/A"}
+              </DataTableCell>
+              <DataTableCell align="center">
+                <span className="flex flex-wrap items-center justify-center gap-2">
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={() => {
+                      setRoleModalUser(u);
+                      setSelectedRole(u.role);
+                    }}
+                  >
+                    Change Role
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="danger"
+                    onClick={() => setDeleteModalUser(u)}
+                  >
+                    Delete Account
+                  </Button>
+                </span>
+              </DataTableCell>
+            </DataTableRow>
+          ))}
+
+          {(!users || users.length === 0) && (
+            <DataTableEmpty colSpan={5}>
+              No registered accounts found.
+            </DataTableEmpty>
+          )}
+        </DataTableBody>
+      </DataTable>
 
       {/* Pop-up Window 1: Change Role Dropdown Modal */}
-      {roleModalUser && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white max-w-sm w-full rounded-2xl shadow-2xl border border-gray-100 p-6 space-y-4">
-            <div>
-              <h2 className="text-lg font-black text-gray-900">Change Role</h2>
-              <p className="text-xs text-gray-400">
-                Modifying access groups for {roleModalUser.email}
-              </p>
-            </div>
-
-            <div className="space-y-1">
-              <label className="text-xs font-semibold uppercase  text-gray-500">
-                Select Access Pool
-              </label>
-              <select
-                value={selectedRole}
-                onChange={(e) => setSelectedRole(e.target.value)}
-                className="w-full bg-white border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-indigo-500 font-medium text-gray-700"
-              >
-                <option value="user">User</option>
-                <option value="librarian">Librarian</option>
-              </select>
-            </div>
-
-            <div className="flex items-center gap-2 pt-2">
-              <button
-                onClick={() => setRoleModalUser(null)}
-                className="w-1/2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold py-2.5 rounded-xl transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={() =>
-                  changeRoleMutation.mutate({
-                    id: roleModalUser._id,
-                    role: selectedRole,
-                  })
-                }
-                disabled={changeRoleMutation.isPending}
-                className="w-1/2 bg-[#635BFF] hover:bg-[#5249E0] text-white text-sm font-semibold py-2.5 rounded-xl shadow-sm transition-colors disabled:opacity-50"
-              >
-                {changeRoleMutation.isPending ? "Updating..." : "Save Changes"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        open={Boolean(roleModalUser)}
+        onClose={() => setRoleModalUser(null)}
+        title="Change Role"
+        description={
+          roleModalUser
+            ? `Modifying access groups for ${roleModalUser.email}`
+            : undefined
+        }
+        closeLabel="Cancel"
+        confirmLabel="Save Changes"
+        confirmVariant="brand"
+        confirming={changeRoleMutation.isPending}
+        onConfirm={() =>
+          changeRoleMutation.mutate({
+            id: roleModalUser?._id,
+            role: selectedRole,
+          })
+        }
+      >
+        <Select
+          label="Select Access Pool"
+          name="role"
+          value={selectedRole}
+          onChange={(e) => setSelectedRole(e.target.value)}
+        >
+          <option value="user">User</option>
+          <option value="librarian">Librarian</option>
+        </Select>
+      </Modal>
 
       {/* Pop-up Window 2: Delete Confirmation Modal */}
-      {deleteModalUser && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white max-w-sm w-full rounded-2xl shadow-2xl border border-gray-100 p-6 text-center space-y-4">
-            <div className="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto">
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
-                />
-              </svg>
-            </div>
-            <div>
-              <h2 className="text-lg font-black text-gray-900">
-                Are you sure you want to delete this account?
-              </h2>
-              <p className="text-xs text-gray-500 mt-1">
-                This will permanently delete the access history configuration
-                profile for <b>{deleteModalUser.email}</b>.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-2 pt-2">
-              <button
-                onClick={() => setDeleteModalUser(null)}
-                className="w-1/2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-semibold py-2.5 rounded-xl transition-colors"
-              >
-                No, Cancel
-              </button>
-              <button
-                onClick={() =>
-                  deleteAccountMutation.mutate(deleteModalUser._id)
-                }
-                disabled={deleteAccountMutation.isPending}
-                className="w-1/2 bg-red-600 hover:bg-red-700 text-white text-sm font-semibold py-2.5 rounded-xl shadow-sm transition-colors disabled:opacity-50"
-              >
-                {deleteAccountMutation.isPending
-                  ? "Deleting..."
-                  : "Yes, Delete"}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+      <Modal
+        open={Boolean(deleteModalUser)}
+        onClose={() => setDeleteModalUser(null)}
+        title="Are you sure you want to delete this account?"
+        description={
+          deleteModalUser ? (
+            <>
+              This will permanently delete the access history configuration
+              profile for <b>{deleteModalUser.email}</b>.
+            </>
+          ) : undefined
+        }
+        icon={AlertTriangle}
+        tone="danger"
+        closeLabel="No, Cancel"
+        confirmLabel="Yes, Delete"
+        confirmVariant="dangerSolid"
+        confirming={deleteAccountMutation.isPending}
+        onConfirm={() => deleteAccountMutation.mutate(deleteModalUser?._id)}
+      />
     </div>
   );
 }

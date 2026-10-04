@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import { Card, Input, TextArea, Button, Spinner } from "@heroui/react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { createBook } from "@/services/bookService";
+import { PageHeader, Panel, Button, Input, Textarea, Spinner } from "@/components/ui";
 
 export default function AddBookPage() {
   const router = useRouter();
@@ -13,6 +13,15 @@ export default function AddBookPage() {
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Object URLs are revoked whenever the preview is replaced or the page
+  // unmounts, so a librarian picking several covers in a row does not leak the
+  // earlier blobs for the life of the session.
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
 
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
@@ -84,17 +93,33 @@ export default function AddBookPage() {
   };
 
   return (
-    <div className="mx-auto max-w-3xl p-4 md:p-6">
-      <Card className="border border-default-200 p-6 shadow-xl md:p-8">
-        <h1 className="mb-8 text-3xl font-semibold">Add New Book</h1>
+    <div className="mx-auto w-full max-w-read space-y-6">
+      <PageHeader
+        title="Add New Book"
+        subtitle="Upload a cover and describe the book to add it to the catalog."
+      />
 
+      <Panel className="p-6 md:p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Cover Image */}
           <div className="w-full">
-            <label className="mb-3 block font-medium">Cover Image</label>
+            <label className="mb-3 block font-medium" htmlFor="coverImage">
+              Cover Image
+            </label>
 
-            <label htmlFor="coverImage" className="block cursor-pointer">
-              <div className="flex h-[220px] w-full items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed border-default-300 transition hover:border-primary">
+            <label
+              htmlFor="coverImage"
+              className="block cursor-pointer"
+              tabIndex={0}
+              role="button"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  e.currentTarget.querySelector("input")?.click();
+                }
+              }}
+            >
+              <div className="flex h-[220px] w-full items-center justify-center overflow-hidden rounded-card border-2 border-dashed border-border transition hover:border-accent focus-within:border-accent">
                 {preview ? (
                   <Image
                     src={preview}
@@ -105,9 +130,13 @@ export default function AddBookPage() {
                   />
                 ) : (
                   <div className="text-center">
-                    <div className="mb-2 text-5xl">📚</div>
+                    <div aria-hidden="true" className="mb-2 text-5xl">
+                      📚
+                    </div>
                     <p className="font-medium">Click to upload</p>
-                    <p className="text-sm text-default-500">JPG, PNG, WEBP</p>
+                    <p className="text-sm text-content-muted">
+                      JPG, PNG, WEBP
+                    </p>
                   </div>
                 )}
               </div>
@@ -123,102 +152,73 @@ export default function AddBookPage() {
             />
           </div>
 
-          {/* Title */}
-          <div className="w-full">
-            <label className="mb-2 block font-medium">Book Title</label>
-            <Input
-              className="w-full"
-              name="title"
-              variant="bordered"
-              placeholder="Atomic Habits"
-              required
-              isDisabled={isSubmitting}
-            />
-          </div>
+          <Input
+            label="Book Title"
+            name="title"
+            placeholder="Atomic Habits"
+            required
+            disabled={isSubmitting}
+          />
 
-          {/* Author */}
-          <div className="w-full">
-            <label className="mb-2 block font-medium">Author</label>
-            <Input
-              className="w-full"
-              name="author"
-              variant="bordered"
-              placeholder="James Clear"
-              required
-              isDisabled={isSubmitting}
-            />
-          </div>
+          <Input
+            label="Author"
+            name="author"
+            placeholder="James Clear"
+            required
+            disabled={isSubmitting}
+          />
 
-          {/* Category */}
-          <div className="w-full">
-            <label className="mb-2 block font-medium">Category</label>
-            <Input
-              className="w-full"
-              name="category"
-              variant="bordered"
-              placeholder="Self Help"
-              required
-              isDisabled={isSubmitting}
-            />
-          </div>
+          <Input
+            label="Category"
+            name="category"
+            placeholder="Self Help"
+            required
+            disabled={isSubmitting}
+          />
 
-          {/* Stock */}
-          <div className="w-full">
-            <label className="mb-2 block font-medium">Stock</label>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <Input
-              className="w-full"
+              type="number"
+              label="Stock"
               name="stock"
-              type="number"
-              variant="bordered"
               placeholder="10"
-              isDisabled={isSubmitting}
+              min="0"
+              disabled={isSubmitting}
             />
-          </div>
 
-          {/* Delivery Fee */}
-          <div className="w-full">
-            <label className="mb-2 block font-medium">Delivery Fee</label>
             <Input
-              className="w-full"
-              name="deliveryFee"
               type="number"
-              variant="bordered"
+              label="Delivery Fee"
+              name="deliveryFee"
               placeholder="50"
-              isDisabled={isSubmitting}
+              min="0"
+              step="0.01"
+              disabled={isSubmitting}
             />
           </div>
 
-          {/* Description */}
-          <div className="w-full">
-            <label className="mb-2 block font-medium">Description</label>
-            <TextArea
-              className="w-full"
-              name="description"
-              variant="bordered"
-              minRows={8}
-              placeholder="Write a short description about the book..."
-              isDisabled={isSubmitting}
-            />
-          </div>
+          <Textarea
+            label="Description"
+            name="description"
+            rows={8}
+            placeholder="Write a short description about the book..."
+            disabled={isSubmitting}
+          />
 
           <Button
-            color="primary"
+            variant="primary"
             size="lg"
             type="submit"
             className="w-full"
-            isDisabled={isSubmitting}
+            disabled={isSubmitting}
           >
-            {isSubmitting ? (
-              <div className="flex items-center gap-3">
-                <Spinner size="sm" color="current" />
-                <span>Uploading Book...</span>
-              </div>
-            ) : (
-              "Add Book"
+            {isSubmitting && (
+              <Spinner className="h-4 w-4 text-current" aria-hidden="true" />
             )}
+            <span>{isSubmitting ? "Uploading Book..." : "Add Book"}</span>
           </Button>
         </form>
-      </Card>
+      </Panel>
     </div>
   );
 }

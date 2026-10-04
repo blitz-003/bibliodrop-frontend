@@ -1,25 +1,18 @@
-import { LayoutDashboard, FilePlus, Boxes, Truck } from "lucide-react";
+import { getRoleLinks, getRoleTitle } from "@/lib/navigationData";
 import SidebarLayout, { SidebarLink } from "./SidebarLayout";
 
 export default function LibrarianSidebar({ user, closeMobileMenu }) {
   return (
     <SidebarLayout
-      title="Librarian Dashboard"
+      title={getRoleTitle("librarian")}
       user={user}
       closeMobileMenu={closeMobileMenu}
     >
-      <SidebarLink href="/dashboard/librarian" icon={LayoutDashboard}>
-        Overview
-      </SidebarLink>
-      <SidebarLink href="/dashboard/librarian/add-book" icon={FilePlus}>
-        Add Book
-      </SidebarLink>
-      <SidebarLink href="/dashboard/librarian/inventory" icon={Boxes}>
-        Manage Inventory
-      </SidebarLink>
-      <SidebarLink href="/dashboard/librarian/deliveries" icon={Truck}>
-        Manage Delivery
-      </SidebarLink>
+      {getRoleLinks("librarian").map(({ label, href, icon }) => (
+        <SidebarLink key={href} href={href} icon={icon}>
+          {label}
+        </SidebarLink>
+      ))}
     </SidebarLayout>
   );
 }

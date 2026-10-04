@@ -1,11 +1,22 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { Card, Spinner, Chip } from "@heroui/react";
 import { authClient } from "@/lib/auth-client";
+import {
+  PageHeader,
+  DataTable,
+  DataTableHead,
+  DataTableTh,
+  DataTableBody,
+  DataTableRow,
+  DataTableCell,
+  DataTableEmpty,
+  StatusBadge,
+  DashboardSkeleton,
+} from "@/components/ui";
 
 export default function InventoryClient({ user }) {
-  const { data: books = [], isLoading } = useQuery({
+  const { data: books = [], isLoading, isError } = useQuery({
     queryKey: ["inventory", user?.id],
 
     queryFn: async () => {
@@ -27,49 +38,49 @@ export default function InventoryClient({ user }) {
   });
 
   const safeBooks = Array.isArray(books) ? books : [];
-  console.log(books);
+
+  if (isLoading) return <DashboardSkeleton />;
+
   return (
-    <div className="p-6 space-y-6 bg-white min-h-screen">
-      <h1 className="text-2xl font-semibold">Inventory Dashboard</h1>
+    <div className="mx-auto w-full max-w-app space-y-6">
+      <PageHeader
+        title="Inventory Dashboard"
+        subtitle="Stock levels and publication status for the titles you manage."
+      />
 
-      {/* CARD WRAPPER */}
-      <Card className="p-4">
-        {isLoading ? (
-          <div className="flex justify-center p-10">
-            <Spinner />
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b text-left">
-                  <th className="p-1">Title</th>
-                  <th>Category</th>
-                  <th>Stock</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
+      <DataTable minWidth="min-w-[520px]">
+        <DataTableHead>
+          <tr>
+            <DataTableTh>Title</DataTableTh>
+            <DataTableTh>Category</DataTableTh>
+            <DataTableTh align="right">Stock</DataTableTh>
+            <DataTableTh>Status</DataTableTh>
+          </tr>
+        </DataTableHead>
 
-              <tbody>
-                {safeBooks.map((b) => (
-                  <tr key={b._id} className="border-b hover:bg-white">
-                    <td className="p-3 font-medium">{b.title}</td>
-                    <td>{b.category}</td>
-                    <td>{b.totalStock}</td>
-                    <td>
-                      {b.publishStatus == "pending" ? (
-                        <Chip color={"warning"}>{b.publishStatus}</Chip>
-                      ) : (
-                        <Chip color={"success"}>{b.publishStatus}</Chip>
-                      )}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </Card>
+        <DataTableBody>
+          {safeBooks.map((b) => (
+            <DataTableRow key={b._id}>
+              <DataTableCell className="font-medium text-content-strong">
+                {b.title}
+              </DataTableCell>
+              <DataTableCell>{b.category}</DataTableCell>
+              <DataTableCell align="right" className="tabular-nums">
+                {b.totalStock}
+              </DataTableCell>
+              <DataTableCell>
+                <StatusBadge kind="publish" value={b.publishStatus} />
+              </DataTableCell>
+            </DataTableRow>
+          ))}
+
+          {safeBooks.length === 0 && !isError && (
+            <DataTableEmpty colSpan={4}>
+              No books in your inventory yet.
+            </DataTableEmpty>
+          )}
+        </DataTableBody>
+      </DataTable>
     </div>
   );
 }

@@ -16,8 +16,6 @@ const fetchFeaturedBooks = async () => {
 export default function FeaturedBooks() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [direction, setDirection] = useState(1); // 1 = next, -1 = prev
-  const timerRef = useRef(null);
-
   // TanStack Query
   const { data, isLoading, error } = useQuery({
     queryKey: ["featuredBooks"],
@@ -27,24 +25,27 @@ export default function FeaturedBooks() {
 
   // Extract array safely from API response structure
   const books = data?.books || [];
+  const bookCount = books.length;
 
-  // Resets and restarts the 7-second automatic sliding timer
-  const resetTimer = () => {
-    if (timerRef.current) clearInterval(timerRef.current);
-    timerRef.current = setInterval(() => {
-      setDirection(1);
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % (books.length || 1));
-    }, 7000); // Updated to 7 seconds
-  };
-
+  /*
+   * The autoplay interval is set up here rather than through a `resetTimer`
+   * helper. The old helper closed over `books`, so the effect that called it
+   * had to list `books` as a dependency; because `books` is a fresh array on
+   * every render (`data?.books || []`), the effect re-ran continuously and
+   * cleared and restarted the interval each render, so the carousel never
+   * actually advanced. Depending on the primitive `bookCount` instead gives
+   * one effect that only restarts when the length or the slide changes.
+   */
   useEffect(() => {
-    if (books && books.length > 0) {
-      resetTimer();
-    }
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [books, currentIndex]);
+    if (bookCount === 0) return;
+
+    const timer = setInterval(() => {
+      setDirection(1);
+      setCurrentIndex((prevIndex) => (prevIndex + 1) % bookCount);
+    }, 7000);
+
+    return () => clearInterval(timer);
+  }, [bookCount, currentIndex]);
 
   if (isLoading) {
     return (
@@ -70,12 +71,12 @@ export default function FeaturedBooks() {
 
   const handleNext = () => {
     setDirection(1);
-    setCurrentIndex((prev) => (prev + 1) % books.length);
+    setCurrentIndex((prev) => (prev + 1) % bookCount);
   };
 
   const handlePrev = () => {
     setDirection(-1);
-    setCurrentIndex((prev) => (prev - 1 + books.length) % books.length);
+    setCurrentIndex((prev) => (prev - 1 + bookCount) % bookCount);
   };
 
   // Blur + Dissolve (Fade out) crossfade configuration
@@ -124,10 +125,15 @@ export default function FeaturedBooks() {
               className="absolute inset-0 w-full h-full rounded-[2.5rem] overflow-hidden shadow-2xl shadow-stone-300/50 bg-stone-100"
             >
               {bookImage && (
+                // Kept as a plain <img>: these covers come from arbitrary
+                // user-supplied URLs, so next/image would require the host to
+                // be added to `images.remotePatterns` per source. The fixed
+                // aspect box above reserves the layout either way.
+                /* eslint-disable-next-line @next/next/no-img-element */
                 <img
                   src={bookImage}
-                  alt={bookTitle}
-                  className="w-full h-full object-cover object-center filter contrast-[102%] min-h-[500px]"
+                  alt=""
+                  className="min-h-[500px] h-full w-full object-cover object-center filter contrast-[102%]"
                   loading="eager"
                 />
               )}
