@@ -7,6 +7,8 @@ import Link from "next/link";
 import { Mail, Lock, BookOpen } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
 
+import { Alert, Button, Input } from "@/components/ui";
+
 export default function LoginPage() {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -19,6 +21,10 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
+
+  function update(field, value) {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  }
 
   async function handleLogin(e) {
     e.preventDefault();
@@ -49,7 +55,7 @@ export default function LoginPage() {
       const { data: session } = await authClient.getSession();
 
       const role = session.user.role;
-      console.log(session, role);
+
       if (role === "admin" || role === "librarian") {
         router.push("/dashboard");
       } else {
@@ -58,7 +64,6 @@ export default function LoginPage() {
 
       router.refresh();
     } catch (err) {
-      console.error(err);
       setError("Something went wrong");
     } finally {
       setLoading(false);
@@ -79,21 +84,21 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen bg-page flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-md">
         {/* CARD */}
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 md:p-8">
+        <div className="bg-surface rounded-card border border-border shadow-card p-6 md:p-8">
           {/* HEADER */}
           <div className="text-center mb-8">
-            <div className="w-16 h-16 rounded-2xl bg-blue-600 mx-auto flex items-center justify-center shadow-lg">
-              <BookOpen className="w-8 h-8 text-white" />
+            <div className="w-16 h-16 rounded-card bg-accent mx-auto flex items-center justify-center shadow-card">
+              <BookOpen aria-hidden="true" className="w-8 h-8 text-white" />
             </div>
 
-            <h1 className="mt-5 text-3xl font-semibold text-slate-900">
+            <h1 className="mt-5 text-3xl font-semibold text-content-strong">
               Welcome Back
             </h1>
 
-            <p className="mt-2 text-sm text-slate-500">
+            <p className="mt-2 text-sm text-content-subtle">
               Sign in to continue using Bibliodrop
             </p>
           </div>
@@ -103,13 +108,13 @@ export default function LoginPage() {
             type="button"
             onClick={handleGoogleLogin}
             disabled={googleLoading}
-            className="w-full flex items-center justify-center gap-3 border border-slate-200 bg-white hover:bg-slate-50 rounded-xl py-3 font-medium transition"
+            className="w-full flex items-center justify-center gap-3 border border-border bg-surface hover:bg-surface-subtle rounded-control py-3 font-medium transition"
           >
             {googleLoading ? (
               "Connecting..."
             ) : (
               <>
-                <svg className="w-5 h-5" viewBox="0 0 48 48">
+                <svg aria-hidden="true" className="w-5 h-5" viewBox="0 0 48 48">
                   <path
                     fill="#FFC107"
                     d="M43.611 20.083H42V20H24v8h11.303C33.654 32.657 29.21 36 24 36c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"
@@ -124,7 +129,7 @@ export default function LoginPage() {
                   />
                   <path
                     fill="#1976D2"
-                    d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.084 5.57l.003-.002 6.19 5.238C36.971 38.47 44 33 44 24c0-1.341-.138-2.65-.389-3.917z"
+                    d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.084 5.57l.003-.002 6.19-5.238C36.971 38.47 44 33 44 24c0-1.341-.138-2.65-.389-3.917z"
                   />
                 </svg>
                 Continue with Google
@@ -134,84 +139,57 @@ export default function LoginPage() {
 
           {/* DIVIDER */}
           <div className="relative my-6">
-            <div className="border-t border-slate-200"></div>
+            <div className="border-t border-border"></div>
 
-            <span className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-xs text-slate-400">
+            <span className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 bg-surface px-3 text-xs text-content-subtle">
               OR
             </span>
           </div>
 
           {/* FORM */}
           <form onSubmit={handleLogin} className="space-y-5">
-            <div>
-              <label className="text-sm font-medium text-slate-700">
-                Email Address
-              </label>
+            <Input
+              name="email"
+              type="email"
+              label="Email Address"
+              icon={Mail}
+              required
+              autoComplete="email"
+              placeholder="you@example.com"
+              value={form.email}
+              onChange={(e) => update("email", e.target.value)}
+            />
 
-              <div className="relative mt-2">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+            <Input
+              name="password"
+              type="password"
+              label="Password"
+              icon={Lock}
+              required
+              autoComplete="current-password"
+              placeholder="Enter your password"
+              value={form.password}
+              onChange={(e) => update("password", e.target.value)}
+            />
 
-                <input
-                  type="email"
-                  required
-                  value={form.email}
-                  onChange={(e) =>
-                    setForm({
-                      ...form,
-                      email: e.target.value,
-                    })
-                  }
-                  placeholder="you@example.com"
-                  className="w-full pl-11 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            </div>
+            {error && <Alert tone="danger">{error}</Alert>}
 
-            <div>
-              <label className="text-sm font-medium text-slate-700">
-                Password
-              </label>
-
-              <div className="relative mt-2">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-
-                <input
-                  type="password"
-                  required
-                  value={form.password}
-                  onChange={(e) =>
-                    setForm({
-                      ...form,
-                      password: e.target.value,
-                    })
-                  }
-                  placeholder="Enter your password"
-                  className="w-full pl-11 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 rounded-xl p-3 text-sm">
-                {error}
-              </div>
-            )}
-
-            <button
+            <Button
               type="submit"
+              variant="neutral"
+              className="w-full"
               disabled={loading}
-              className="w-full bg-neutral-900/95 hover:bg-neutral-700 text-white py-3 rounded-xl font-semibold transition disabled:opacity-50"
             >
               {loading ? "Signing In..." : "Sign In"}
-            </button>
+            </Button>
           </form>
 
           {/* FOOTER */}
-          <div className="mt-6 text-center text-sm text-slate-500">
+          <div className="mt-6 text-center text-sm text-content-subtle">
             Do not have an account?{" "}
             <Link
               href="/register"
-              className="font-semibold text-blue-600 hover:text-blue-700"
+              className="font-semibold text-accent hover:text-accent-hover"
             >
               Register
             </Link>

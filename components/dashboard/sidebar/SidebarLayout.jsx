@@ -9,6 +9,19 @@ export default function SidebarLayout({
   children,
   closeMobileMenu,
 }) {
+  const pathname = usePathname();
+
+  // The current entry is resolved once, here, rather than independently by each
+  // link. Deciding it per link marked every ancestor route as current too, so on
+  // /dashboard/admin/users/42 both "Overview" and "Manage Users" carried
+  // aria-current="page" and screen readers announced two current pages.
+  const hrefs = React.Children.toArray(children)
+    .filter((child) => React.isValidElement(child))
+    .map((child) => child.props.href)
+    .filter(Boolean);
+
+  const activeHref = findActiveHref(pathname, hrefs);
+
   return (
     <aside
       className="
@@ -55,7 +68,10 @@ export default function SidebarLayout({
       >
         {React.Children.map(children, (child) => {
           if (React.isValidElement(child)) {
-            return React.cloneElement(child, { onClick: closeMobileMenu });
+            return React.cloneElement(child, {
+              onClick: closeMobileMenu,
+              activeHref,
+            });
           }
           return child;
         })}
@@ -65,11 +81,42 @@ export default function SidebarLayout({
 }
 
 // SHARED TARGET ACTIVE LINK STYLING UTILITY
-export function SidebarLink({ href, icon: Icon, children, onClick }) {
+
+// `null` is possible outside a routed render, so the predicate stays total.
+export function matchesPath(pathname, href) {
+  if (!pathname || !href) return false;
+  return pathname === href || pathname.startsWith(`${href}/`);
+}
+
+/**
+ * Picks the single most specific route the current path sits under.
+ *
+ * Preferring the longest match is what stops an ancestor entry from also
+ * claiming to be current on a nested page.
+ */
+export function findActiveHref(pathname, hrefs) {
+  if (!pathname || !hrefs?.length) return undefined;
+
+  return hrefs.reduce((best, href) => {
+    if (!matchesPath(pathname, href)) return best;
+    if (best === undefined || href.length > best.length) return href;
+    return best;
+  }, undefined);
+}
+
+export function SidebarLink({
+  href,
+  icon: Icon,
+  children,
+  onClick,
+  activeHref,
+}) {
+  // `activeHref` is supplied by `SidebarLayout`, which is the only thing that
+  // can see every sibling and so pick one winner. The local fallback keeps the
+  // link working if it is ever rendered outside a layout.
   const pathname = usePathname();
-  // Exact equality only meant no link was ever highlighted when a user was on
-  // a nested route such as /dashboard/admin/users. A prefix match fixes that.
-  const isActive = pathname === href || pathname.startsWith(`${href}/`);
+  const isActive =
+    activeHref !== undefined ? href === activeHref : matchesPath(pathname, href);
 
   return (
     <a

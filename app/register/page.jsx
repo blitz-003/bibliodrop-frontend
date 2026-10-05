@@ -4,7 +4,23 @@ import { useState } from "react";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { User, Mail, Lock, ImageIcon, BookOpen, Briefcase } from "lucide-react";
+import { User, Mail, Lock, ImageIcon, BookOpen } from "lucide-react";
+
+import { Alert, Button, Input } from "@/components/ui";
+
+/*
+ * There is deliberately no account-type selector here.
+ *
+ * The form used to offer User / Librarian radio cards and forward the choice to
+ * `signUp.email({ role })`. Because Better Auth honours `additionalFields` from
+ * the client payload, that made librarian registration self-service: anyone
+ * could create a librarian and reach `requireRole("librarian")` routes such as
+ * POST /books and PATCH /deliveries/:id/status.
+ *
+ * `role` is now `input: false` in `lib/auth.js`, so it is stripped from the
+ * sign-up schema server-side and every new account is a `user`. Librarian and
+ * admin access is granted by an administrator through PATCH /admin/users/:id/role.
+ */
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -14,12 +30,15 @@ export default function RegisterPage() {
     email: "",
     password: "",
     image: "",
-    role: "user",
   });
 
   const [loading, setLoading] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState("");
+
+  function update(field, value) {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  }
 
   async function handleRegister(e) {
     e.preventDefault();
@@ -34,8 +53,6 @@ export default function RegisterPage() {
         password: form.password,
 
         image: form.image || undefined,
-
-        role: form.role,
       });
 
       if (res?.error) {
@@ -67,20 +84,20 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-page flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-lg">
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-xl p-6 md:p-8">
+        <div className="bg-surface rounded-card border border-border shadow-card p-6 md:p-8">
           {/* HEADER */}
           <div className="text-center mb-8">
-            <div className="w-16 h-16 rounded-2xl bg-blue-600/95 hover:bg-blue-700 mx-auto flex items-center justify-center shadow-lg">
-              <BookOpen className="w-8 h-8 text-white" />
+            <div className="w-16 h-16 rounded-card bg-accent/95 hover:bg-accent-hover mx-auto flex items-center justify-center shadow-card">
+              <BookOpen aria-hidden="true" className="w-8 h-8 text-white" />
             </div>
 
-            <h1 className="mt-5 text-3xl font-semibold text-slate-900">
+            <h1 className="mt-5 text-3xl font-semibold text-content-strong">
               Create Account
             </h1>
 
-            <p className="mt-2 text-sm text-slate-500">
+            <p className="mt-2 text-sm text-content-subtle">
               Join Bibliodrop and start exploring books
             </p>
           </div>
@@ -90,13 +107,13 @@ export default function RegisterPage() {
             type="button"
             onClick={handleGoogleSignup}
             disabled={googleLoading}
-            className="w-full flex items-center justify-center gap-3 border border-slate-200 bg-white hover:bg-slate-50 rounded-xl py-3 font-medium transition"
+            className="w-full flex items-center justify-center gap-3 border border-border bg-surface hover:bg-surface-subtle rounded-control py-3 font-medium transition"
           >
             {googleLoading ? (
               "Connecting..."
             ) : (
               <>
-                <svg className="w-5 h-5" viewBox="0 0 48 48">
+                <svg aria-hidden="true" className="w-5 h-5" viewBox="0 0 48 48">
                   <path
                     fill="#FFC107"
                     d="M43.611 20.083H42V20H24v8h11.303C33.654 32.657 29.21 36 24 36c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z"
@@ -111,7 +128,7 @@ export default function RegisterPage() {
                   />
                   <path
                     fill="#1976D2"
-                    d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.084 5.57l.003-.002 6.19 5.238C36.971 38.47 44 33 44 24c0-1.341-.138-2.65-.389-3.917z"
+                    d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.084 5.57l.003-.002 6.19-5.238C36.971 38.47 44 33 44 24c0-1.341-.138-2.65-.389-3.917z"
                   />
                 </svg>
                 Continue with Google
@@ -121,181 +138,85 @@ export default function RegisterPage() {
 
           {/* DIVIDER */}
           <div className="relative my-6">
-            <div className="border-t border-slate-200"></div>
+            <div className="border-t border-border"></div>
 
-            <span className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 text-xs text-slate-400">
+            <span className="absolute left-1/2 -translate-x-1/2 -translate-y-1/2 bg-surface px-3 text-xs text-content-subtle">
               OR
             </span>
           </div>
 
           {/* FORM */}
           <form onSubmit={handleRegister} className="space-y-5">
-            {/* NAME */}
-            <div>
-              <label className="text-sm font-medium text-slate-700">
-                Full Name
-              </label>
+            <Input
+              name="name"
+              label="Full Name"
+              icon={User}
+              required
+              autoComplete="name"
+              placeholder="John Doe"
+              value={form.name}
+              onChange={(e) => update("name", e.target.value)}
+            />
 
-              <div className="relative mt-2">
-                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+            <Input
+              name="email"
+              type="email"
+              label="Email"
+              icon={Mail}
+              required
+              autoComplete="email"
+              placeholder="you@example.com"
+              value={form.email}
+              onChange={(e) => update("email", e.target.value)}
+            />
 
-                <input
-                  type="text"
-                  required
-                  value={form.name}
-                  onChange={(e) =>
-                    setForm({
-                      ...form,
-                      name: e.target.value,
-                    })
-                  }
-                  placeholder="John Doe"
-                  className="w-full pl-11 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            </div>
+            <Input
+              name="password"
+              type="password"
+              label="Password"
+              icon={Lock}
+              required
+              minLength={6}
+              autoComplete="new-password"
+              placeholder="Minimum 6 characters"
+              value={form.password}
+              onChange={(e) => update("password", e.target.value)}
+            />
 
-            {/* EMAIL */}
-            <div>
-              <label className="text-sm font-medium text-slate-700">
-                Email
-              </label>
+            <Input
+              name="image"
+              label="Profile Image URL (Optional)"
+              icon={ImageIcon}
+              autoComplete="photo"
+              placeholder="https://example.com/avatar.jpg"
+              value={form.image}
+              onChange={(e) => update("image", e.target.value)}
+            />
 
-              <div className="relative mt-2">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+            {/* ACCOUNT TYPE */}
+            <p className="rounded-control border border-border-subtle bg-surface-subtle p-3 text-xs text-content-subtle">
+              New accounts start with reader access. Librarian and admin access
+              is granted by an administrator.
+            </p>
 
-                <input
-                  type="email"
-                  required
-                  value={form.email}
-                  onChange={(e) =>
-                    setForm({
-                      ...form,
-                      email: e.target.value,
-                    })
-                  }
-                  placeholder="you@example.com"
-                  className="w-full pl-11 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            </div>
+            {error && <Alert tone="danger">{error}</Alert>}
 
-            {/* PASSWORD */}
-            <div>
-              <label className="text-sm font-medium text-slate-700">
-                Password
-              </label>
-
-              <div className="relative mt-2">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-
-                <input
-                  type="password"
-                  required
-                  minLength={6}
-                  value={form.password}
-                  onChange={(e) =>
-                    setForm({
-                      ...form,
-                      password: e.target.value,
-                    })
-                  }
-                  placeholder="Minimum 6 characters"
-                  className="w-full pl-11 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-
-            {/* IMAGE URL */}
-            <div>
-              <label className="text-sm font-medium text-slate-700">
-                Profile Image URL (Optional)
-              </label>
-
-              <div className="relative mt-2">
-                <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-
-                <input
-                  type="text"
-                  value={form.image}
-                  onChange={(e) =>
-                    setForm({
-                      ...form,
-                      image: e.target.value,
-                    })
-                  }
-                  placeholder="https://example.com/avatar.jpg"
-                  className="w-full pl-11 pr-4 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            </div>
-
-            {/* ROLE */}
-            <div>
-              <label className="text-sm font-medium text-slate-700">
-                Account Type
-              </label>
-
-              <div className="grid grid-cols-2 gap-3 mt-2">
-                <button
-                  type="button"
-                  onClick={() =>
-                    setForm({
-                      ...form,
-                      role: "user",
-                    })
-                  }
-                  className={`p-4 rounded-xl border transition ${
-                    form.role === "user"
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-slate-200"
-                  }`}
-                >
-                  <User className="w-5 h-5 mx-auto mb-2 text-blue-600" />
-                  <p className="font-semibold">User</p>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setForm({
-                      ...form,
-                      role: "librarian",
-                    })
-                  }
-                  className={`p-4 rounded-xl border transition ${
-                    form.role === "librarian"
-                      ? "border-blue-500 bg-blue-50"
-                      : "border-slate-200"
-                  }`}
-                >
-                  <Briefcase className="w-5 h-5 mx-auto mb-2 text-blue-600" />
-                  <p className="font-semibold">Librarian</p>
-                </button>
-              </div>
-            </div>
-
-            {error && (
-              <div className="bg-red-50 border border-red-200 text-red-600 rounded-xl p-3 text-sm">
-                {error}
-              </div>
-            )}
-
-            <button
+            <Button
               type="submit"
+              variant="neutral"
+              className="w-full"
               disabled={loading}
-              className="w-full bg-neutral-900/95 hover:bg-neutral-700 text-white py-3 rounded-xl font-semibold transition disabled:opacity-50"
             >
               {loading ? "Creating Account..." : "Create Account"}
-            </button>
+            </Button>
           </form>
 
           {/* FOOTER */}
-          <div className="mt-6 text-center text-sm text-slate-500">
+          <div className="mt-6 text-center text-sm text-content-subtle">
             Already have an account?{" "}
             <Link
               href="/login"
-              className="font-semibold text-blue-600 hover:text-blue-700"
+              className="font-semibold text-accent hover:text-accent-hover"
             >
               Sign In
             </Link>

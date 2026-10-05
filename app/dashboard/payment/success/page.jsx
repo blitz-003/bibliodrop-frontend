@@ -62,7 +62,13 @@ export default function PaymentSuccessPage() {
           </p>
         )}
 
-        <Button as={Link} variant="brand" size="lg" className="w-full">
+        <Button
+          as={Link}
+          href="/dashboard"
+          variant="brand"
+          size="lg"
+          className="w-full"
+        >
           Go to Dashboard Now
         </Button>
       </Panel>

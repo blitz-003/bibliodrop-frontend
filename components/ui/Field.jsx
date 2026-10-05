@@ -13,6 +13,11 @@ import { cn } from "@/lib/cn";
  * Every control is also forced to render an id so `Field` can associate its
  * label. Roughly fifteen inputs across the app previously had a visible label
  * with no `htmlFor`/`id` pair, or relied on a placeholder as the only label.
+ *
+ * `icon` is destructured by every control and handed to `Field`, which renders it
+ * inside the label. Without that, an `icon` passed to one of these controls fell
+ * through `...props` and landed on the raw `<input>`, emitting an invalid
+ * `icon="[object Object]"` attribute and drawing nothing.
  */
 
 const CONTROL_BASE =
@@ -69,7 +74,7 @@ export function Field({
   );
 }
 
-export function Input({ label, hint, error, required, className, id, ...props }) {
+export function Input({ label, hint, error, required, icon, className, id, ...props }) {
   const fieldId = id ?? props.name;
 
   return (
@@ -78,6 +83,7 @@ export function Input({ label, hint, error, required, className, id, ...props })
       hint={hint}
       error={error}
       required={required}
+      icon={icon}
       htmlFor={fieldId}
       className={className}
     >
@@ -95,7 +101,17 @@ export function Input({ label, hint, error, required, className, id, ...props })
   );
 }
 
-export function Select({ label, hint, error, required, className, id, children, ...props }) {
+export function Select({
+  label,
+  hint,
+  error,
+  required,
+  icon,
+  className,
+  id,
+  children,
+  ...props
+}) {
   const fieldId = id ?? props.name;
 
   return (
@@ -104,6 +120,7 @@ export function Select({ label, hint, error, required, className, id, children, 
       hint={hint}
       error={error}
       required={required}
+      icon={icon}
       htmlFor={fieldId}
       className={className}
     >
@@ -155,7 +172,16 @@ export function IconSelect({ label, icon: Icon, id, className, children, ...prop
   );
 }
 
-export function Textarea({ label, hint, error, required, className, id, ...props }) {
+export function Textarea({
+  label,
+  hint,
+  error,
+  required,
+  icon,
+  className,
+  id,
+  ...props
+}) {
   const fieldId = id ?? props.name;
 
   return (
@@ -164,6 +190,7 @@ export function Textarea({ label, hint, error, required, className, id, ...props
       hint={hint}
       error={error}
       required={required}
+      icon={icon}
       htmlFor={fieldId}
       className={className}
     >

@@ -24,7 +24,6 @@ BiblioDrop is a modern online book marketplace built with Next.js. This reposito
 - Next.js
 - React
 - Tailwind CSS
-- HeroUI
 - TanStack Query
 - BetterAuth.js
 - Stripe

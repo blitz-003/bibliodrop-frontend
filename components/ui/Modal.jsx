@@ -55,14 +55,16 @@ export default function Modal({
 
   // `close` also fires on Escape and on backdrop clicks, so route both back
   // through the same handler.
+  //
+  // This is the only place focus is restored. An earlier version also restored
+  // it from a mount-only effect, which broke the initial-render path: when a
+  // dialog mounted with `open` already true, `showModal()` moved focus into the
+  // dialog and the effect immediately dragged it back out to the trigger,
+  // leaving an open dialog with focus sitting on the inert page behind it.
   const handleNativeClose = useCallback(() => {
     previouslyFocused.current?.focus?.();
     onClose?.();
   }, [onClose]);
-
-  useEffect(() => {
-    previouslyFocused.current?.focus?.();
-  }, []);
 
   const iconTone =
     tone === "danger"

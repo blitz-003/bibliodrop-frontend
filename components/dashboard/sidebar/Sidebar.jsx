@@ -103,6 +103,7 @@ export default function Sidebar({ user, isOpen, setIsOpen }) {
       {/* MOBILE DRIFT BACKDROP OVERLAY */}
       {isOpen && (
         <div
+          data-testid="sidebar-backdrop"
           className="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm transition-opacity duration-200 lg:hidden"
           onClick={close}
         />
