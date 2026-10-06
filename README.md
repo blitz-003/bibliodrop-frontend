@@ -47,3 +47,38 @@ First set up environment variables in your .env file
 ## 📄 License
 
 This project is licensed under the MIT License.
+
+
+## Testing
+
+This project uses Jest, React Testing Library, MSW, and jest-axe for unit, integration, and accessibility testing.
+
+### Run tests
+
+`ash
+npm run test
+` 
+
+### Run tests in watch mode
+
+`ash
+npm run test:watch
+` 
+
+### Run with coverage
+
+`ash
+npm run test:coverage
+` 
+
+### Testing notes
+
+- MSW mocks API calls to http://localhost:5000; handlers are in 	ests/mocks/handlers.js.
+- Navigation is mocked in-memory via 	ests/setup/navigationMock.js to round-trip URL changes.
+- Accessibility tests use jest-axe in integration suites. 
+
+## Known gaps
+
+- BookCard reads ook.available to decide availability, but the backend catalogue returns vailableStock/	otalStock; in practice Browse currently renders cards based on catalogue data. See fixtures and comments for details.
+- Some ESLint warnings exist in generated coverage files and in 	ests/mocks/betterAuthReact.js (non-blocking).
+

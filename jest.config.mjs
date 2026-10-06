@@ -83,6 +83,15 @@ const customJestConfig = {
 
   coverageReporters: ["text-summary", "lcov"],
   coverageDirectory: "<rootDir>/coverage",
+
+  coverageThreshold: {
+    global: {
+      statements: 30,
+      branches: 40,
+      functions: 25,
+      lines: 30,
+    },
+  },
 };
 
 export default createJestConfig(customJestConfig);

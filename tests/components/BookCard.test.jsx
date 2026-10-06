@@ -187,11 +187,11 @@ describe("BookCard", () => {
   });
 
   describe("text details", () => {
-    it("renders the title as a level-3 heading", () => {
+    it("renders the title as a level-2 heading", () => {
       renderCard({ title: "Dune" });
 
       expect(
-        screen.getByRole("heading", { level: 3, name: "Dune" }),
+        screen.getByRole("heading", { level: 2, name: "Dune" }),
       ).toBeInTheDocument();
     });
 

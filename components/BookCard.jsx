@@ -86,9 +86,9 @@ export default function BookCard({ book }) {
 
       {/* BOOK TEXT DETAILS */}
       <div className="flex flex-col gap-3 p-5">
-        <h3 className="line-clamp-2 text-lg font-semibold leading-snug text-content-strong transition-colors group-hover:text-accent">
+        <h2 className="line-clamp-2 text-lg font-semibold leading-snug text-content-strong transition-colors group-hover:text-accent">
           {book.title}
-        </h3>
+        </h2>
 
         <div className="flex flex-wrap items-center gap-1.5 text-sm text-content-muted">
           <User aria-hidden="true" className="h-4 w-4 shrink-0 text-gray-400" />
