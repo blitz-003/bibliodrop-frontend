@@ -151,8 +151,8 @@ export default function BrowseBooksPage() {
   );
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-page px-3 py-10 text-content sm:px-4 lg:px-6 xl:px-8">
-      <div className="mx-auto max-w-app space-y-6 md:space-y-8">
+    <div className="min-h-screen overflow-x-hidden bg-page px-2.5 py-8 text-content sm:px-3.5 lg:px-5 xl:px-6">
+      <div className="mx-auto max-w-app space-y-5 md:space-y-7">
         {/* HEADER SECTION */}
         <PageHeader
           title="Browse Books"
@@ -173,18 +173,18 @@ export default function BrowseBooksPage() {
               <label htmlFor="book-search" className="sr-only">
                 Search books by title or author
               </label>
-              <Search
-                aria-hidden="true"
-                className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-content-subtle"
-              />
-              <input
-                id="book-search"
-                type="text"
-                placeholder="Search books by title, author..."
-                value={searchInput}
-                onChange={(e) => setSearchInput(e.target.value)}
-                className="w-full rounded-control border border-border bg-surface-subtle pl-12 pr-4 py-3 text-base text-content transition-colors placeholder:text-content-subtle hover:bg-surface focus:border-accent focus:bg-surface focus:outline-none focus:ring-2 focus:ring-accent/30"
-              />
+                 <Search
+                   aria-hidden="true"
+                   className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-content-subtle"
+                 />
+               <input
+                 id="book-search"
+                 type="text"
+                 placeholder="Search books by title, author..."
+                 value={searchInput}
+                 onChange={(e) => setSearchInput(e.target.value)}
+                 className="w-full rounded-control border border-border bg-surface-subtle pl-10 pr-3.5 py-2.5 text-sm text-content transition-colors placeholder:text-content-subtle hover:bg-surface focus:border-accent focus:bg-surface focus:outline-none focus:ring-2 focus:ring-accent/30"
+               />
             </div>
 
             {/* ACTION ELEMENTS CONTAINER */}
@@ -194,16 +194,16 @@ export default function BrowseBooksPage() {
                 <label htmlFor="book-sort" className="sr-only">
                   Sort books
                 </label>
-                <ArrowUpDown
-                  aria-hidden="true"
-                  className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-content-subtle"
-                />
+                   <ArrowUpDown
+                     aria-hidden="true"
+                     className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-content-subtle"
+                   />
                 <select
                   id="book-sort"
                   value={sort}
                   onChange={(e) => updateURL("sort", e.target.value)}
-                  className="w-full cursor-pointer appearance-none rounded-control border border-border bg-surface-subtle py-3 pl-12 pr-10 text-base font-medium text-content transition-colors hover:bg-surface focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
-                >
+                   className="w-full cursor-pointer appearance-none rounded-control border border-border bg-surface-subtle py-2.5 pl-10 pr-9 text-sm font-medium text-content transition-colors hover:bg-surface focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30"
+                 >
                   <option value="newest">Sort by: Newest</option>
                   <option value="oldest">Sort by: Oldest</option>
                   <option value="price_low">Price: Low to High</option>
@@ -247,7 +247,7 @@ export default function BrowseBooksPage() {
               id="book-filters-panel"
               className="animate-in fade-in slide-in-from-top-2 border-t border-border-subtle pt-4 duration-200"
             >
-              <div className="grid grid-cols-1 gap-6 rounded-control border border-border-subtle bg-surface-subtle p-5 md:grid-cols-3">
+               <div className="grid grid-cols-1 gap-5 rounded-control border border-border-subtle bg-surface-subtle p-4 md:grid-cols-3">
                 {/* CATEGORY DROPDOWN BOX */}
                 <Select
                   label="Category"
@@ -312,7 +312,7 @@ export default function BrowseBooksPage() {
                 description="Try modifying your search query filters."
               />
             ) : (
-               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
+               <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-5 xl:grid-cols-4">
                 {booksList.map((book) => (
                   <BookCard key={book._id || book.id} book={book} />
                 ))}

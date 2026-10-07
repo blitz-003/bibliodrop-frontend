@@ -20,17 +20,17 @@ export default function PageHeader({
   return (
     <div
       className={cn(
-        "flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between",
+        "flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between",
         className,
       )}
     >
       <div className="min-w-0">
-        <h1 className="flex items-center gap-2 text-2xl font-semibold tracking-tight text-content-strong sm:text-3xl">
-          {Icon && <Icon aria-hidden="true" className="h-6 w-6 text-accent" />}
+        <h1 className="flex items-center gap-1.5 text-xl font-semibold tracking-tight text-content-strong sm:text-2xl">
+          {Icon && <Icon aria-hidden="true" className="h-5 w-5 text-accent" />}
           {title}
         </h1>
         {subtitle && (
-          <p className="mt-1 text-sm text-content-muted sm:text-base">
+          <p className="mt-0.5 text-xs text-content-muted sm:text-sm">
             {subtitle}
           </p>
         )}

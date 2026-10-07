@@ -55,8 +55,8 @@
   --color-info-subtle: #eff6ff;
 
   /* ---- Radius — 9 loose values collapsed to 2 (rounded-full covers pills) --- */
-  --radius-control: 0.75rem; /* rounded-xl — inputs, buttons, badges */
-  --radius-card: 1rem; /* rounded-2xl — cards, panels, modals */
+  --radius-control: 0.675rem; /* downshifted from 0.75rem to match 90% visual at 100% */
+  --radius-card: 0.9rem; /* downshifted from 1rem to match 90% visual at 100% */
 
   /* ---- Layout ----------------------------------------------------- */
   --container-app: 1400px; /* replaces the max-w-[1400px] / max-w-7xl split */

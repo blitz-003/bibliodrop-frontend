@@ -52,8 +52,8 @@ export default function Badge({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1",
-        "text-xs font-semibold whitespace-nowrap",
+        "inline-flex items-center gap-1.25 rounded-full border px-2 py-0.75",
+        "text-[11px] sm:text-xs font-semibold whitespace-nowrap",
         uppercase && "uppercase tracking-wide",
         TONES[tone] ?? TONES.neutral,
         className,
@@ -63,7 +63,7 @@ export default function Badge({
       {dot && (
         <span
           aria-hidden="true"
-          className="h-1.5 w-1.5 shrink-0 rounded-full bg-current"
+          className="h-1.25 w-1.25 shrink-0 rounded-full bg-current"
         />
       )}
       {children}

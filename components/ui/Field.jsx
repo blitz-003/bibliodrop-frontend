@@ -39,7 +39,7 @@ export function Field({
   children,
 }) {
   return (
-    <div className={cn("space-y-2", className)}>
+    <div className={cn("space-y-1.5", className)}>
       {label && (
         <label
           htmlFor={htmlFor}
@@ -94,7 +94,7 @@ export function Input({ label, hint, error, required, icon, className, id, ...pr
         aria-describedby={
           error ? `${fieldId}-error` : hint ? `${fieldId}-hint` : undefined
         }
-        className={cn(CONTROL_BASE, "px-4 py-2.5 text-sm")}
+        className={cn(CONTROL_BASE, "px-3.5 py-2 text-sm")}
         {...props}
       />
     </Field>
@@ -131,7 +131,7 @@ export function Select({
         aria-describedby={
           error ? `${fieldId}-error` : hint ? `${fieldId}-hint` : undefined
         }
-        className={cn(CONTROL_BASE, "cursor-pointer px-4 py-2.5 text-sm")}
+        className={cn(CONTROL_BASE, "cursor-pointer px-3.5 py-2 text-sm")}
         {...props}
       >
         {children}
@@ -152,14 +152,14 @@ export function IconSelect({ label, icon: Icon, id, className, children, ...prop
     <div className={cn("relative", className)}>
       <Icon
         aria-hidden="true"
-        className="pointer-events-none absolute left-4 top-1/2 z-10 h-4 w-4 -translate-y-1/2 text-content-subtle"
+        className="pointer-events-none absolute left-3.5 top-1/2 z-10 h-3.5 w-3.5 -translate-y-1/2 text-content-subtle"
       />
       <label htmlFor={fieldId} className="sr-only">
         {label}
       </label>
       <select
         id={fieldId}
-        className={cn(CONTROL_BASE, "cursor-pointer py-3 pl-11 pr-10 text-base")}
+        className={cn(CONTROL_BASE, "cursor-pointer py-2.5 pl-10 pr-9 text-sm")}
         {...props}
       >
         {children}
@@ -201,7 +201,7 @@ export function Textarea({
         aria-describedby={
           error ? `${fieldId}-error` : hint ? `${fieldId}-hint` : undefined
         }
-        className={cn(CONTROL_BASE, "px-4 py-2.5 text-sm")}
+        className={cn(CONTROL_BASE, "px-3.5 py-2 text-sm")}
         {...props}
       />
     </Field>

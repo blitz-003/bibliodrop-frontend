@@ -65,10 +65,10 @@ describe("Button", () => {
 
   it("applies the size classes and falls back for an unknown size", () => {
     const { rerender } = render(<Button size="lg">A</Button>);
-    expect(screen.getByRole("button").className).toContain("min-h-12");
+    expect(screen.getByRole("button").className).toContain("min-h-10");
 
     rerender(<Button size="enormous">A</Button>);
-    expect(screen.getByRole("button").className).toContain("min-h-10");
+    expect(screen.getByRole("button").className).toContain("min-h-9");
   });
 
   it("calls onClick when activated", async () => {

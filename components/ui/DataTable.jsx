@@ -34,7 +34,7 @@ export default function DataTable({
       )}
     >
       <table
-        className={cn("w-full border-collapse text-left", minWidth, wrapperClassName)}
+        className={cn("w-full border-collapse text-left", minWidth ?? "min-w-[600px]", wrapperClassName)}
         {...props}
       >
         {children}
@@ -56,7 +56,7 @@ export function DataTableTh({ children, align = "left", className, ...props }) {
     <th
       scope="col"
       className={cn(
-        "px-4 py-3 text-xs font-semibold uppercase tracking-wide text-content-muted",
+        "px-3.5 py-2.5 text-[11px] font-semibold uppercase tracking-wide text-content-muted",
         align === "center" && "text-center",
         align === "right" && "text-right",
         className,
@@ -91,7 +91,7 @@ export function DataTableCell({ children, align = "left", className, ...props })
   return (
     <td
       className={cn(
-        "px-4 py-3 align-middle",
+        "px-3.5 py-2.5 align-middle",
         align === "center" && "text-center",
         align === "right" && "text-right",
         className,
@@ -112,7 +112,7 @@ export function DataTableEmpty({ colSpan, children }) {
     <tr>
       <td
         colSpan={colSpan}
-        className="px-4 py-12 text-center text-sm text-content-subtle"
+        className="px-4 py-10 text-center text-sm text-content-subtle"
       >
         {children}
       </td>
