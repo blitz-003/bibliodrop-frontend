@@ -16,11 +16,10 @@ export default function DashboardShell({ user, children }) {
       />
 
       {/*
-        `lg:ml-72` is 18rem and the pinned drawer occupies 17rem
-        (w-64 + lg:left-4), leaving a 1rem gutter. The drawer itself declares
-        the same numbers so the two cannot drift apart.
+        Sidebar width is w-64 (16rem). With lg:left-4, content margin lg:ml-64
+        aligns cleanly and avoids horizontal overflow.
       */}
-      <main className="w-full p-4 md:p-8 lg:ml-72">
+      <main className="w-full min-w-0 overflow-x-hidden p-3 sm:p-4 md:p-6 lg:ml-64">
         {/*
           The drawer had open/close plumbing but no trigger, so on viewports
           below `lg` it was unreachable — the only way in was to resize the

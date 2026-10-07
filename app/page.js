@@ -185,6 +185,9 @@ export default function HomePage() {
             <div className="overflow-hidden py-1">
               <motion.h1
                 variants={textRevealVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: false, margin: "-10%" }}
                 className="text-5xl sm:text-6xl md:text-7xl font-serif font-light text-stone-900 leading-[1.05]"
               >
                 Your Local Library, <br />
@@ -197,6 +200,9 @@ export default function HomePage() {
             <div className="overflow-hidden">
               <motion.p
                 variants={textRevealVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: false, margin: "-10%" }}
                 className="text-lg text-stone-600 font-light leading-relaxed"
               >
                 Skip the lines. We connect local independent bookstores and town
@@ -220,7 +226,7 @@ export default function HomePage() {
                 variants={textRevealVariants}
                 className="text-xs uppercase  text-stone-400 font-semibold hidden sm:inline-block"
               >
-                Est. 2026 — Archive Edition
+                Est. 2026 �?Archive Edition
               </motion.span>
             </div>
           </motion.div>
@@ -361,7 +367,7 @@ export default function HomePage() {
                   href="/browse-books"
                   className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 w-full cursor-pointer"
                 >
-                  {/* Portrait Avatar — `relative` is required for the same
+                  {/* Portrait Avatar �?`relative` is required for the same
                       reason as the cafe image above. Without it the containing
                       block became the framer-motion card (its `y` transform
                       establishes one) and the portrait filled the entire card,
@@ -435,8 +441,7 @@ export default function HomePage() {
                   {cat}
                 </span>
                 <span className="text-[10px] font-mono  text-stone-400 block mt-2 uppercase">
-                  Explore →
-                </span>
+                  Explore �?                </span>
               </Link>
             </motion.div>
           ))}

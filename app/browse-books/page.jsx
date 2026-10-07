@@ -151,8 +151,8 @@ export default function BrowseBooksPage() {
   );
 
   return (
-    <div className="min-h-screen overflow-hidden bg-page px-4 py-12 text-content sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-app space-y-8">
+    <div className="min-h-screen overflow-x-hidden bg-page px-3 py-10 text-content sm:px-4 lg:px-6 xl:px-8">
+      <div className="mx-auto max-w-app space-y-6 md:space-y-8">
         {/* HEADER SECTION */}
         <PageHeader
           title="Browse Books"
@@ -312,7 +312,7 @@ export default function BrowseBooksPage() {
                 description="Try modifying your search query filters."
               />
             ) : (
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3 xl:grid-cols-4">
+               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6 xl:grid-cols-4">
                 {booksList.map((book) => (
                   <BookCard key={book._id || book.id} book={book} />
                 ))}
