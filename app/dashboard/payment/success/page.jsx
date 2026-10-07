@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -30,7 +30,7 @@ export default function PaymentSuccessPage() {
 
   return (
     <div className="flex min-h-[calc(100vh-64px)] items-center justify-center bg-page p-4">
-      <Panel className="w-full max-w-narrow p-8 text-center">
+      <Panel className="w-full max-w-full min-w-0 p-6 sm:p-8 text-center">
         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-success-subtle">
           <CheckCircle2 aria-hidden="true" className="h-8 w-8 text-success" />
         </div>
@@ -75,3 +75,4 @@ export default function PaymentSuccessPage() {
     </div>
   );
 }
+

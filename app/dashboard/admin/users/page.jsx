@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -154,7 +154,7 @@ export default function AdminManageUsersPage() {
     );
 
   return (
-    <div className="mx-auto w-full max-w-app space-y-6">
+    <div className="mx-auto w-full max-w-full min-w-0 space-y-6 px-1 sm:px-0">
       <PageHeader
         title="Manage Users"
         subtitle="View registered accounts, alter account group privileges, or revoke system access logs."
@@ -277,3 +277,4 @@ export default function AdminManageUsersPage() {
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-import { cn } from "@/lib/cn";
+﻿import { cn } from "@/lib/cn";
 
 /*
  * Dashboard metric tile.
@@ -87,3 +87,5 @@ export default function StatCard({ label, value, unit, icon: Icon, tone = "blue"
     </div>
   );
 }
+
+

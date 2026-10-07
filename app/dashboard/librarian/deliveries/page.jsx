@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { authClient } from "@/lib/auth-client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -100,7 +100,7 @@ export default function ManageDeliveriesPage() {
     );
 
   return (
-    <div className="mx-auto w-full max-w-app space-y-6">
+    <div className="mx-auto w-full max-w-full min-w-0 space-y-6 px-1 sm:px-0">
       <PageHeader
         title="Manage Deliveries Dashboard"
         subtitle="Dispatch and confirm book deliveries across the branch queue."
@@ -181,3 +181,4 @@ export default function ManageDeliveriesPage() {
     </div>
   );
 }
+

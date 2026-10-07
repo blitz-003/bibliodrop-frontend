@@ -1,14 +1,4 @@
-import { cn } from "@/lib/cn";
-
-/*
- * Page heading.
- *
- * Replaces nine separate treatments that disagreed on size (text-xl through
- * text-3xl), weight (font-black vs font-semibold) and subtitle size
- * (text-xs text-gray-400 vs text-sm text-gray-500). Browse is the reference:
- * `text-3xl sm:text-4xl font-semibold tracking-tight` with a `text-base`
- * subtitle.
- */
+﻿import { cn } from "@/lib/cn";
 
 export default function PageHeader({
   title,
@@ -20,7 +10,7 @@ export default function PageHeader({
   return (
     <div
       className={cn(
-        "flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between",
+        "flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between mt-6 sm:mt-8 lg:mt-10 ml-0.5 sm:ml-1",
         className,
       )}
     >

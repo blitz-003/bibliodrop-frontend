@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import {
@@ -161,7 +161,7 @@ export default function MyReviewsPage() {
 
   if (isLoading) {
     return (
-      <div aria-busy="true" className="mx-auto w-full max-w-narrow space-y-4">
+      <div aria-busy="true" className="mx-auto w-full max-w-full min-w-0 space-y-4 px-1 sm:px-0">
         <span className="sr-only">Loading your reviews</span>
         {[1, 2].map((n) => (
           <Panel key={n} className="h-32 animate-pulse bg-surface-subtle" />
@@ -186,7 +186,7 @@ export default function MyReviewsPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-narrow space-y-6">
+    <div className="mx-auto w-full max-w-full min-w-0 space-y-6 px-1 sm:px-0">
       <PageHeader
         title="My Personal Reviews"
         subtitle="Manage and update evaluation metrics you logged across catalog entries."
@@ -319,3 +319,4 @@ export default function MyReviewsPage() {
     </div>
   );
 }
+

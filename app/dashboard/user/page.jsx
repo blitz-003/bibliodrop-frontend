@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -75,7 +75,7 @@ function UserOverviewContent() {
       <div className="mx-auto w-full max-w-app text-center">
         <Alert tone="danger" className="mx-auto max-w-md inline-flex">
           <p className="text-base font-semibold">Failed to load dashboard</p>
-          <p className="mt-1 text-sm">
+          <p className="mt-1.5 text-xs">
             There was an issue fetching your reading insights. Please try
             refreshing the page.
           </p>
@@ -88,14 +88,14 @@ function UserOverviewContent() {
   const { stats = {}, charts = {} } = data || {};
 
   return (
-    <div className="mx-auto w-full max-w-app space-y-6">
+    <div className="mx-auto w-full max-w-full min-w-0 space-y-4 px-1 sm:px-0">
       <PageHeader
         title="Reading Dashboard"
         subtitle="Track your reading habits, borrowing activity, and spending insights."
       />
 
       {/* METRIC CARDS */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4 [&>*]:min-w-0 [&>*]:min-w-0">
         <StatCard
           label="Total Spent"
           value={`$${Number(stats.totalSpent || 0).toFixed(2)}`}
@@ -123,10 +123,10 @@ function UserOverviewContent() {
       </div>
 
       {/* CHARTS */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 [&>*]:min-w-0">
         <ChartPanel title="Monthly Spending" icon={BarChart3}>
           {charts.monthlySpending?.length > 0 ? (
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" className="min-w-0">
               <BarChart data={charts.monthlySpending}>
                 <CartesianGrid strokeDasharray="3 3" stroke={GRID_COLOR} />
                 <XAxis dataKey="month" stroke={AXIS_COLOR} />
@@ -145,7 +145,7 @@ function UserOverviewContent() {
 
         <ChartPanel title="Reading Categories" icon={PieIcon}>
           {charts.categoryDistribution?.length > 0 ? (
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" className="min-w-0">
               <PieChart>
                 <Pie
                   data={charts.categoryDistribution}
@@ -180,3 +180,8 @@ function UserOverviewContent() {
 export default function UserOverviewPage() {
   return <UserOverviewContent />;
 }
+
+
+
+
+

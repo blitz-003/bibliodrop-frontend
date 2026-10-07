@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { authClient } from "@/lib/auth-client";
 import { useQuery } from "@tanstack/react-query";
@@ -77,14 +77,14 @@ function AdminOverviewContent() {
   const { stats, charts } = data;
 
   return (
-    <div className="mx-auto w-full max-w-app space-y-6">
+    <div className="mx-auto w-full max-w-full min-w-0 space-y-6 px-1 sm:px-0">
       <PageHeader
         title="Ecosystem Control Panel"
         subtitle="Ecosystem audit logs, network parameters, and multi-tier queue parameters."
       />
 
       {/* CARDS METRICS GRID */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4 [&>*]:min-w-0 [&>*]:min-w-0">
         <StatCard
           label="Total Profiles"
           value={stats.totalUsers || 0}
@@ -115,10 +115,10 @@ function AdminOverviewContent() {
       </div>
 
       {/* PLOT ANALYTICS MODULES */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 [&>*]:min-w-0">
         <ChartPanel title="Platform Profile Registrations" icon={TrendingUp}>
           {charts.userRegistrationTrends?.length > 0 ? (
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" className="min-w-0">
               <LineChart data={charts.userRegistrationTrends}>
                 <CartesianGrid strokeDasharray="3 3" stroke={GRID_COLOR} />
                 <XAxis dataKey="month" stroke={AXIS_COLOR} />
@@ -144,7 +144,7 @@ function AdminOverviewContent() {
           icon={Activity}
         >
           {charts.revenueVelocity?.length > 0 ? (
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" className="min-w-0">
               <BarChart data={charts.revenueVelocity}>
                 <CartesianGrid strokeDasharray="3 3" stroke={GRID_COLOR} />
                 <XAxis dataKey="month" stroke={AXIS_COLOR} />
@@ -174,3 +174,7 @@ function AdminOverviewContent() {
 export default function AdminOverview() {
   return <AdminOverviewContent />;
 }
+
+
+
+

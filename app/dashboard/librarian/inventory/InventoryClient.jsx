@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useQuery } from "@tanstack/react-query";
 import { authClient } from "@/lib/auth-client";
@@ -42,7 +42,7 @@ export default function InventoryClient({ user }) {
   if (isLoading) return <DashboardSkeleton />;
 
   return (
-    <div className="mx-auto w-full max-w-app space-y-6">
+    <div className="mx-auto w-full max-w-full min-w-0 space-y-6 px-1 sm:px-0">
       <PageHeader
         title="Inventory Dashboard"
         subtitle="Stock levels and publication status for the titles you manage."
@@ -84,3 +84,4 @@ export default function InventoryClient({ user }) {
     </div>
   );
 }
+

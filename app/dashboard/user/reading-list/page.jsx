@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { BookMarked } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
@@ -60,14 +60,14 @@ export default function UserReadingListPage() {
   }
 
   return (
-    <div className="mx-auto w-full max-w-app space-y-6">
+    <div className="mx-auto w-full max-w-full min-w-0 space-y-6 px-1 sm:px-0">
       <PageHeader
         title="My Reading List"
         subtitle="Your curated collection of successfully acquired and delivered literature volumes."
       />
 
       {readingList?.length > 0 ? (
-        <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 [&>*]:min-w-0">
           {readingList.map((book) => (
             <Panel
               key={book.deliveryId}
@@ -139,3 +139,6 @@ export default function UserReadingListPage() {
     </div>
   );
 }
+
+
+

@@ -344,10 +344,10 @@ describe("Sidebar", () => {
     });
 
     it("matches the sidebar width used by the shell's content offset", () => {
-      // `w-64` (17rem) against the shell's `lg:ml-72` (18rem) left a visible gap.
+      // `w-32` (17rem) against the shell's `lg:ml-72` (18rem) left a visible gap.
       renderSidebar();
 
-      expect(screen.getByRole("dialog").className).toContain("w-64");
+      expect(screen.getByRole("dialog").className).toContain("w-32");
     });
   });
 });

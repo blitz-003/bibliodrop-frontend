@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useQuery } from "@tanstack/react-query";
 import { authClient } from "@/lib/auth-client";
@@ -82,7 +82,7 @@ export default function UserDeliveryHistoryPage() {
   const rows = Array.isArray(deliveries) ? deliveries : [];
 
   return (
-    <div className="mx-auto w-full max-w-app space-y-6">
+    <div className="mx-auto w-full max-w-full min-w-0 space-y-6 px-1 sm:px-0">
       <PageHeader
         title="Your Delivery History"
         subtitle="Track the status of every book you have requested."
@@ -130,3 +130,4 @@ export default function UserDeliveryHistoryPage() {
     </div>
   );
 }
+

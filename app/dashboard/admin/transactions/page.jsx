@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useQuery } from "@tanstack/react-query";
 import { authClient } from "@/lib/auth-client";
@@ -61,7 +61,7 @@ export default function AdminTransactionsPage() {
     );
 
   return (
-    <div className="mx-auto w-full max-w-app space-y-6">
+    <div className="mx-auto w-full max-w-full min-w-0 space-y-6 px-1 sm:px-0">
       <PageHeader
         title="System Transactions"
         subtitle="Master ledger monitoring overall global checkout logs and shipping fulfillment statuses."
@@ -130,3 +130,4 @@ export default function AdminTransactionsPage() {
     </div>
   );
 }
+

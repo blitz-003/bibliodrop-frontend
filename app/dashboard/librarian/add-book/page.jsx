@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
@@ -93,7 +93,7 @@ export default function AddBookPage() {
   };
 
   return (
-    <div className="mx-auto w-full max-w-read space-y-6">
+    <div className="mx-auto w-full max-w-full min-w-0 space-y-6 px-1 sm:px-0">
       <PageHeader
         title="Add New Book"
         subtitle="Upload a cover and describe the book to add it to the catalog."
@@ -131,7 +131,7 @@ export default function AddBookPage() {
                 ) : (
                   <div className="text-center">
                     <div aria-hidden="true" className="mb-2 text-5xl">
-                      📚
+                      馃摎
                     </div>
                     <p className="font-medium">Click to upload</p>
                     <p className="text-sm text-content-muted">
@@ -222,3 +222,4 @@ export default function AddBookPage() {
     </div>
   );
 }
+

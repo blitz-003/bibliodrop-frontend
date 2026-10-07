@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { authClient } from "@/lib/auth-client";
 import { useQuery } from "@tanstack/react-query";
@@ -76,14 +76,14 @@ function LibrarianOverviewContent() {
   const { stats, charts } = data;
 
   return (
-    <div className="mx-auto w-full max-w-app space-y-6">
+    <div className="mx-auto w-full max-w-full min-w-0 space-y-6 px-1 sm:px-0">
       <PageHeader
         title="Librarian Console Hub"
         subtitle="Manage branch catalogs, circulation speeds, and active dispatches."
       />
 
       {/* METRIC CARDS */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4 [&>*]:min-w-0 [&>*]:min-w-0">
         <StatCard
           label="Total Sales"
           value={`$${Number(stats.totalSales || 0).toFixed(2)}`}
@@ -114,10 +114,10 @@ function LibrarianOverviewContent() {
       </div>
 
       {/* CHARTS CONTAINER */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 [&>*]:min-w-0">
         <ChartPanel title="System Circulation Trends" icon={BarChart3}>
           {charts.circulationData?.length > 0 ? (
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" className="min-w-0">
               <BarChart data={charts.circulationData}>
                 <CartesianGrid strokeDasharray="3 3" stroke={GRID_COLOR} />
                 <XAxis dataKey="day" stroke={AXIS_COLOR} />
@@ -137,7 +137,7 @@ function LibrarianOverviewContent() {
 
         <ChartPanel title="Branch Inventory Additions" icon={ShieldAlert}>
           {charts.stockGrowth?.length > 0 ? (
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" className="min-w-0">
               <AreaChart data={charts.stockGrowth}>
                 <CartesianGrid strokeDasharray="3 3" stroke={GRID_COLOR} />
                 <XAxis dataKey="week" stroke={AXIS_COLOR} />
@@ -164,3 +164,7 @@ function LibrarianOverviewContent() {
 export default function LibrarianOverview() {
   return <LibrarianOverviewContent />;
 }
+
+
+
+

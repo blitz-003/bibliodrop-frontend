@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { authClient } from "@/lib/auth-client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -109,7 +109,7 @@ export default function ApprovalsClient() {
     );
 
   return (
-    <div className="mx-auto w-full max-w-app space-y-6">
+    <div className="mx-auto w-full max-w-full min-w-0 space-y-6 px-1 sm:px-0">
       <PageHeader
         title="Admin Approval Management"
         subtitle="Review catalog submissions submitted by librarians."
@@ -182,3 +182,4 @@ export default function ApprovalsClient() {
     </div>
   );
 }
+

@@ -1,4 +1,4 @@
-import { cn } from "@/lib/cn";
+﻿import { cn } from "@/lib/cn";
 
 /*
  * Chart panel + its empty state.
@@ -6,7 +6,7 @@ import { cn } from "@/lib/cn";
  * Replaces six wrappers that disagreed on padding (`p-5` on the user overview
  * versus `p-4 md:p-5` elsewhere) and on the dashed fallback border, which was
  * left uncoloured on the user overview and therefore resolved to
- * `currentColor` — roughly 40% darker than the sibling dashboards.
+ * `currentColor` 鈥?roughly 40% darker than the sibling dashboards.
  *
  * `h-64` is reserved on both branches so swapping between the empty state and
  * a loaded chart does not shift the page. Tick colour and font size are
@@ -45,7 +45,7 @@ export default function ChartPanel({ title, icon: Icon, action, children, classN
   return (
     <section
       className={cn(
-        "rounded-card border border-border bg-surface p-4 shadow-card md:p-5",
+        "rounded-card border border-border bg-surface p-4 shadow-card md:p-5 min-w-0 w-full overflow-hidden",
         className,
       )}
     >
