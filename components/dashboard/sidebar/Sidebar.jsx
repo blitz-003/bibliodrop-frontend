@@ -21,9 +21,9 @@ import AdminSidebar from "./AdminSidebar";
  *    handler and no close button, so once open the only exit was tapping the
  *    backdrop or navigating.
  *
- * 3. `w-20` at `left-4` is 17rem of horizontal space, but the content column
- *    was offset by `lg:ml-72` (18rem). The two numbers are now both 17rem,
- *    declared here and consumed by `DashboardShell`.
+ * 3. `w-64` at `lg:left-4` is 17rem of horizontal space; the content column
+ *    is inset with `lg:pl-72` (18rem) by `DashboardShell`, leaving a 1rem gap.
+ *    Any change to the width must be mirrored there.
  */
 export default function Sidebar({ user, isOpen, setIsOpen }) {
   const panelRef = useRef(null);
@@ -116,22 +116,7 @@ export default function Sidebar({ user, isOpen, setIsOpen }) {
         role="dialog"
         aria-modal={isOpen ? true : undefined}
         aria-label="Dashboard navigation"
-        className={`
-    fixed
-    bottom-0
-    left-0
-    top-16
-    z-50
-    w-20
-    transition-transform duration-300 ease-in-out
-
-    ${isOpen ? "translate-x-0" : "-translate-x-full"}
-
-    lg:top-[88px]
-    lg:bottom-6
-    lg:left-0.5
-    lg:translate-x-0
-  `}
+        className={`fixed bottom-0 left-0 top-16 z-50 w-64 transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:top-[88px] lg:bottom-6 lg:left-4 lg:translate-x-0`}
       >
         {/* Explicit close affordance; hidden on desktop where the drawer is
             permanently pinned open and has nothing to dismiss. */}

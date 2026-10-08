@@ -80,6 +80,20 @@ describe("Field primitives", () => {
 
       expect(screen.getByLabelText("Search")).not.toHaveAttribute("aria-describedby");
     });
+
+    it("toggles password visibility with an accessible button", async () => {
+      const user = userEvent.setup();
+      render(<Input name="password" label="Password" type="password" />);
+
+      const input = screen.getByLabelText("Password");
+      expect(input).toHaveAttribute("type", "password");
+
+      await user.click(screen.getByRole("button", { name: "Show password" }));
+      expect(input).toHaveAttribute("type", "text");
+
+      await user.click(screen.getByRole("button", { name: "Hide password" }));
+      expect(input).toHaveAttribute("type", "password");
+    });
   });
 
   describe("Select", () => {

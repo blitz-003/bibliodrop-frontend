@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { cn } from "@/lib/cn";
 
 /*
@@ -48,12 +52,14 @@ export function Field({
           {Icon && (
             <Icon aria-hidden="true" className="h-4 w-4 text-content-subtle" />
           )}
-          {label}
-          {required && (
-            <span aria-hidden="true" className="ml-0.5 text-danger">
-              *
-            </span>
-          )}
+          <span>
+            {label}
+            {required && (
+              <span aria-hidden="true" className="text-danger">
+                *
+              </span>
+            )}
+          </span>
         </label>
       )}
 
@@ -74,8 +80,20 @@ export function Field({
   );
 }
 
-export function Input({ label, hint, error, required, icon, className, id, ...props }) {
+export function Input({
+  label,
+  hint,
+  error,
+  required,
+  icon,
+  className,
+  id,
+  type,
+  ...props
+}) {
   const fieldId = id ?? props.name;
+  const isPassword = type === "password";
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <Field
@@ -87,16 +105,46 @@ export function Input({ label, hint, error, required, icon, className, id, ...pr
       htmlFor={fieldId}
       className={className}
     >
-      <input
-        id={fieldId}
-        required={required}
-        aria-invalid={error ? true : undefined}
-        aria-describedby={
-          error ? `${fieldId}-error` : hint ? `${fieldId}-hint` : undefined
-        }
-        className={cn(CONTROL_BASE, "px-3.5 py-2 text-sm")}
-        {...props}
-      />
+      {isPassword ? (
+        <div className="relative">
+          <input
+            id={fieldId}
+            type={showPassword ? "text" : "password"}
+            required={required}
+            aria-invalid={error ? true : undefined}
+            aria-describedby={
+              error ? `${fieldId}-error` : hint ? `${fieldId}-hint` : undefined
+            }
+            className={cn(CONTROL_BASE, "px-3.5 py-2 pr-10 text-sm")}
+            {...props}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword((visible) => !visible)}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+            aria-pressed={showPassword}
+            className="absolute inset-y-0 right-0 flex items-center px-3 text-content-subtle transition-colors hover:text-content focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+          >
+            {showPassword ? (
+              <EyeOff aria-hidden="true" className="h-4 w-4" />
+            ) : (
+              <Eye aria-hidden="true" className="h-4 w-4" />
+            )}
+          </button>
+        </div>
+      ) : (
+        <input
+          id={fieldId}
+          type={type}
+          required={required}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={
+            error ? `${fieldId}-error` : hint ? `${fieldId}-hint` : undefined
+          }
+          className={cn(CONTROL_BASE, "px-3.5 py-2 text-sm")}
+          {...props}
+        />
+      )}
     </Field>
   );
 }

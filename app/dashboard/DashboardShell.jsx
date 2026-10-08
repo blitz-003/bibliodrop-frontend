@@ -34,19 +34,19 @@ export default function DashboardShell({ user, children }) {
 
       {/*
 
-        Sidebar width is w-64 (16rem). With lg:left-4, content margin lg:ml-20
-
-        aligns cleanly and avoids horizontal overflow.
+        Sidebar width is w-64 (16rem) at lg:left-4. Content is inset with lg:pl-72
+        (18rem) so it clears the sidebar and never overflows the viewport
+        horizontally (padding, unlike margin, stays within the element width).
 
       */}
 
-      <main className="w-full min-w-0 overflow-x-hidden max-w-full w-full p-2 sm:p-3 md:p-4 lg:ml-20">
+      <main className="w-full min-w-0 overflow-x-hidden p-2 sm:p-3 md:p-4 lg:pl-72">
 
         {/*
 
           The drawer had open/close plumbing but no trigger, so on viewports
 
-          below `lg` it was unreachable 锟?the only way in was to resize the
+          below `lg` it was unreachable — the only way in was to resize the
 
           window. This is the missing control.
 

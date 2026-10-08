@@ -226,7 +226,7 @@ export default function HomePage() {
                 variants={textRevealVariants}
                 className="text-xs uppercase  text-stone-400 font-semibold hidden sm:inline-block"
               >
-                Est. 2026 �?Archive Edition
+                Est. 2026 — Archive Edition
               </motion.span>
             </div>
           </motion.div>
@@ -367,7 +367,7 @@ export default function HomePage() {
                   href="/browse-books"
                   className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 w-full cursor-pointer"
                 >
-                  {/* Portrait Avatar �?`relative` is required for the same
+                  {/* Portrait Avatar — `relative` is required for the same
                       reason as the cafe image above. Without it the containing
                       block became the framer-motion card (its `y` transform
                       establishes one) and the portrait filled the entire card,
@@ -441,7 +441,7 @@ export default function HomePage() {
                   {cat}
                 </span>
                 <span className="text-[10px] font-mono  text-stone-400 block mt-2 uppercase">
-                  Explore �?                </span>
+                  Explore →                </span>
               </Link>
             </motion.div>
           ))}

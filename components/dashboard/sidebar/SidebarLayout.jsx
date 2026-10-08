@@ -24,16 +24,7 @@ export default function SidebarLayout({
 
   return (
     <aside
-      className="
-    h-full
-    bg-slate-900
-    border border-slate-800
-    rounded-card
-    shadow-panel
-    flex flex-col
-    p-4
-    text-slate-300
-  "
+      className="h-full bg-slate-900 border border-slate-800 rounded-card shadow-panel flex flex-col p-4 overflow-x-hidden text-slate-300"
     >
       {/* 1. BRAND TITLE HEADER BLOCK */}
       <div className="border-b border-slate-800/80 pb-4">
@@ -123,11 +114,7 @@ export function SidebarLink({
       href={href}
       onClick={onClick}
       aria-current={isActive ? "page" : undefined}
-      className={`flex select-none items-center gap-2 rounded-control px-4 py-3 text-sm font-medium leading-normal transition-colors duration-150 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-400 ${
-        isActive
-          ? "bg-accent text-white shadow-card"
-          : "text-slate-400 hover:bg-slate-800/70 hover:text-slate-200"
-      }`}
+      className={`flex select-none items-center gap-2 rounded-control px-4 py-3 text-sm font-medium leading-normal transition-colors duration-150 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-400 ${ isActive ? "bg-accent text-white shadow-card" : "text-slate-400 hover:bg-slate-800/70 hover:text-slate-200" }`}
     >
       <Icon
         aria-hidden="true"

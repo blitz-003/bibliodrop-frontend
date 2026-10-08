@@ -155,7 +155,7 @@ export default function Navbar({ user }) {
             </Link>
           </div>
 
-          {/* SECTION B: NO OVERLAP RE-ROUTING �?SIDEBAR CONTENT INJECTS HERE ON MOBILE */}
+          {/* SECTION B: NO OVERLAP RE-ROUTING — SIDEBAR CONTENT INJECTS HERE ON MOBILE */}
           {user && dashboardLinks.length > 0 && (
             <div className="space-y-2 border-t border-gray-100 pt-5">
               <div className="px-3 flex items-center justify-between mb-1">
@@ -175,11 +175,7 @@ export default function Navbar({ user }) {
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-base font-medium transition-colors ${
-                      isActive
-                        ? "bg-stone-950 text-white shadow-sm"
-                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                    }`}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-base font-medium transition-colors ${ isActive ? "bg-stone-950 text-white shadow-sm" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900" }`}
                   >
                     <Icon
                       className={`w-5 h-5 flex-shrink-0 ${isActive ? "text-white" : "text-gray-400"}`}
