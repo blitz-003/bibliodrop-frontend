@@ -93,7 +93,7 @@ function EditBookFormContent() {
   if (isLoading || !formData) {
     return (
       <p className="p-6 text-gray-500 font-medium">
-        Loading asset parameters...
+        Loading book...
       </p>
     );
   }
@@ -101,7 +101,7 @@ function EditBookFormContent() {
   if (isError) {
     return (
       <p className="p-6 text-red-500 font-medium">
-        Error mapping catalog configuration metrics.
+        Could not load this book.
       </p>
     );
   }
@@ -110,10 +110,10 @@ function EditBookFormContent() {
     <div className="p-6 max-w-2xl mx-auto space-y-8 text-gray-700 ">
       <div>
         <h1 className="text-xl font-semibold text-gray-900">
-          Edit Catalog Volume
+          Edit Book
         </h1>
         <p className="text-xs text-gray-400">
-          Modify data variables index record for catalog index reference token{" "}
+          Editing book{" "}
           {id}
         </p>
       </div>
@@ -162,7 +162,7 @@ function EditBookFormContent() {
 
         <div className="space-y-1">
           <label className="text-xs font-semibold text-gray-500 uppercase">
-            Delivery Logistics Access Fee ($)
+            Delivery Fee ($)
           </label>
           <input
             type="number"
@@ -178,7 +178,7 @@ function EditBookFormContent() {
 
         <div className="space-y-1">
           <label className="text-xs font-semibold text-gray-500 uppercase">
-            Manifest Overview Description
+            Description
           </label>
           <textarea
             rows="5"
@@ -192,18 +192,18 @@ function EditBookFormContent() {
           <button
             type="button"
             onClick={() => router.back()}
-            className="bg-white hover:bg-white text-gray-700 border border-gray-200 font-semibold text-xs px-4 py-2 rounded-lg transition-colors"
+            className="hover-glow bg-white hover:bg-white text-gray-700 border border-gray-200 font-semibold text-xs px-4 py-2 rounded-lg transition-colors"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={updateBookMutation.isPending}
-            className="bg-gray-900 hover:bg-gray-800 text-white font-semibold text-xs px-4 py-2 rounded-lg transition-colors disabled:opacity-40"
+            className="hover-glow bg-gray-900 hover:bg-gray-800 text-white font-semibold text-xs px-4 py-2 rounded-lg transition-colors disabled:opacity-40"
           >
             {updateBookMutation.isPending
-              ? "Saving Schema Changes..."
-              : "Save Modifications"}
+              ? "Saving..."
+              : "Save Changes"}
           </button>
         </div>
       </form>

@@ -46,7 +46,7 @@ export default function AdminTransactionsPage() {
   if (isLoading)
     return (
       <div aria-busy="true" className="mx-auto w-full max-w-app">
-        <span className="sr-only">Loading ledger streams</span>
+        <span className="sr-only">Loading transactions</span>
       </div>
     );
   if (isError)
@@ -54,7 +54,7 @@ export default function AdminTransactionsPage() {
       <div className="mx-auto w-full max-w-app">
         <Alert tone="danger" className="mx-auto max-w-md inline-flex">
           <p className="text-base font-semibold">
-            Error loading system transaction histories
+            Could not load transactions.
           </p>
         </Alert>
       </div>
@@ -63,8 +63,8 @@ export default function AdminTransactionsPage() {
   return (
     <div className="mx-auto w-full max-w-full min-w-0 space-y-6 px-1 sm:px-0">
       <PageHeader
-        title="System Transactions"
-        subtitle="Master ledger monitoring overall global checkout logs and shipping fulfillment statuses."
+        title="Transactions"
+        subtitle="All payments and delivery statuses."
       />
 
       <DataTable minWidth="min-w-[900px]">

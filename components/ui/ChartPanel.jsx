@@ -45,7 +45,7 @@ export default function ChartPanel({ title, icon: Icon, action, children, classN
   return (
     <section
       className={cn(
-        "rounded-card border border-border bg-surface p-4 shadow-card md:p-5 min-w-0 w-full overflow-hidden",
+        "hover-glow-soft rounded-card border border-border bg-surface p-4 shadow-card md:p-5 min-w-0 w-full overflow-hidden",
         className,
       )}
     >

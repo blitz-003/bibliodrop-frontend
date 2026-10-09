@@ -60,7 +60,7 @@ describe("Book Details page", () => {
 
     renderPage("book-8");
 
-    expect(await screen.findByText(/Available \(2 Units\)/)).toBeInTheDocument();
+    expect(await screen.findByText(/Available \(2 copies\)/)).toBeInTheDocument();
     expect(screen.getByText(/\$7\.50/)).toBeInTheDocument();
   });
 

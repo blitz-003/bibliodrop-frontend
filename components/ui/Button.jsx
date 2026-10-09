@@ -55,7 +55,7 @@ export default function Button({
       type={isNativeButton ? (type ?? "button") : undefined}
       className={cn(
         "inline-flex items-center justify-center rounded-control font-semibold",
-        "transition-colors duration-150",
+        "hover-glow",
         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2",
         "disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none",
         VARIANTS[variant] ?? VARIANTS.secondary,

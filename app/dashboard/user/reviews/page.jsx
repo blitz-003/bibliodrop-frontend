@@ -188,8 +188,8 @@ export default function MyReviewsPage() {
   return (
     <div className="mx-auto w-full max-w-full min-w-0 space-y-6 px-1 sm:px-0">
       <PageHeader
-        title="My Personal Reviews"
-        subtitle="Manage and update evaluation metrics you logged across catalog entries."
+        title="My Reviews"
+        subtitle="Read, edit, or delete the reviews you've written."
         icon={MessageSquare}
       />
 

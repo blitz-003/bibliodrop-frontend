@@ -49,13 +49,13 @@ export default function Navbar({ user }) {
           <div className="hidden lg:flex items-center gap-6 text-base font-medium text-gray-600">
             <Link
               href="/"
-              className={`transition-colors ${pathname === "/" ? "text-stone-900 font-semibold" : "hover:text-stone-900"}`}
+              className={`hover-glow transition-colors ${pathname === "/" ? "text-stone-900 font-semibold" : "hover:text-stone-900"}`}
             >
               Home
             </Link>
             <Link
               href="/browse-books"
-              className={`transition-colors ${pathname === "/browse-books" ? "text-stone-900 font-semibold" : "hover:text-stone-900"}`}
+              className={`hover-glow transition-colors ${pathname === "/browse-books" ? "text-stone-900 font-semibold" : "hover:text-stone-900"}`}
             >
               Browse
             </Link>
@@ -68,14 +68,14 @@ export default function Navbar({ user }) {
             <>
               <Link
                 href="/login"
-                className="text-gray-600 hover:text-stone-900 transition-colors"
+                className="hover-glow text-gray-600 hover:text-stone-900 transition-colors"
               >
                 Login
               </Link>
               {/* UPDATED: Rounded-full to match the outer tablet shape */}
               <Link
                 href="/register"
-                className="bg-stone-800 text-white px-5 py-2.5 rounded-full hover:bg-stone-950 transition-colors shadow-sm"
+                className="hover-glow bg-stone-800 text-white px-5 py-2.5 rounded-full hover:bg-stone-950 transition-colors shadow-sm"
               >
                 Register
               </Link>
@@ -85,7 +85,7 @@ export default function Navbar({ user }) {
               {/* UPDATED: Rounded-full to match the outer tablet shape */}
               <Link
                 href={`/dashboard/${user.role}`}
-                className="flex items-center gap-2 text-gray-600 hover:text-stone-900 transition-colors bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100"
+                className="hover-glow flex items-center gap-2 text-gray-600 hover:text-stone-900 transition-colors bg-gray-50 px-3 py-1.5 rounded-full border border-gray-100"
               >
                 <LayoutDashboard className="w-4 h-4 text-stone-700" />
                 <span>Dashboard</span>
@@ -95,7 +95,7 @@ export default function Navbar({ user }) {
               </span>
               <button
                 onClick={logout}
-                className="text-red-500 hover:text-red-700 transition-colors"
+                className="rounded-full bg-red-50 px-4 py-2 text-red-600 border border-red-100 hover:bg-red-100 hover:text-red-700 hover-glow"
               >
                 Logout
               </button>
@@ -142,14 +142,14 @@ export default function Navbar({ user }) {
             <Link
               href="/"
               onClick={() => setIsOpen(false)}
-              className={`flex items-center px-3 py-2.5 rounded-lg text-base font-medium transition-colors ${pathname === "/" ? "bg-stone-100 text-stone-900" : "text-gray-600 hover:bg-gray-50"}`}
+              className={`hover-glow flex items-center px-3 py-2.5 rounded-lg text-base font-medium transition-colors ${pathname === "/" ? "bg-stone-100 text-stone-900" : "text-gray-600 hover:bg-gray-50"}`}
             >
               Home
             </Link>
             <Link
               href="/browse-books"
               onClick={() => setIsOpen(false)}
-              className={`flex items-center px-3 py-2.5 rounded-lg text-base font-medium transition-colors ${pathname === "/browse-books" ? "bg-stone-100 text-stone-900" : "text-gray-600 hover:bg-gray-50"}`}
+              className={`hover-glow flex items-center px-3 py-2.5 rounded-lg text-base font-medium transition-colors ${pathname === "/browse-books" ? "bg-stone-100 text-stone-900" : "text-gray-600 hover:bg-gray-50"}`}
             >
               Browse Books
             </Link>
@@ -175,7 +175,7 @@ export default function Navbar({ user }) {
                     key={link.href}
                     href={link.href}
                     onClick={() => setIsOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-base font-medium transition-colors ${ isActive ? "bg-stone-950 text-white shadow-sm" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900" }`}
+                    className={`hover-glow flex items-center gap-3 px-3 py-2.5 rounded-lg text-base font-medium transition-colors ${ isActive ? "bg-stone-950 text-white shadow-sm" : "text-gray-600 hover:bg-gray-50 hover:text-gray-900" }`}
                   >
                     <Icon
                       className={`w-5 h-5 flex-shrink-0 ${isActive ? "text-white" : "text-gray-400"}`}
@@ -194,14 +194,14 @@ export default function Navbar({ user }) {
                 <Link
                   href="/login"
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center py-2.5 border border-gray-200 rounded-xl text-base font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+                  className="hover-glow flex items-center justify-center py-2.5 border border-gray-200 rounded-xl text-base font-medium text-gray-700 hover:bg-gray-50 transition-colors"
                 >
                   Login
                 </Link>
                 <Link
                   href="/register"
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center py-2.5 bg-stone-700 rounded-xl text-base font-medium text-white hover:bg-stone-800 transition-colors text-center"
+                  className="hover-glow flex items-center justify-center py-2.5 bg-stone-700 rounded-xl text-base font-medium text-white hover:bg-stone-800 transition-colors text-center"
                 >
                   Register
                 </Link>
@@ -213,7 +213,7 @@ export default function Navbar({ user }) {
                     logout();
                     setIsOpen(false);
                   }}
-                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-base font-medium text-red-600 hover:bg-red-50 transition-colors"
+                  className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-base font-medium text-red-600 bg-red-50 border border-red-100 hover:bg-red-100 hover-glow"
                 >
                   <LogOut className="w-5 h-5" />
                   <span>Logout Account</span>

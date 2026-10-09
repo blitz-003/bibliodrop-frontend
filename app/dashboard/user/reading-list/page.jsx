@@ -38,7 +38,7 @@ export default function UserReadingListPage() {
       );
 
       if (!res.ok) {
-        throw new Error("Could not parse digital catalog archives.");
+        throw new Error("Could not load your reading list.");
       }
 
       return res.json();
@@ -52,7 +52,7 @@ export default function UserReadingListPage() {
       <div className="mx-auto w-full max-w-app">
         <Alert tone="danger" className="mx-auto max-w-md inline-flex">
           <p className="text-base font-semibold">
-            Error loading your personal reading list index.
+            Could not load your reading list.
           </p>
         </Alert>
       </div>
@@ -133,7 +133,7 @@ export default function UserReadingListPage() {
         <EmptyState
           icon={BookMarked}
           title="Your reading library is empty"
-          description="Books will automatically securely materialize on this dashboard index here once they are dispatched and dropped off at your address."
+          description="Books you request will show up here once they're delivered to your address."
         />
       )}
     </div>

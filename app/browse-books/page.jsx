@@ -156,7 +156,7 @@ export default function BrowseBooksPage() {
         {/* HEADER SECTION */}
         <PageHeader
           title="Browse Books"
-          subtitle="Explore our unified catalog, ecosystem records, and reading queues."
+          subtitle="Explore our catalog and find your next read."
           action={
             <Badge tone="info" className="bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-2 text-base">
               <BookOpen aria-hidden="true" className="h-5 w-5" />
@@ -297,7 +297,7 @@ export default function BrowseBooksPage() {
         {isError && (
           <Alert tone="danger" className="mx-auto max-w-md">
             <p className="text-base font-semibold">
-              Failed to load system book catalog stream.
+              Could not load books.
             </p>
           </Alert>
         )}
@@ -308,8 +308,8 @@ export default function BrowseBooksPage() {
             {booksList.length === 0 ? (
               <EmptyState
                 icon={Layers}
-                title="No results matched your parameters."
-                description="Try modifying your search query filters."
+                title="No results found."
+                description="Try changing your search or filters."
               />
             ) : (
                <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-5 xl:grid-cols-4">

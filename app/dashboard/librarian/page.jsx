@@ -78,8 +78,8 @@ function LibrarianOverviewContent() {
   return (
     <div className="mx-auto w-full max-w-full min-w-0 space-y-6 px-1 sm:px-0">
       <PageHeader
-        title="Librarian Console Hub"
-        subtitle="Manage branch catalogs, circulation speeds, and active dispatches."
+        title="Librarian Dashboard"
+        subtitle="Manage your catalog, deliveries, and book requests."
       />
 
       {/* METRIC CARDS */}
@@ -115,7 +115,7 @@ function LibrarianOverviewContent() {
 
       {/* CHARTS CONTAINER */}
       <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 [&>*]:min-w-0">
-        <ChartPanel title="System Circulation Trends" icon={BarChart3}>
+          <ChartPanel title="Borrowing Trends" icon={BarChart3}>
           {charts.circulationData?.length > 0 ? (
             <ResponsiveContainer width="100%" height="100%" className="min-w-0">
               <BarChart data={charts.circulationData}>
@@ -131,11 +131,11 @@ function LibrarianOverviewContent() {
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <ChartEmptyState>No circulation metrics available.</ChartEmptyState>
+            <ChartEmptyState>No borrowing data yet.</ChartEmptyState>
           )}
         </ChartPanel>
 
-        <ChartPanel title="Branch Inventory Additions" icon={ShieldAlert}>
+          <ChartPanel title="New Books Added" icon={ShieldAlert}>
           {charts.stockGrowth?.length > 0 ? (
             <ResponsiveContainer width="100%" height="100%" className="min-w-0">
               <AreaChart data={charts.stockGrowth}>
@@ -153,7 +153,7 @@ function LibrarianOverviewContent() {
               </AreaChart>
             </ResponsiveContainer>
           ) : (
-            <ChartEmptyState>No stock history found.</ChartEmptyState>
+            <ChartEmptyState>No stock history yet.</ChartEmptyState>
           )}
         </ChartPanel>
       </div>

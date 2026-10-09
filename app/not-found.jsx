@@ -28,11 +28,11 @@ export default function NotFound() {
         {/* ─── TYPOGRAPHY CONTENT ─── */}
         <div className="space-y-2">
           <h1 className="text-3xl md:text-4xl font-semibold text-gray-900">
-            Catalog Index Missing
+            Page Not Found
           </h1>
           <p className="text-sm text-gray-400 font-medium max-w-sm mx-auto leading-relaxed">
-            The book record or workspace view matrix you are trying to access
-            does not exist or has been archived from our index servers.
+            The page or book you&apos;re looking for doesn&apos;t exist or may have been
+            removed.
           </p>
         </div>
 
@@ -40,7 +40,7 @@ export default function NotFound() {
         <div className="pt-2 w-full">
           <Link
             href="/"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-6 rounded-xl transition-colors duration-200"
+            className="hover-glow w-full sm:w-auto inline-flex items-center justify-center gap-2.5 bg-gray-900 hover:bg-gray-800 text-white font-medium py-3 px-6 rounded-xl transition-colors duration-200"
           >
             <svg
               className="w-4 h-4"

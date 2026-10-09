@@ -97,6 +97,52 @@ body {
 }
 
 /*
+ * Shared hover treatment.
+ *
+ * `hover-glow` is for anything clickable (buttons, links, cards): a hand
+ * cursor, a slight grow, and a soft, light blue halo. `hover-glow-soft` is for
+ * decorative, non-clickable cards: the same light halo and lift, but no
+ * pointer cursor and no grow, so the cursor never lies about being clickable.
+ *
+ * The glow is intentionally faint (low opacity, tight blur) so it reads as a
+ * gentle emphasis rather than a loud effect.
+ */
+@utility hover-glow {
+  cursor: pointer;
+  transition:
+    box-shadow 200ms ease-out,
+    color 200ms ease-out,
+    background-color 200ms ease-out,
+    border-color 200ms ease-out;
+
+  &:hover {
+    box-shadow: 0 4px 12px -4px rgb(37 99 235 / 0.28);
+  }
+}
+
+@utility hover-glow-soft {
+  transition:
+    transform 200ms ease-out,
+    box-shadow 200ms ease-out;
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px -6px rgb(37 99 235 / 0.28);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hover-glow,
+  .hover-glow-soft {
+    transition: box-shadow 200ms ease-out;
+  }
+
+  .hover-glow:hover,
+  .hover-glow-soft:hover {
+    transform: none;
+  }
+}
+
+/*
  * Editorial theme — homepage only.
  * Serif headings on a stone scale with square corners, deliberately
  * distinct from the application surface above.

@@ -103,7 +103,7 @@ export default function AdminManageBooksPage() {
       <div className="mx-auto w-full max-w-app">
         <Alert tone="danger" className="mx-auto max-w-md inline-flex">
           <p className="text-base font-semibold">
-            Error loading master book inventory catalogue
+            Could not load books.
           </p>
         </Alert>
       </div>
@@ -113,7 +113,7 @@ export default function AdminManageBooksPage() {
     <div className="mx-auto w-full max-w-full min-w-0 space-y-6 px-1 sm:px-0">
       <PageHeader
         title="Manage Books"
-        subtitle="Monitor active catalog submissions, review delivery valuations, and control platform publication parameters."
+        subtitle="Review new book submissions and choose what gets published."
       />
 
       <DataTable minWidth="min-w-[800px]">
@@ -205,7 +205,7 @@ export default function AdminManageBooksPage() {
 
           {(!books || books.length === 0) && (
             <DataTableEmpty colSpan={6}>
-              No books uploaded to the system ledger directories yet.
+              No books added yet.
             </DataTableEmpty>
           )}
         </DataTableBody>

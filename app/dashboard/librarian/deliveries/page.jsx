@@ -102,8 +102,8 @@ export default function ManageDeliveriesPage() {
   return (
     <div className="mx-auto w-full max-w-full min-w-0 space-y-6 px-1 sm:px-0">
       <PageHeader
-        title="Manage Deliveries Dashboard"
-        subtitle="Dispatch and confirm book deliveries across the branch queue."
+        title="Deliveries"
+        subtitle="Send out books and mark them delivered."
       />
 
       <DataTable>

@@ -147,7 +147,7 @@ export default function AdminManageUsersPage() {
       <div className="mx-auto w-full max-w-app">
         <Alert tone="danger" className="mx-auto max-w-md inline-flex">
           <p className="text-base font-semibold">
-            Error loading user profile directory
+            Could not load users.
           </p>
         </Alert>
       </div>
@@ -157,7 +157,7 @@ export default function AdminManageUsersPage() {
     <div className="mx-auto w-full max-w-full min-w-0 space-y-6 px-1 sm:px-0">
       <PageHeader
         title="Manage Users"
-        subtitle="View registered accounts, alter account group privileges, or revoke system access logs."
+        subtitle="View accounts, change user roles, or remove access."
       />
 
       {/* Main Data Table */}
@@ -228,7 +228,7 @@ export default function AdminManageUsersPage() {
         title="Change Role"
         description={
           roleModalUser
-            ? `Modifying access groups for ${roleModalUser.email}`
+            ? `Update role for ${roleModalUser.email}`
             : undefined
         }
         closeLabel="Cancel"
@@ -243,7 +243,7 @@ export default function AdminManageUsersPage() {
         }
       >
         <Select
-          label="Select Access Pool"
+          label="Role"
           name="role"
           value={selectedRole}
           onChange={(e) => setSelectedRole(e.target.value)}

@@ -70,8 +70,7 @@ export default function Footer() {
           </div>
 
           <p className="text-base leading-relaxed text-slate-400">
-            A shared ecosystem catalog built to streamline book collections,
-            reading queues, and distribution tracking effortlessly.
+            Borrow and have books delivered from your local library.
           </p>
         </div>
 
@@ -80,19 +79,19 @@ export default function Footer() {
           <nav aria-label="Footer" className="flex flex-col items-center gap-6 text-base font-semibold sm:flex-row sm:gap-8">
             <Link
               href="/browse-books"
-              className="rounded-sm py-1 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400 md:py-0"
+              className="hover-glow rounded-sm py-1 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400 md:py-0"
             >
               Browse Books
             </Link>
             <Link
               href="/"
-              className="rounded-sm py-1 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400 md:py-0"
+              className="hover-glow rounded-sm py-1 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400 md:py-0"
             >
               Home
             </Link>
             <Link
               href="/login"
-              className="rounded-sm py-1 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400 md:py-0"
+              className="hover-glow rounded-sm py-1 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-400 md:py-0"
             >
               Sign In
             </Link>
@@ -106,7 +105,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={label}
-                className="rounded-control bg-stone-950 p-3 text-slate-300 transition-colors hover:bg-stone-700 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
+                className="hover-glow rounded-control bg-stone-950 p-3 text-slate-300 transition-colors hover:bg-stone-700 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-400"
               >
                 <svg
                   aria-hidden="true"
@@ -134,12 +133,12 @@ export default function Footer() {
 
       {/* BOTTOM BASE UTILITY STRIP */}
       <div className="mx-auto mt-10 flex max-w-app flex-col items-center justify-between gap-4 border-t border-slate-800/60 px-6 pt-8 text-sm font-medium text-slate-400 sm:flex-row sm:px-8">
-        <p>© 2026 Bibliodrop System. All rights reserved.</p>
+        <p>© 2026 Bibliodrop. All rights reserved.</p>
 
         <p className="flex items-center gap-1.5">
           <span>Crafted with</span>
           <Heart aria-hidden="true" className="h-4 w-4 fill-red-500/20 text-red-500/90" />
-          <span>for literary management</span>
+          <span>for book lovers</span>
         </p>
       </div>
     </footer>

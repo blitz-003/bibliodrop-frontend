@@ -101,7 +101,7 @@ export default function ApprovalsClient() {
       <div className="mx-auto w-full max-w-app">
         <Alert tone="danger" className="mx-auto max-w-md inline-flex">
           <p className="text-base font-semibold">
-            Error loading approval requests
+            Could not load approval requests.
           </p>
           <p className="mt-1 text-sm">{error.message}</p>
         </Alert>

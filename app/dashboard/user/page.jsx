@@ -74,9 +74,9 @@ function UserOverviewContent() {
     return (
       <div className="mx-auto w-full max-w-app text-center">
         <Alert tone="danger" className="mx-auto max-w-md inline-flex">
-          <p className="text-base font-semibold">Failed to load dashboard</p>
+          <p className="text-base font-semibold">Could not load your dashboard</p>
           <p className="mt-1.5 text-xs">
-            There was an issue fetching your reading insights. Please try
+            Something went wrong while loading your reading insights. Please try
             refreshing the page.
           </p>
         </Alert>
@@ -91,7 +91,7 @@ function UserOverviewContent() {
     <div className="mx-auto w-full max-w-full min-w-0 space-y-4 px-1 sm:px-0">
       <PageHeader
         title="Reading Dashboard"
-        subtitle="Track your reading habits, borrowing activity, and spending insights."
+        subtitle="Track your books, borrowing, and spending."
       />
 
       {/* METRIC CARDS */}
@@ -139,7 +139,7 @@ function UserOverviewContent() {
               </BarChart>
             </ResponsiveContainer>
           ) : (
-            <ChartEmptyState>No spending history found.</ChartEmptyState>
+            <ChartEmptyState>No spending data yet.</ChartEmptyState>
           )}
         </ChartPanel>
 
@@ -169,7 +169,7 @@ function UserOverviewContent() {
               </PieChart>
             </ResponsiveContainer>
           ) : (
-            <ChartEmptyState>No category insights available.</ChartEmptyState>
+            <ChartEmptyState>No category data yet.</ChartEmptyState>
           )}
         </ChartPanel>
       </div>

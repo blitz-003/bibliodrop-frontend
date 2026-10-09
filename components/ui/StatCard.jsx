@@ -58,7 +58,7 @@ export default function StatCard({ label, value, unit, icon: Icon, tone = "blue"
   return (
     <div
       className={cn(
-        "flex items-center justify-between gap-3 rounded-control border p-5 shadow-card",
+        "hover-glow-soft flex items-center justify-between gap-3 rounded-control border p-5 shadow-card",
         t.card,
       )}
     >

@@ -114,7 +114,7 @@ export function SidebarLink({
       href={href}
       onClick={onClick}
       aria-current={isActive ? "page" : undefined}
-      className={`flex select-none items-center gap-2 rounded-control px-4 py-3 text-sm font-medium leading-normal transition-colors duration-150 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-400 ${ isActive ? "bg-accent text-white shadow-card" : "text-slate-400 hover:bg-slate-800/70 hover:text-slate-200" }`}
+      className={`flex select-none items-center gap-2 rounded-control px-4 py-3 text-sm font-medium leading-normal transition-all duration-200 cursor-pointer focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-blue-400 ${ isActive ? "bg-accent text-white shadow-card" : "text-slate-400 hover:bg-slate-800/70 hover:text-slate-200 hover:shadow-[0_0_16px_rgba(37,99,235,0.45)]" }`}
     >
       <Icon
         aria-hidden="true"

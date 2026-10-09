@@ -165,7 +165,7 @@ function BookDetailsContent() {
       <div className="mx-auto w-full max-w-app px-4 py-12">
         <Alert tone="danger" className="mx-auto max-w-md">
           <p className="text-base font-semibold">
-            Error loading book parameters.
+            Could not load this book.
           </p>
         </Alert>
       </div>
@@ -285,7 +285,7 @@ function BookDetailsContent() {
             </p>
             <div className="text-xs leading-relaxed text-content">
               <strong className="mb-1 block text-sm text-content">
-                Manifest Overview Description:
+                Description:
               </strong>
               <p className="line-clamp-4 whitespace-pre-line">
                 {book?.description}
@@ -295,7 +295,7 @@ function BookDetailsContent() {
 
           <div className="flex flex-wrap items-center gap-3 py-1">
             <span className="text-sm font-medium text-content">
-              Status Availability:
+              Availability:
             </span>
             <Badge
               tone={isAvailable && !isCheckedOut ? "success" : "danger"}
@@ -304,14 +304,14 @@ function BookDetailsContent() {
               {isCheckedOut
                 ? "Checked Out"
                 : isAvailable
-                  ? `Available (${book?.availableStock} Units)`
-                  : "Out of Inventory Stock"}
+                  ? `Available (${book?.availableStock} copies)`
+                  : "Out of Stock"}
             </Badge>
           </div>
 
           <div className="flex items-center justify-between rounded-control border border-indigo-100 bg-indigo-50/60 p-4">
             <span className="text-xs font-semibold uppercase text-indigo-700">
-              Delivery Logistics Fee
+              Delivery Fee
             </span>
             <span className="text-2xl font-black text-indigo-600 md:text-3xl">
               ${Number(book?.deliveryFee || 0).toFixed(2)}
@@ -389,7 +389,7 @@ function BookDetailsContent() {
       {/* ─── REVIEW LISTING MODULE ─── */}
       <Panel className="mt-2 w-full max-w-detail space-y-6 p-6">
         <h2 className="text-lg font-semibold text-content-strong">
-          Reader Feedback Log
+          Reader Reviews
         </h2>
 
         {computedAuthStatus && canReview ? (
@@ -399,7 +399,7 @@ function BookDetailsContent() {
             </h3>
 
             <Select
-              label="Rating Scale"
+              label="Rating"
               id="review-rating"
               className="max-w-[10rem]"
               value={rating}
@@ -462,7 +462,7 @@ function BookDetailsContent() {
             ))
           ) : (
             <p className="text-xs italic text-content-subtle">
-              No reviews logged under this catalog index yet.
+              No reviews yet.
             </p>
           )}
         </div>

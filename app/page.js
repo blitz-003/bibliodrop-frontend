@@ -205,9 +205,9 @@ export default function HomePage() {
                 viewport={{ once: false, margin: "-10%" }}
                 className="text-lg text-stone-600 font-light leading-relaxed"
               >
-                Skip the lines. We connect local independent bookstores and town
-                archives straight to your coffee table, maintaining the rich
-                texture of fresh book pages without the commute.
+                Skip the lines. We bring books from local bookstores and
+                libraries straight to your door, so you can enjoy the feel of a
+                real book without the trip.
               </motion.p>
             </div>
 
@@ -217,7 +217,7 @@ export default function HomePage() {
                   variants={textRevealVariants}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="px-8 py-4 bg-stone-900 text-stone-100 rounded-none shadow-sm hover:bg-stone-800 transition-all duration-300 text-sm font-medium uppercase"
+                  className="hover-glow cursor-pointer px-8 py-4 bg-stone-900 text-stone-100 rounded-none shadow-sm hover:bg-stone-800 hover:shadow-[0_6px_16px_-6px_rgba(37,99,235,0.3)] transition-all duration-300 text-sm font-medium uppercase"
                 >
                   Browse Books
                 </motion.button>
@@ -263,7 +263,7 @@ export default function HomePage() {
               New Arrivals
             </span>
             <h2 className="text-3xl md:text-4xl font-serif font-light text-stone-900 mt-2">
-              Latest From The Archives
+              Just Added
             </h2>
           </div>
           <p className="text-sm text-stone-500 max-w-xs font-light">
@@ -286,7 +286,7 @@ export default function HomePage() {
               }}
               className="group"
             >
-              <Link href="/browse-books" className="block cursor-pointer group">
+              <Link href="/browse-books" className="block cursor-pointer group hover:shadow-[0_6px_16px_-6px_rgba(37,99,235,0.28)] transition-shadow duration-200">
                 {/* Immersive Book Framing with Rounded Left Spine */}
                 <div className="overflow-hidden bg-stone-100 aspect-[4/5] relative mb-6 rounded-2xl">
                   <Image
@@ -333,10 +333,8 @@ export default function HomePage() {
               Local Providers
             </h2>
             <p className="text-stone-600 font-light max-w-md leading-relaxed text-sm md:text-base">
-              Meet the meticulous specialists managing your literary drops.
-              These designated library couriers pack each edition perfectly
-              alongside custom protective sleeves to preserve the physical text
-              ecosystem.
+              Meet the librarians who prepare and deliver your books. Each one
+              wraps your book carefully so it arrives in great shape.
             </p>
             {/* `relative` is required: `fill` resolves against the nearest
                 positioned ancestor, which was the section container, so the
@@ -361,7 +359,8 @@ export default function HomePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.7, delay: i * 0.1 }}
-                className="bg-white p-6 sm:p-8 rounded-none border border-stone-200 shadow-sm flex flex-col sm:flex-row items-center gap-6 sm:gap-8 group"
+                whileHover={{ y: -4 }}
+                className="hover-glow-soft bg-white p-6 sm:p-8 rounded-none border border-stone-200 shadow-sm flex flex-col sm:flex-row items-center gap-6 sm:gap-8 group"
               >
                 <Link
                   href="/browse-books"
@@ -394,7 +393,7 @@ export default function HomePage() {
                       {lib.role}
                     </p>
                     <p className="text-sm font-light text-stone-600 pt-2 border-t border-stone-100 mt-2">
-                      Successfully routed{" "}
+                      Delivered{" "}
                       <strong className="font-medium text-stone-900">
                         {lib.deliveries} books
                       </strong>{" "}
@@ -414,14 +413,13 @@ export default function HomePage() {
       <section className="py-24 px-6 sm:px-12 lg:px-20 max-w-7xl mx-auto">
         <div className="text-center max-w-xl mx-auto mb-16">
           <span className="text-xs uppercase  text-stone-400 font-semibold">
-            Taxonomy
+            Categories
           </span>
           <h2 className="text-3xl md:text-4xl font-serif font-light text-stone-900 mt-2">
-            Search via Core Disciplines
+            Browse by Category
           </h2>
           <p className="text-stone-500 font-light text-sm mt-3">
-            Filter immediately down into specialized literary ecosystems via
-            automated metadata routing rules.
+            Pick a category to find your next book.
           </p>
         </div>
 
@@ -435,7 +433,7 @@ export default function HomePage() {
             >
               <Link
                 href="/browse-books"
-                className="bg-white border border-stone-200 px-4 py-8 text-center hover:border-stone-800 transition-colors duration-300 block group cursor-pointer"
+                className="hover-glow bg-white border border-stone-200 px-4 py-8 text-center hover:border-stone-800 transition-colors duration-300 block group cursor-pointer"
               >
                 <span className="block font-serif text-lg font-light text-stone-800 group-hover:text-stone-900">
                   {cat}

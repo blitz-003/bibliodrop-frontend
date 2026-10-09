@@ -64,7 +64,7 @@ function AdminOverviewContent() {
       <div className="mx-auto w-full max-w-app">
         <Alert tone="danger" className="mx-auto max-w-md inline-flex">
           <p className="text-base font-semibold">
-            Error reading ecosystem stats
+            Could not load dashboard stats.
           </p>
           <p className="mt-1 text-sm">
             We could not load the admin dashboard. Please try refreshing the
@@ -79,16 +79,16 @@ function AdminOverviewContent() {
   return (
     <div className="mx-auto w-full max-w-full min-w-0 space-y-6 px-1 sm:px-0">
       <PageHeader
-        title="Ecosystem Control Panel"
-        subtitle="Ecosystem audit logs, network parameters, and multi-tier queue parameters."
+        title="Admin Dashboard"
+        subtitle="An overview of users, books, and activity."
       />
 
       {/* CARDS METRICS GRID */}
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-4 [&>*]:min-w-0 [&>*]:min-w-0">
         <StatCard
-          label="Total Profiles"
+          label="Total Users"
           value={stats.totalUsers || 0}
-          unit="nodes"
+          unit="users"
           icon={Users}
           tone="indigo"
         />
@@ -100,14 +100,14 @@ function AdminOverviewContent() {
           tone="sky"
         />
         <StatCard
-          label="Approval Pendings"
+          label="Pending Approvals"
           value={stats.pendingApprovals || 0}
-          unit="in queue"
+          unit="waiting"
           icon={AlertTriangle}
           tone="amber"
         />
         <StatCard
-          label="Platform Gross GMV"
+          label="Total Revenue"
           value={`$${Number(stats.platformGmv || 0).toFixed(2)}`}
           icon={DollarSign}
           tone="emerald"
@@ -116,7 +116,7 @@ function AdminOverviewContent() {
 
       {/* PLOT ANALYTICS MODULES */}
       <div className="grid grid-cols-1 gap-2 lg:grid-cols-2 [&>*]:min-w-0">
-        <ChartPanel title="Platform Profile Registrations" icon={TrendingUp}>
+        <ChartPanel title="New Users" icon={TrendingUp}>
           {charts.userRegistrationTrends?.length > 0 ? (
             <ResponsiveContainer width="100%" height="100%" className="min-w-0">
               <LineChart data={charts.userRegistrationTrends}>
@@ -135,12 +135,12 @@ function AdminOverviewContent() {
               </LineChart>
             </ResponsiveContainer>
           ) : (
-            <ChartEmptyState>No profile growth tracked.</ChartEmptyState>
+            <ChartEmptyState>No new users yet.</ChartEmptyState>
           )}
         </ChartPanel>
 
         <ChartPanel
-          title="Site-wide Financial Volume Velocity"
+          title="Revenue Over Time"
           icon={Activity}
         >
           {charts.revenueVelocity?.length > 0 ? (
@@ -150,7 +150,7 @@ function AdminOverviewContent() {
                 <XAxis dataKey="month" stroke={AXIS_COLOR} />
                 <YAxis stroke={AXIS_COLOR} />
                 <Tooltip
-                  formatter={(value) => [`$${value}`, "GMV Volume"]}
+                  formatter={(value) => [`$${value}`, "Revenue"]}
                   contentStyle={TOOLTIP_STYLE}
                 />
                 <Bar
@@ -162,7 +162,7 @@ function AdminOverviewContent() {
             </ResponsiveContainer>
           ) : (
             <ChartEmptyState>
-              No system transaction velocity logs.
+              No transactions yet.
             </ChartEmptyState>
           )}
         </ChartPanel>

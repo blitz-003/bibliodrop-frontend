@@ -154,7 +154,7 @@ describe("Browse Books page", () => {
   });
 
   describe("empty", () => {
-    it("explains that nothing matched the parameters", async () => {
+    it("explains that nothing matched the search", async () => {
       server.use(
         http.get("http://localhost:5000/books", () =>
           HttpResponse.json({
@@ -170,7 +170,7 @@ describe("Browse Books page", () => {
       renderPage();
 
       expect(
-        await screen.findByText("No results matched your parameters."),
+        await screen.findByText("No results found."),
       ).toBeInTheDocument();
     });
 
@@ -184,7 +184,7 @@ describe("Browse Books page", () => {
       renderPage();
 
       expect(
-        await screen.findByText("Try modifying your search query filters."),
+        await screen.findByText("Try changing your search or filters."),
       ).toBeInTheDocument();
     });
 
@@ -197,7 +197,7 @@ describe("Browse Books page", () => {
 
       renderPage();
 
-      await screen.findByText("No results matched your parameters.");
+      await screen.findByText("No results found.");
 
       expect(screen.queryByRole("navigation", { name: "Pagination" })).toBeNull();
     });
@@ -215,7 +215,7 @@ describe("Browse Books page", () => {
 
       expect(
         await screen.findByText(
-          "Failed to load system book catalog stream.",
+          "Could not load books.",
         ),
       ).toBeInTheDocument();
     });
@@ -244,7 +244,7 @@ describe("Browse Books page", () => {
       await screen.findByRole("alert");
 
       expect(
-        screen.queryByText("No results matched your parameters."),
+        screen.queryByText("No results found."),
       ).not.toBeInTheDocument();
     });
   });

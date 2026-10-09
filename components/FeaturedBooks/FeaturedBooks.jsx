@@ -50,7 +50,7 @@ export default function FeaturedBooks() {
   if (isLoading) {
     return (
       <div className="min-h-[500px] flex items-center justify-center text-stone-400 font-light">
-        Loading premium selections...
+        Loading books...
       </div>
     );
   }
@@ -172,7 +172,7 @@ export default function FeaturedBooks() {
             <Link
               href={`/browse-books?id=${currentBook.id || currentBook._id}`}
             >
-              <button className="px-6 py-3 border border-stone-900 bg-stone-900 text-stone-100 hover:bg-transparent hover:text-stone-900 transition-all duration-300 text-xs font-semibold uppercase tracking-wider">
+              <button className="hover-glow px-6 py-3 border border-stone-900 bg-stone-900 text-stone-100 hover:bg-transparent hover:text-stone-900 transition-all duration-300 text-xs font-semibold uppercase tracking-wider">
                 Discover Book
               </button>
             </Link>
@@ -182,7 +182,7 @@ export default function FeaturedBooks() {
               <button
                 onClick={handlePrev}
                 aria-label="Previous Book"
-                className="w-10 h-10 border border-stone-200 rounded-full flex items-center justify-center text-stone-600 hover:border-stone-900 hover:text-stone-900 transition-all duration-200 bg-white shadow-sm active:scale-95"
+                className="hover-glow w-10 h-10 border border-stone-200 rounded-full flex items-center justify-center text-stone-600 hover:border-stone-900 hover:text-stone-900 transition-all duration-200 bg-white shadow-sm active:scale-95"
               >
                 ←
               </button>
@@ -193,7 +193,7 @@ export default function FeaturedBooks() {
               <button
                 onClick={handleNext}
                 aria-label="Next Book"
-                className="w-10 h-10 border border-stone-200 rounded-full flex items-center justify-center text-stone-600 hover:border-stone-900 hover:text-stone-900 transition-all duration-200 bg-white shadow-sm active:scale-95"
+                className="hover-glow w-10 h-10 border border-stone-200 rounded-full flex items-center justify-center text-stone-600 hover:border-stone-900 hover:text-stone-900 transition-all duration-200 bg-white shadow-sm active:scale-95"
               >
                 →
               </button>

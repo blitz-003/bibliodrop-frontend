@@ -108,7 +108,7 @@ export default function LoginPage() {
             type="button"
             onClick={handleGoogleLogin}
             disabled={googleLoading}
-            className="w-full flex items-center justify-center gap-3 border border-border bg-surface hover:bg-surface-subtle rounded-control py-3 font-medium transition"
+            className="hover-glow w-full flex items-center justify-center gap-3 border border-border bg-surface hover:bg-surface-subtle rounded-control py-3 font-medium transition"
           >
             {googleLoading ? (
               "Connecting..."
@@ -189,7 +189,7 @@ export default function LoginPage() {
             Do not have an account?{" "}
             <Link
               href="/register"
-              className="font-semibold text-accent hover:text-accent-hover"
+              className="hover-glow font-semibold text-accent hover:text-accent-hover"
             >
               Register
             </Link>
