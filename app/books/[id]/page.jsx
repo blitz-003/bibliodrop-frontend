@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { motion } from "framer-motion";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import toast from "react-hot-toast";
@@ -220,6 +221,20 @@ function BookDetailsContent() {
           <Button variant="ghost" size="sm" onClick={clearStatus}>
             Dismiss
           </Button>
+                {computedAuthStatus && !isLibrarianOwner && (
+                  <motion.button
+                    type="button"
+                    onClick={() => toggleWishlistMutation.mutate()}
+                    whileHover={{ scale: 1.12 }}
+                    whileTap={{ scale: 0.95 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                    aria-label={isInWishlist ? "Remove from wishlist" : "Add to wishlist"}
+                    className="ml-2 inline-flex items-center justify-center rounded-full p-2 transition-all duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent"
+                  >
+                    <Heart aria-hidden="true" className={`${isInWishlist ? "h-6 w-6 text-pink-500 drop-shadow-[0_0_6px_rgba(236,72,153,0.6)]" : "h-6 w-6 text-gray-400 hover:text-pink-500 hover:drop-shadow-[0_0_4px_rgba(236,72,153,0.4)]"} ${toggleWishlistMutation.isPending ? "animate-pulse" : ""}`} />
+                  </motion.button>
+                )}
+
         </Alert>
       )}
 

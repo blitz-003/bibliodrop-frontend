@@ -286,7 +286,7 @@ export default function HomePage() {
               }}
               className="group"
             >
-              <Link href="/browse-books" className="block cursor-pointer group hover:shadow-[0_6px_16px_-6px_rgba(37,99,235,0.28)] transition-shadow duration-200">
+              <Link href="/browse-books" className="block cursor-pointer group">
                 {/* Immersive Book Framing with Rounded Left Spine */}
                 <div className="overflow-hidden bg-stone-100 aspect-[4/5] relative mb-6 rounded-2xl">
                   <Image
