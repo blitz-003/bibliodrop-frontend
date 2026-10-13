@@ -41,7 +41,7 @@ export default function BookCard({ book }) {
   return (
     <Link
       href={`/books/${bookId}`}
-      className="hover-glow group relative flex flex-col justify-between overflow-hidden rounded-card border border-border bg-surface transition-all duration-300 hover:border-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+      className="group relative flex flex-col justify-between overflow-hidden rounded-card border border-border bg-surface transition-shadow duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 hover:shadow-[0_6px_16px_-6px_rgba(37,99,235,0.3)]"
     >
       {/* COVER IMAGE — fixed aspect ratio reserves space, preventing layout shift.
           `aspect-[5/6]` is 80% of the previous `aspect-[2/3]` height (1.2x width
@@ -52,7 +52,7 @@ export default function BookCard({ book }) {
           <img
             src={coverImageSrc}
             alt=""
-            className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-105"
             loading="lazy"
           />
         ) : (

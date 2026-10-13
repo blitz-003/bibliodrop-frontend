@@ -80,7 +80,7 @@ export function DataTableRow({ children, className, ...props }) {
   return (
     <tr
       className={cn(
-        "transition-all duration-200 hover:bg-surface-subtle hover:shadow-[0_0_14px_-4px_rgba(37,99,235,0.3)]",
+        "transition-colors hover:bg-surface-subtle",
         className,
       )}
       {...props}

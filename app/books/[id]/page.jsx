@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { useParams, useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import toast from "react-hot-toast";
-import { CheckCircle2, XCircle } from "lucide-react";
+import { CheckCircle2, XCircle, Heart } from "lucide-react";
 import LibrarianBookActions from "@/components/LibrarianBookActions";
 import { authClient } from "@/lib/auth-client";
 import {

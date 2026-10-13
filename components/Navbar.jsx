@@ -49,13 +49,13 @@ export default function Navbar({ user }) {
           <div className="hidden lg:flex items-center gap-6 text-base font-medium text-gray-600">
             <Link
               href="/"
-              className={`transition-all duration-200 hover:text-stone-900 hover:text-lg hover:drop-shadow-[0_0_4px_rgba(37,99,235,0.35)] ${pathname === "/" ? "text-stone-900 font-semibold" : "text-gray-600"}`}
+              className={`transition-all duration-200 hover:text-stone-900 hover:drop-shadow-[0_0_4px_rgba(37,99,235,0.35)] ${pathname === "/" ? "text-stone-900 font-semibold" : "text-gray-600"}`}
             >
               Home
             </Link>
             <Link
               href="/browse-books"
-              className={`transition-all duration-200 hover:text-stone-900 hover:text-lg hover:drop-shadow-[0_0_4px_rgba(37,99,235,0.35)] ${pathname === "/browse-books" ? "text-stone-900 font-semibold" : "text-gray-600"}`}
+              className={`transition-all duration-200 hover:text-stone-900 hover:drop-shadow-[0_0_4px_rgba(37,99,235,0.35)] ${pathname === "/browse-books" ? "text-stone-900 font-semibold" : "text-gray-600"}`}
             >
               Browse
             </Link>
